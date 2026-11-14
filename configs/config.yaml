@@ -1,0 +1,65 @@
+# BISINDO Alphabet Model Configuration (KawanIsyarat-compatible)
+
+classes:
+  - A
+  - B
+  - C
+  - D
+  - E
+  - F
+  - G
+  - H
+  - I
+  - J
+  - K
+  - L
+  - M
+  - N
+  - NOTHING
+  - O
+  - P
+  - Q
+  - R
+  - S
+  - T
+  - U
+  - V
+  - W
+  - X
+  - Y
+  - Z
+
+features:
+  num_landmarks: 21
+  feature_dim: 86 # 42 (left) + 42 (right) + 2 (dx, dy)
+
+paths:
+  raw_images_dir: data/raw_images
+  webcam_npz: data/processed/webcam_landmarks.npz
+  public_npz: data/processed/public_landmarks.npz
+  merged_npz: data/processed/bisindo_alphabet_dataset.npz
+  artifacts_dir: artifacts
+  tflite_model: artifacts/bisindo_alphabet_model_f32.tflite
+  labels_json: artifacts/bisindo_alphabet_labels.json
+  tfjs_dir: artifacts/tfjs
+  wl_tflite_model: artifacts/bisindo_wl_model.tflite
+  wl_labels_json: artifacts/bisindo_wl_labels.json
+
+training:
+  seed: 42
+  val_split: 0.15
+  test_split: 0.15
+  batch_size: 64
+  epochs: 120
+  learning_rate: 0.001
+  early_stopping_patience: 15
+  reduce_lr_patience: 6
+  augment:
+    flip_swap: true
+    single_hand_ratio: 0.15
+    jitter_std: 0.015
+    jitter_copies: 2
+
+inference:
+  two_hand_threshold: 0.40
+  single_hand_threshold: 0.65

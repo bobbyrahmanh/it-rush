@@ -1,0 +1,173 @@
+{
+  "format": "layers-model",
+  "generatedBy": "bisindo-tfjs-exporter",
+  "convertedBy": "TensorFlow.js Converter",
+  "modelTopology": {
+    "keras_version": "2.15.0",
+    "backend": "tensorflow",
+    "model_config": {
+      "class_name": "Sequential",
+      "config": {
+        "name": "kawanisyarat_bisindo_alphabet_mlp",
+        "layers": [
+          {
+            "class_name": "InputLayer",
+            "config": {
+              "batch_input_shape": [
+                null,
+                86
+              ],
+              "dtype": "float32",
+              "sparse": false,
+              "ragged": false,
+              "name": "landmarks"
+            }
+          },
+          {
+            "class_name": "Dense",
+            "config": {
+              "name": "dense_1",
+              "trainable": true,
+              "dtype": "float32",
+              "batch_input_shape": [
+                null,
+                86
+              ],
+              "units": 512,
+              "activation": "relu",
+              "use_bias": true
+            }
+          },
+          {
+            "class_name": "Dense",
+            "config": {
+              "name": "dense_2",
+              "trainable": true,
+              "dtype": "float32",
+              "units": 256,
+              "activation": "relu",
+              "use_bias": true
+            }
+          },
+          {
+            "class_name": "Dense",
+            "config": {
+              "name": "dense_3",
+              "trainable": true,
+              "dtype": "float32",
+              "units": 128,
+              "activation": "relu",
+              "use_bias": true
+            }
+          },
+          {
+            "class_name": "Dense",
+            "config": {
+              "name": "dense_4",
+              "trainable": true,
+              "dtype": "float32",
+              "units": 64,
+              "activation": "relu",
+              "use_bias": true
+            }
+          },
+          {
+            "class_name": "Dense",
+            "config": {
+              "name": "dense_5",
+              "trainable": true,
+              "dtype": "float32",
+              "units": 27,
+              "activation": "softmax",
+              "use_bias": true
+            }
+          }
+        ]
+      }
+    }
+  },
+  "weightsManifest": [
+    {
+      "paths": [
+        "group1-shard1of1.bin"
+      ],
+      "weights": [
+        {
+          "name": "dense_1/kernel",
+          "shape": [
+            86,
+            512
+          ],
+          "dtype": "float32"
+        },
+        {
+          "name": "dense_1/bias",
+          "shape": [
+            512
+          ],
+          "dtype": "float32"
+        },
+        {
+          "name": "dense_2/kernel",
+          "shape": [
+            512,
+            256
+          ],
+          "dtype": "float32"
+        },
+        {
+          "name": "dense_2/bias",
+          "shape": [
+            256
+          ],
+          "dtype": "float32"
+        },
+        {
+          "name": "dense_3/kernel",
+          "shape": [
+            256,
+            128
+          ],
+          "dtype": "float32"
+        },
+        {
+          "name": "dense_3/bias",
+          "shape": [
+            128
+          ],
+          "dtype": "float32"
+        },
+        {
+          "name": "dense_4/kernel",
+          "shape": [
+            128,
+            64
+          ],
+          "dtype": "float32"
+        },
+        {
+          "name": "dense_4/bias",
+          "shape": [
+            64
+          ],
+          "dtype": "float32"
+        },
+        {
+          "name": "dense_5/kernel",
+          "shape": [
+            64,
+            27
+          ],
+          "dtype": "float32"
+        },
+        {
+          "name": "dense_5/bias",
+          "shape": [
+            27
+          ],
+          "dtype": "float32"
+        }
+      ]
+    }
+  ]
+}

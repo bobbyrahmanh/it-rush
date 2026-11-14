@@ -1,0 +1,25 @@
+[project]
+name = "bisindo"
+version = "0.1.0"
+description = "BISINDO Alphabet Computer Vision model (2-hand MediaPipe landmarks + Dense MLP -> TFLite), inspired by KawanIsyarat"
+readme = "README.md"
+requires-python = ">=3.10,<3.13"
+dependencies = [
+    "numpy>=1.26.0,<2.0.0",
+    "opencv-python>=4.9.0",
+    "mediapipe>=0.10.14",
+    "tensorflow-cpu>=2.16.1",
+    "scikit-learn>=1.4.0",
+    "pyyaml>=6.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0.0",
+    "pytest-cov>=5.0.0",
+]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]
+addopts = "-v"
