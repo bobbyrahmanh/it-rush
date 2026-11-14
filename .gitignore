@@ -1,6 +1,7 @@
 # Next.js
 node_modules
 .next
+tsconfig.tsbuildinfo
 
 # Python & local training artifacts
 .venv/
@@ -12,6 +13,7 @@ __pycache__/
 htmlcov/
 data/
 artifacts/mediapipe/
+public/models/mediapipe/
 *.egg-info/
 build/
 dist/

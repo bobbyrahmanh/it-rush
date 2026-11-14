@@ -45,12 +45,22 @@ export default function BisindoPage() {
         </div>
 
         <div className="space-y-5 lg:sticky lg:top-24 lg:self-start">
-          <div key={sel} className="card animate-pop flex items-center gap-5 bg-white p-5">
-            <span className="flex h-24 w-24 items-center justify-center rounded-3xl border-4 border-ink bg-grape font-display text-6xl font-bold text-white">{sel}</span>
-            <div>
-              <span className="inline-block rounded-full border-2 border-ink bg-mint px-3 py-1 font-semibold">{handsOf(sel)} Tangan</span>
-              <button onClick={() => speak(sel, data.settings.audioEnabled)} className="btn ml-2 !min-h-[44px] !px-4 bg-sun" aria-label={`Dengarkan huruf ${sel}`}><span aria-hidden="true">🔊</span></button>
-              {sel === "J" && <p className="mt-2 text-sm">Catatan praktik: sehari-hari huruf J digerakkan melengkung di udara. Untuk latihan kamera, tahan pose akhir kelingking mengarah ke samping.</p>}
+          <div key={sel} className="card animate-pop flex flex-wrap items-center gap-4 bg-white p-5 sm:flex-nowrap">
+            <img
+              src={`/images/bisindo/${sel}.webp`}
+              alt={`Contoh pose tangan huruf BISINDO ${sel}`}
+              className="h-28 w-28 shrink-0 rounded-2xl border-4 border-ink bg-sun/20 object-cover sm:h-32 sm:w-32"
+            />
+            <div className="flex items-start gap-4">
+              <span className="flex h-20 w-20 shrink-0 items-center justify-center rounded-3xl border-4 border-ink bg-grape font-display text-5xl font-bold text-white">{sel}</span>
+              <div>
+                <div className="flex flex-wrap items-center gap-2">
+                  <span className="inline-block rounded-full border-2 border-ink bg-mint px-3 py-1 font-semibold">{handsOf(sel)} Tangan</span>
+                  <button onClick={() => speak(sel, data.settings.audioEnabled)} className="btn !min-h-[44px] !px-4 bg-sun" aria-label={`Dengarkan huruf ${sel}`}><span aria-hidden="true">🔊</span></button>
+                </div>
+                <p className="mt-2 text-sm text-ink/80">Tirukan bentuk tangan pada foto contoh, lalu tahan selama 1,5 detik di kamera.</p>
+                {sel === "J" && <p className="mt-1 text-sm">Catatan praktik: sehari-hari huruf J digerakkan melengkung di udara. Untuk latihan kamera, tahan pose akhir kelingking mengarah ke samping.</p>}
+              </div>
             </div>
           </div>
           <CameraSlot letter={sel} />
