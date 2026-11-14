@@ -17,3 +17,157 @@
   *, *::before, *::after { animation: none !important; transition: none !important; }
   .reveal { opacity: 1; transform: none; }
 }
+
+/* Chat messages */
+.chat-message {
+  opacity: 0;
+  transform: translateY(10px);
+  animation: chatAppear 0.55s ease forwards;
+}
+
+.chat-delay-1 {
+  animation-delay: 0.5s;
+}
+
+.chat-delay-2 {
+  animation-delay: 1.8s;
+}
+
+.chat-delay-3 {
+  animation-delay: 3.3s;
+}
+
+.chat-delay-4 {
+  animation-delay: 4.8s;
+}
+
+@keyframes chatAppear {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Typing indicator */
+.typing-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #64748b;
+  animation: typingBounce 0.8s infinite ease-in-out;
+}
+
+.typing-dot:nth-child(2) {
+  animation-delay: 0.15s;
+}
+
+.typing-dot:nth-child(3) {
+  animation-delay: 0.3s;
+}
+
+@keyframes typingBounce {
+  0%, 60%, 100% {
+    transform: translateY(0);
+    opacity: 0.5;
+  }
+
+  30% {
+    transform: translateY(-5px);
+    opacity: 1;
+  }
+}
+
+/* SIGNIFY cards */
+.signify-visual-card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.signify-visual-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 4px 4px 0 #202020;
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .chat-message {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+
+  .typing-dot {
+    animation: none;
+  }
+
+  .signify-visual-card {
+    transition: none;
+  }
+}
+
+/* SIGNIFY animated card deck */
+
+.deck-container {
+  perspective: 1000px;
+}
+
+.deck-card {
+  transform-origin: center center;
+  will-change: transform;
+}
+
+.deck-card-back {
+  z-index: 1;
+  transform: translate(18px, -12px) rotate(9deg) scale(0.92);
+  animation: deckBack 5s ease-in-out infinite;
+}
+
+.deck-card-middle {
+  z-index: 2;
+  transform: translate(-10px, -5px) rotate(-6deg) scale(0.96);
+  animation: deckMiddle 5s ease-in-out infinite;
+}
+
+.deck-card-front {
+  z-index: 3;
+  transform: translate(0, 8px) rotate(1deg);
+  animation: deckFront 5s ease-in-out infinite;
+}
+
+@keyframes deckBack {
+  0%, 100% {
+    transform: translate(18px, -12px) rotate(9deg) scale(0.92);
+  }
+
+  50% {
+    transform: translate(23px, -18px) rotate(11deg) scale(0.92);
+  }
+}
+
+@keyframes deckMiddle {
+  0%, 100% {
+    transform: translate(-10px, -5px) rotate(-6deg) scale(0.96);
+  }
+
+  50% {
+    transform: translate(-15px, -12px) rotate(-8deg) scale(0.96);
+  }
+}
+
+@keyframes deckFront {
+  0%, 100% {
+    transform: translate(0, 8px) rotate(1deg);
+  }
+
+  50% {
+    transform: translate(0, 1px) rotate(-1deg);
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .deck-card {
+    animation: none !important;
+    will-change: auto;
+  }
+}
+

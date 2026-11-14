@@ -3,6 +3,7 @@ import AboutSection from "@/components/landing/AboutSection";
 import FeaturesSection from "@/components/landing/FeaturesSection";
 import PrivacySection from "@/components/landing/PrivacySection";
 import FooterSection from "@/components/Footer";
+import EnvironmentalSection from "@/components/landing/EnvironmentalSection";
 
 export default function Home() {
   return (
@@ -10,6 +11,7 @@ export default function Home() {
       <HeroSection />
       <AboutSection />
       <FeaturesSection />
+      <EnvironmentalSection />
       <PrivacySection />
       <FooterSection />
     </main>

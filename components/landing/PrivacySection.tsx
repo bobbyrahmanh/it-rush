@@ -11,7 +11,7 @@ export default function PrivacySection() {
             </span>
 
             <h2 className="mt-5 text-3xl font-bold sm:text-4xl">
-              Kameramu sepenuhnya milikmu.
+              Belajar dengan aman, <br></br> teknologi yang bertanggung jawab.
             </h2>
 
             <p className="mt-4 max-w-2xl text-lg leading-relaxed">

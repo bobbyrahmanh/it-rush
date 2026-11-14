@@ -22,6 +22,7 @@
   min-height: 340px;
   display: flex;
   flex-direction: column;
+  align-items: center;
   justify-content: center;
   color: #171717;
   animation: stageEnter 0.5s ease both;
@@ -226,7 +227,7 @@
 /* GUESS THE SIGN */
 
 .quizDemo {
-  padding: 22px;
+  padding: 30px;
   border: 4px solid #171717;
   border-radius: 22px;
   background: white;

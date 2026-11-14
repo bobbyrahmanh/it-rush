@@ -1,3 +1,4 @@
+
 import Link from "next/link";
 import Mascot from "@/components/Mascot";
 
@@ -19,30 +20,30 @@ export default function HeroSection() {
     <section className="relative flex min-h-[100svh] items-center overflow-hidden">
       <div className="relative mx-auto grid w-full max-w-6xl items-center gap-10 px-4 py-16 md:grid-cols-2 md:py-20">
         {CHIPS.map((chip) => (
-        <span
+          <span
             key={chip.t + chip.p}
             aria-hidden="true"
             className={`absolute hidden md:flex ${chip.p} ${chip.r}`}
-        >
+          >
             <span
-            style={{ animationDelay: chip.d }}
-            className={`flex h-14 w-14 animate-floaty items-center justify-center rounded-2xl border-4 border-ink font-display text-2xl font-bold shadow-popsm ${chip.c}`}
+              style={{ animationDelay: chip.d }}
+              className={`flex h-14 w-14 animate-floaty items-center justify-center rounded-2xl border-4 border-ink font-display text-2xl font-bold shadow-popsm ${chip.c}`}
             >
-            {chip.t}
+              {chip.t}
             </span>
-        </span>
+          </span>
         ))}
 
         <div className="relative z-10">
           <span className="inline-flex items-center gap-2 rounded-full border-2 border-ink bg-mint px-4 py-2 text-sm font-bold shadow-popsm">
             <span className="h-2.5 w-2.5 rounded-full bg-ink" />
-            Belajar komunikasi inklusif
+            Inclusive Learning for Sustainable Communities
           </span>
 
           <h1 className="mt-6 text-5xl font-bold leading-[1.05] sm:text-6xl lg:text-7xl">
-            Komunikasi inklusif dimulai dari{" "}
+            Pengetahuan{" "}
             <span className="relative inline-block">
-              dua arah.
+              untuk semua.
               <span
                 aria-hidden="true"
                 className="absolute -bottom-1 left-0 -z-10 h-3 w-full -rotate-1 bg-sun"
@@ -50,10 +51,12 @@ export default function HeroSection() {
             </span>
           </h1>
 
-          <p className="mt-6 max-w-xl text-lg leading-relaxed">
-            Pelajari alfabet Bahasa Isyarat Indonesia (BISINDO) dengan deteksi
-            tangan langsung di kamera perangkatmu dan pahami logika pola tulis
-            Braille secara interaktif. Tanpa instalasi, tanpa daftar akun.
+          <p className="mt-6 max-w-xl text-lg leading-snug">
+            SIGNIFY menghadirkan pembelajaran komunikasi inklusif melalui
+            pengenalan alfabet BISINDO berbasis AI dan simulator Braille
+            interaktif. Kami percaya bahwa akses terhadap pendidikan dan
+            informasi, termasuk tentang keberlanjutan pesisir dan hutan tropis,
+            perlu terbuka bagi semua orang.
           </p>
 
           <div className="mt-8 flex flex-wrap gap-4">

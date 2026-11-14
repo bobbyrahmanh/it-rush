@@ -13,10 +13,15 @@ const FEATURES = [
     number: "01",
     title: "BISINDO AI Recognition",
     subtitle: "Belajar bahasa isyarat",
-    tagline: "Ubah gerakan tangan menjadi jembatan komunikasi.",
+    tagline:
+      "Mengenal komunikasi yang lebih inklusif, satu gerakan pada satu waktu.",
     description:
-      "Latih kemampuan mengenali alfabet BISINDO melalui kamera. Sistem mendeteksi posisi tangan dan membantu mengenali gestur untuk 26 huruf alfabet.",
-    points: ["Deteksi gestur tangan", "Pengenalan 1 dan 2 tangan", "Latihan alfabet A–Z"],
+      "Latih kemampuan mengenali alfabet BISINDO melalui kamera. Sistem mendeteksi posisi tangan dan membantu mengenali gestur untuk 26 huruf alfabet. Kemampuan komunikasi yang lebih inklusif dapat membuka ruang partisipasi dan pertukaran pengetahuan bagi masyarakat dengan kebutuhan komunikasi yang beragam.",
+    points: [
+      "Deteksi gestur tangan",
+      "Pengenalan 1 dan 2 tangan",
+      "Latihan alfabet A–Z",
+    ],
     href: "/bisindo",
     action: "Mulai belajar",
   },
@@ -25,10 +30,15 @@ const FEATURES = [
     number: "02",
     title: "Braille Simulator",
     subtitle: "Kenali pola enam titik",
-    tagline: "Setiap titik punya makna, setiap pola membentuk kata.",
+    tagline:
+      "Membuka akses belajar melalui pengenalan sistem tulisan Braille.",
     description:
-      "Pelajari cara membaca dan membentuk huruf Braille melalui sel enam titik interaktif. Coba klik titik atau gunakan keyboard untuk membentuk pola.",
-    points: ["Pengenalan enam titik", "Simulasi pola huruf", "Latihan input keyboard"],
+      "Pelajari cara membaca dan membentuk huruf Braille melalui sel enam titik interaktif. Coba klik titik atau gunakan keyboard untuk membentuk pola. Pengenalan Braille menjadi langkah awal memahami pentingnya akses informasi bagi penyandang Tunanetra.",
+    points: [
+      "Pengenalan enam titik",
+      "Simulasi pola huruf",
+      "Latihan input keyboard",
+    ],
     href: "/braille",
     action: "Coba simulator",
   },
@@ -37,10 +47,15 @@ const FEATURES = [
     number: "03",
     title: "Guess the Sign",
     subtitle: "Uji pemahamanmu",
-    tagline: "Belajar lebih seru dengan menebak dan mencoba.",
+    tagline:
+      "Latihan interaktif untuk membangun pemahaman komunikasi inklusif.",
     description:
-      "Uji pengetahuan alfabet BISINDO dengan menebak huruf berdasarkan gestur yang ditampilkan. Belajar terasa lebih menyenangkan melalui latihan interaktif.",
-    points: ["Tebak huruf BISINDO", "Latihan pengenalan gestur", "Evaluasi jawaban"],
+      "Uji pengetahuan alfabet BISINDO dengan menebak huruf berdasarkan gestur yang ditampilkan. Melalui latihan yang menyenangkan, pengguna dapat memperkuat pemahaman dasar komunikasi inklusif dan membangun kesadaran untuk berinteraksi dengan lebih terbuka.",
+    points: [
+      "Tebak huruf BISINDO",
+      "Latihan pengenalan gestur",
+      "Evaluasi jawaban",
+    ],
     href: "/bisindo",
     action: "Coba latihan",
   },
@@ -49,16 +64,177 @@ const FEATURES = [
     number: "04",
     title: "Learning Progress",
     subtitle: "Pantau perjalanan belajar",
-    tagline: "Rayakan setiap kemajuan kecil dalam perjalanan belajarmu.",
+    tagline:
+      "Setiap kemajuan kecil berarti dalam perjalanan menuju masyarakat inklusif.",
     description:
-      "Lihat perkembangan belajarmu melalui XP, streak harian, dan catatan huruf yang sudah dipelajari. Setiap langkah kecil menjadi bagian dari progresmu.",
-    points: ["Perolehan XP", "Streak belajar", "Riwayat penguasaan huruf"],
+      "Lihat perkembangan belajarmu melalui XP, streak harian, dan catatan huruf yang sudah dipelajari. Progres ini membantu pengguna memantau konsistensi belajar dalam mengenal BISINDO dan Braille sebagai bagian dari penguatan literasi dan akses pengetahuan.",
+    points: [
+      "Perolehan XP",
+      "Streak belajar",
+      "Riwayat penguasaan huruf",
+    ],
     href: "/progress",
     action: "Lihat progres",
   },
+  {
+    id: "eco",
+    number: "05",
+    title: "Inclusive Eco-Learning",
+    subtitle: "Belajar lingkungan secara inklusif",
+    tagline:
+      "Mengenal keberlanjutan melalui akses pengetahuan yang lebih inklusif.",
+    description:
+      "Jelajahi materi singkat mengenai ekosistem mangrove, kebersihan laut, dan keanekaragaman hayati hutan tropis. Kenali istilah penting dari setiap topik, kemudian eksplorasi huruf-huruf penyusunnya melalui modul pembelajaran alfabet BISINDO.",
+    points: [
+      "Materi lingkungan tematik",
+      "Kosakata lingkungan",
+      "Eksplorasi alfabet BISINDO",
+    ],
+    href: "/bisindo",
+    action: "Latih alfabet",
+  },
+
 ] as const;
 
 type FeatureId = (typeof FEATURES)[number]["id"];
+
+
+const ECO_TOPICS = [
+  {
+    id: "mangrove",
+    icon: "🌱",
+    title: "Mangrove",
+    category: "EKOSISTEM PESISIR",
+    description:
+      "Mangrove melindungi pantai, menjadi habitat organisme, dan menjaga keseimbangan lingkungan.",
+    keyword: "PESISIR",
+    letters: ["P", "E", "S", "I", "S", "I", "R"],
+    color: "bg-mint",
+  },
+  {
+    id: "ocean",
+    icon: "🌊",
+    title: "Laut Bersih",
+    category: "KELESTARIAN LAUT",
+    description:
+      "Sampah laut mengancam biota dan merusak ekosistem, sehingga perlu dikurangi dan dikelola dengan baik.",
+    keyword: "LAUT",
+    letters: ["L", "A", "U", "T"],
+    color: "bg-sky",
+  },
+  {
+    id: "forest",
+    icon: "🌳",
+    title: "Hutan Tropis",
+    category: "KEANEKARAGAMAN HAYATI",
+    description:
+      "Hutan tropis menjadi habitat beragam flora dan fauna serta menjaga keseimbangan ekosistem.",
+    keyword: "HUTAN",
+    letters: ["H", "U", "T", "A", "N"],
+    color: "bg-sun",
+  },
+] as const;
+
+function EcoLearningDemo() {
+  const [activeTopic, setActiveTopic] = useState(0);
+  const topic = ECO_TOPICS[activeTopic];
+
+  return (
+    <div className={styles.demoStage}>
+      <div className="w-full max-w-[330px] rounded-3xl border-4 border-ink bg-white p-4 text-ink shadow-pop sm:p-5">
+
+        {/* HEADER */}
+        <div className="flex items-center justify-between gap-2">
+          <div>
+            <span className="text-[10px] font-black tracking-[0.15em] text-gray-500">
+              SIGNIFY LEARNING LIBRARY
+            </span>
+            <h4 className="mt-1 text-xl font-black">
+              Eco-Learning
+            </h4>
+          </div>
+
+          <span className="rounded-full border-2 border-ink bg-mint px-3 py-1 text-[10px] font-black">
+            EXPLORE
+          </span>
+        </div>
+
+        {/* TOPIC SELECTOR */}
+        <div className="mt-5 grid grid-cols-3 gap-2">
+          {ECO_TOPICS.map((item, index) => (
+            <button
+              key={item.id}
+              type="button"
+              onClick={() => setActiveTopic(index)}
+              aria-pressed={activeTopic === index}
+              className={`rounded-xl border-2 border-ink p-2 text-center transition-all duration-200 ${
+                activeTopic === index
+                  ? `${item.color} -translate-y-1 shadow-popsm`
+                  : "bg-white hover:bg-gray-100"
+              }`}
+            >
+              <span className="block text-2xl">{item.icon}</span>
+              <span className="mt-1 block text-[10px] font-black">
+                {item.title}
+              </span>
+            </button>
+          ))}
+        </div>
+
+        {/* SELECTED TOPIC */}
+        <div
+          key={topic.id}
+          className="mt-4 animate-in fade-in duration-300"
+        >
+          <div className={`rounded-2xl border-2 border-ink px-4 py-1 mb-1 ${topic.color}`}>
+            <span className="text-[10px] font-black tracking-wider">
+              {topic.category}
+            </span>
+
+            <h5 className="mt-1 text-2xl font-black">
+              {topic.icon} {topic.title}
+            </h5>
+
+            <p className="mt-2 text-xs leading-snug mb-1">
+              {topic.description}
+            </p>
+          </div>
+
+          {/* KEYWORD */}
+          <div className="">
+            <span className="text-[10px] font-black tracking-wider text-gray-500">
+              KOSAKATA UTAMA
+            </span>
+
+            <h5 className="text-lg font-black">
+              {topic.keyword}
+            </h5>
+
+            <div className="flex flex-wrap gap-1.5">
+              {topic.letters.map((letter, index) => (
+                <span
+                  key={`${letter}-${index}`}
+                  className="flex h-8 w-8 items-center justify-center rounded-lg border-2 border-ink bg-sun text-sm font-black shadow-popsm"
+                >
+                  {letter}
+                </span>
+              ))}
+            </div>
+          </div>
+
+          <p className="mt-4 border-t-2 border-dashed border-gray-300 pt-3 text-[10px] font-medium leading-snug text-gray-600">
+            Kenali huruf penyusun kosakata, lalu lanjutkan
+            eksplorasi alfabet melalui modul BISINDO.
+          </p>
+        </div>
+      </div>
+
+      <p className={styles.demoCaption}>
+        Demonstrasi pembelajaran lingkungan dan eksplorasi alfabet
+      </p>
+    </div>
+  );
+}
 
 function FeatureAnimation({ type }: { type: FeatureId }) {
   if (type === "bisindo") {
@@ -174,6 +350,11 @@ function FeatureAnimation({ type }: { type: FeatureId }) {
     );
   }
 
+  if (type === "eco") {
+    return <EcoLearningDemo />;
+  }
+
+
   return (
     <div className={styles.demoStage}>
       <div className={styles.progressDemo}>
@@ -227,18 +408,20 @@ export default function FeaturesSection() {
   return (
     <section className="mx-auto max-w-6xl px-4 py-20">
       <Reveal>
-        <div className="mb-12 max-w-2xl">
+        <div className="mb-12">
           <span className="inline-block rounded-full border-2 border-ink bg-mint px-4 py-2 text-sm font-bold">
             EXPLORE SIGNIFY
           </span>
 
           <h2 className="mt-5 text-4xl font-bold leading-tight sm:text-5xl">
-            Kenali fitur, temukan cara belajar yang menyenangkan.
+            Satu platform, <br/> lebih banyak cara untuk belajar dan memahami.
           </h2>
 
-          <p className="mt-4 text-lg leading-relaxed">
-            Setiap fitur dirancang untuk membantumu mengenal dan memahami
-            komunikasi inklusif. Pilih salah satu untuk melihat cara kerjanya.
+          <p className="mt-4 text-lg leading-snug">
+            Kenali fitur pembelajaran BISINDO dan Braille yang dirancang
+            untuk memperkenalkan komunikasi inklusif. Melalui akses belajar
+            yang lebih terbuka, SIGNIFY turut mengangkat pentingnya
+            pemerataan pengetahuan bagi masyarakat.
           </p>
         </div>
       </Reveal>
@@ -306,7 +489,7 @@ export default function FeaturesSection() {
                   >
                     <div className="overflow-hidden">
                       <div className="px-5 pb-5 pl-[76px]">
-                        <p className="text-sm leading-relaxed">
+                        <p className="text-sm leading-snug">
                           {feature.tagline}
                         </p>
                       </div>
@@ -333,7 +516,7 @@ export default function FeaturesSection() {
                     {selected.title}
                   </h3>
 
-                  <p className="mt-4 text-sm leading-relaxed text-white/85">
+                  <p className="mt-4 text-sm max-w-sm leading-snug text-white/85">
                     {selected.description}
                   </p>
                   <div className="mt-6 flex flex-wrap gap-2">
