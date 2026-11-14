@@ -12,13 +12,14 @@ from __future__ import annotations
 
 import argparse
 from collections import Counter
+from datetime import datetime
 from pathlib import Path
 
 import cv2
 import numpy as np
 import yaml
 
-from bisindo.dataset import load_landmarks_npz, save_landmarks_npz
+from bisindo.dataset import append_landmarks_npz, load_landmarks_npz
 from bisindo.landmarks import create_hands_detector, extract_features_from_bgr
 
 
@@ -27,6 +28,12 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--config", type=Path, default=Path("configs/config.yaml"))
     parser.add_argument("--output", type=Path, default=None, help="Override webcam_npz")
     parser.add_argument("--camera", type=int, default=0, help="Webcam device index")
+    parser.add_argument(
+        "--class-name",
+        type=str,
+        default=None,
+        help="Jump directly to a class label (existing or new custom class)",
+    )
     return parser.parse_args()
 
 
@@ -38,34 +45,44 @@ def _draw_hands(frame: np.ndarray, hands_xy: list[np.ndarray]) -> None:
             cv2.circle(frame, (int(x * w), int(y * h)), 4, color, -1)
 
 
-def _save_merged(out_path: Path, X_new: list[np.ndarray], y_new: list[str]) -> int:
+def _save_merged(
+    out_path: Path,
+    X_new: list[np.ndarray],
+    y_new: list[str],
+    g_new: list[str],
+) -> int:
     if not X_new:
         return 0
     X_arr = np.stack(X_new, axis=0)
     y_arr = np.array(y_new, dtype=str)
-    if out_path.exists():
-        X_old, y_old = load_landmarks_npz(out_path)
-        X_arr = np.concatenate([X_old, X_arr], axis=0)
-        y_arr = np.concatenate([y_old, y_arr], axis=0)
-    save_landmarks_npz(out_path, X_arr, y_arr)
-    return len(X_arr)
+    g_arr = np.array(g_new, dtype=str)
+    return append_landmarks_npz(out_path, X_arr, y_arr, groups_new=g_arr)
 
 
 def main() -> None:
     args = parse_args()
     cfg = yaml.safe_load(args.config.read_text(encoding="utf-8"))
-    classes: list[str] = cfg["classes"]
+    classes: list[str] = list(cfg["classes"])
     out_path = args.output or Path(cfg["paths"]["webcam_npz"])
+
+    class_idx = 0
+    if args.class_name:
+        target = args.class_name.strip().upper()
+        if target not in classes:
+            classes.append(target)
+        class_idx = classes.index(target)
 
     cap = cv2.VideoCapture(args.camera)
     if not cap.isOpened():
         raise RuntimeError(f"Could not open webcam index {args.camera}")
 
     detector = create_hands_detector(static_image_mode=False, min_detection_confidence=0.3)
-    class_idx = 0
+    session_tag = datetime.now().strftime("%Y%m%d_%H%M%S")
+    burst_id = 0
     recording = False
     X_buf: list[np.ndarray] = []
     y_buf: list[str] = []
+    g_buf: list[str] = []
     counts: Counter[str] = Counter()
 
     if out_path.exists():
@@ -86,6 +103,7 @@ def main() -> None:
             if recording and res.features is not None:
                 X_buf.append(res.features)
                 y_buf.append(current_label)
+                g_buf.append(f"webcam_{current_label}_{session_tag}_b{burst_id}")
                 counts[current_label] += 1
 
             status = "REC ON" if recording else "PAUSED"
@@ -114,22 +132,29 @@ def main() -> None:
                 break
             elif key == ord(" "):
                 if res.features is not None:
+                    burst_id += 1
                     X_buf.append(res.features)
                     y_buf.append(current_label)
+                    g_buf.append(f"webcam_{current_label}_{session_tag}_b{burst_id}")
                     counts[current_label] += 1
             elif key == ord("r"):
+                burst_id += 1
                 recording = not recording
             elif key == ord("n"):
+                burst_id += 1
                 class_idx = (class_idx + 1) % len(classes)
             elif key == ord("p"):
+                burst_id += 1
                 class_idx = (class_idx - 1) % len(classes)
             elif key == ord("s"):
-                total = _save_merged(out_path, X_buf, y_buf)
+                burst_id += 1
+                total = _save_merged(out_path, X_buf, y_buf, g_buf)
                 X_buf.clear()
                 y_buf.clear()
+                g_buf.clear()
                 print(f"Saved! Total samples in {out_path}: {total}")
     finally:
-        total = _save_merged(out_path, X_buf, y_buf)
+        total = _save_merged(out_path, X_buf, y_buf, g_buf)
         if total:
             print(f"Saved on exit! Total samples in {out_path}: {total}")
         detector.close()

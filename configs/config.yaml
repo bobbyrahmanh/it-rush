@@ -38,10 +38,12 @@ paths:
   webcam_npz: data/processed/webcam_landmarks.npz
   public_npz: data/processed/public_landmarks.npz
   merged_npz: data/processed/bisindo_alphabet_dataset.npz
+  wl_npz: data/processed/wl_landmarks.npz
   artifacts_dir: artifacts
   tflite_model: artifacts/bisindo_alphabet_model_f32.tflite
   labels_json: artifacts/bisindo_alphabet_labels.json
   tfjs_dir: artifacts/tfjs
+  public_models_dir: public/models/bisindo
   wl_tflite_model: artifacts/bisindo_wl_model.tflite
   wl_labels_json: artifacts/bisindo_wl_labels.json
 
@@ -59,6 +61,21 @@ training:
     single_hand_ratio: 0.15
     jitter_std: 0.015
     jitter_copies: 2
+
+finetuning:
+  seed: 42
+  val_split: 0.15
+  test_split: 0.15
+  batch_size: 32
+  warmup_epochs: 5
+  warmup_lr: 0.0005
+  epochs: 40
+  learning_rate: 0.0001
+  l2_sp_alpha: 0.01
+  early_stopping_patience: 10
+  reduce_lr_patience: 4
+  wl_epochs: 40
+  wl_learning_rate: 0.001
 
 inference:
   two_hand_threshold: 0.40

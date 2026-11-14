@@ -2,6 +2,7 @@ from pathlib import Path
 from types import SimpleNamespace
 from unittest.mock import MagicMock
 
+import cv2
 import numpy as np
 import pytest
 
@@ -12,13 +13,19 @@ from bisindo.word_level import (
     WordLevelPredictor,
     add_temporal_derivatives,
     anatomical_is_right,
+    append_wl_sequences_npz,
     create_pose_detector,
     detect_raw_pose,
+    extract_wl_backbone_embeddings,
     extract_wl_features_from_bgr,
     extract_wl_frame_features,
+    extract_wl_sequence_from_video_file,
+    finetune_wl_head_in_place,
+    load_wl_sequences_npz,
     normalize_sequence_std,
     prepare_wl_model_input,
     resample_sequence,
+    save_wl_sequences_npz,
 )
 
 
@@ -135,3 +142,89 @@ def test_create_pose_detector_runs_on_blank_image():
         assert detect_raw_pose(img, detector) is None
     finally:
         detector.close()
+
+
+def test_save_load_and_append_wl_sequences_npz(tmp_path):
+    rng = np.random.default_rng(5)
+    X1 = rng.normal(0.0, 0.2, size=(2, WL_SEQUENCE_LEN, WL_TEMPORAL_FEATURE_DIM)).astype(np.float32)
+    y1 = np.array(["air", "makan"])
+    npz_path = tmp_path / "wl.npz"
+
+    save_wl_sequences_npz(npz_path, X1, y1)
+    X2 = rng.normal(0.0, 0.2, size=(2, WL_SEQUENCE_LEN, WL_TEMPORAL_FEATURE_DIM)).astype(np.float32)
+    y2 = np.array(["saya", "tuli"])
+    total = append_wl_sequences_npz(npz_path, X2, y2)
+
+    assert total == 4
+    X_loaded, y_loaded, g_loaded = load_wl_sequences_npz(npz_path)
+    assert X_loaded.shape == (4, WL_SEQUENCE_LEN, WL_TEMPORAL_FEATURE_DIM)
+    assert list(y_loaded) == ["air", "makan", "saya", "tuli"]
+    assert g_loaded is not None and list(g_loaded[:2]) == ["old_0", "old_1"]
+
+
+def test_extract_wl_sequence_from_video_file(tmp_path):
+    vid_path = tmp_path / "air_01.mp4"
+    blank = np.zeros((64, 64, 3), dtype=np.uint8)
+    writer = cv2.VideoWriter(str(vid_path), cv2.VideoWriter_fourcc(*"mp4v"), 10, (64, 64))
+    for _ in range(4):
+        writer.write(blank)
+    writer.release()
+
+    hand_det = MagicMock(spec=["detect"])
+    hand_det.detect.return_value = SimpleNamespace(
+        hand_landmarks=[
+            _make_hand_lms(wrist_x=0.3, wrist_y=0.6, thumb_x=0.38, pinky_x=0.22, finger_y=0.55)
+        ]
+    )
+    pose_det = MagicMock(spec=["detect"])
+    pose_det.detect.return_value = SimpleNamespace(pose_landmarks=[_make_pose_lms()])
+
+    seq = extract_wl_sequence_from_video_file(vid_path, hand_det, pose_det)
+    assert seq.shape == (WL_SEQUENCE_LEN, WL_TEMPORAL_FEATURE_DIM)
+    assert seq.dtype == np.float32
+    assert np.all(np.isfinite(seq))
+
+
+def test_finetune_wl_head_in_place_updates_and_preserves_absent_classes(tmp_path):
+    import json
+
+    base_tflite = Path("artifacts/bisindo_wl_model.tflite")
+    labels_path = Path("artifacts/bisindo_wl_labels.json")
+    if not base_tflite.exists() or not labels_path.exists():
+        pytest.skip("bisindo_wl_model.tflite not downloaded")
+
+    payload = json.loads(labels_path.read_text(encoding="utf-8"))
+    i2l = payload["index_to_label"]
+    classes = [str(i2l[str(i)]) for i in range(len(i2l))]
+
+    rng = np.random.default_rng(19)
+    X_seq = rng.normal(0.0, 0.3, size=(6, WL_SEQUENCE_LEN, WL_TEMPORAL_FEATURE_DIM)).astype(np.float32)
+    y_labels = np.array(["air", "makan", "air", "makan", "air", "makan"])
+
+    _, w_before, b_before = extract_wl_backbone_embeddings(base_tflite, X_seq[:1])
+
+    out_tflite = tmp_path / "wl_finetuned.tflite"
+    acc = finetune_wl_head_in_place(
+        base_tflite_path=base_tflite,
+        classes=classes,
+        X_seq=X_seq,
+        y_labels=y_labels,
+        output_tflite_path=out_tflite,
+        epochs=5,
+        learning_rate=1e-3,
+        l2_sp_alpha=1e-2,
+    )
+
+    assert out_tflite.exists()
+    assert 0.0 <= acc <= 1.0
+
+    _, w_after, b_after = extract_wl_backbone_embeddings(out_tflite, X_seq[:1])
+    absent_idx = classes.index("tuli")
+    assert np.allclose(w_after[absent_idx], w_before[absent_idx], atol=1e-6)
+    assert np.isclose(b_after[absent_idx], b_before[absent_idx], atol=1e-6)
+
+    predictor = WordLevelPredictor(out_tflite, labels_path)
+    frames = [rng.normal(0.0, 0.2, size=WL_RAW_FEATURE_DIM).astype(np.float32) for _ in range(10)]
+    preds = predictor.predict(frames)
+    assert len(preds) == len(classes)
+    assert np.isclose(sum(p.confidence for p in preds), 1.0, atol=1e-4)

@@ -1,27 +1,23 @@
-"""Extract 86-dim BISINDO landmarks from a folder of class-labeled images.
+"""Extract 86-dim BISINDO landmarks from a folder of class-labeled images and videos.
 
 Supports optional YOLO `.txt` hand bounding boxes for fallback cropping (e.g. Agung Ma'ruf dataset),
-stored either next to each image or in a sibling `labels/` directory, and computes anti-leakage
-group IDs via `extract_base_group_id`.
+video sampling, incremental `--append` saving, and `--allow-new-classes`.
 """
 
 from __future__ import annotations
 
 import argparse
+from collections import Counter
 from pathlib import Path
 
-import cv2
-import numpy as np
 import yaml
 
-from bisindo.dataset import extract_base_group_id, save_landmarks_npz
-from bisindo.landmarks import (
-    create_hands_detector,
-    extract_features_with_yolo_fallback,
-    parse_yolo_boxes,
+from bisindo.dataset import (
+    append_landmarks_npz,
+    extract_dataset_from_directory,
+    save_landmarks_npz,
 )
-
-IMAGE_EXTS = {".jpg", ".jpeg", ".png", ".webp", ".bmp"}
+from bisindo.landmarks import create_hands_detector
 
 
 def _find_yolo_label_file(img_path: Path, input_dir: Path) -> Path | None:
@@ -29,9 +25,6 @@ def _find_yolo_label_file(img_path: Path, input_dir: Path) -> Path | None:
     if same_dir.exists():
         return same_dir
 
-    # Check common sibling labels/ structures:
-    #   <root>/images/<CLASS>/<name>.jpg -> <root>/labels/<CLASS>/<name>.txt
-    #   <root>/<CLASS>/<name>.jpg        -> <root>/labels/<CLASS>/<name>.txt
     rel = img_path.relative_to(input_dir)
     candidates = [
         input_dir.parent / "labels" / rel.with_suffix(".txt"),
@@ -45,10 +38,28 @@ def _find_yolo_label_file(img_path: Path, input_dir: Path) -> Path | None:
 
 
 def parse_args() -> argparse.Namespace:
-    parser = argparse.ArgumentParser(description="Prepare BISINDO landmark NPZ from image folders")
+    parser = argparse.ArgumentParser(
+        description="Prepare BISINDO landmark NPZ from image/video folders"
+    )
     parser.add_argument("--config", type=Path, default=Path("configs/config.yaml"))
     parser.add_argument("--input-dir", type=Path, default=None, help="Override raw_images_dir")
     parser.add_argument("--output", type=Path, default=None, help="Override public_npz")
+    parser.add_argument(
+        "--append",
+        action="store_true",
+        help="Append extracted samples to existing NPZ instead of overwriting",
+    )
+    parser.add_argument(
+        "--allow-new-classes",
+        action="store_true",
+        help="Extract all subfolder names as classes, including classes not in config.yaml",
+    )
+    parser.add_argument(
+        "--frame-stride",
+        type=int,
+        default=3,
+        help="Sample every Nth frame when reading video files",
+    )
     return parser.parse_args()
 
 
@@ -63,59 +74,31 @@ def main() -> None:
         raise FileNotFoundError(f"Input directory not found: {input_dir}")
 
     detector = create_hands_detector(static_image_mode=True, min_detection_confidence=0.3)
-    X_list: list[np.ndarray] = []
-    y_list: list[str] = []
-    groups_list: list[str] = []
-    skipped = 0
-    yolo_used = 0
-
     try:
-        for class_dir in sorted(input_dir.iterdir()):
-            if not class_dir.is_dir():
-                continue
-            label = class_dir.name.upper()
-            if label not in classes:
-                print(f"[SKIP] Unknown class folder: {class_dir.name}")
-                continue
-
-            images = [p for p in sorted(class_dir.iterdir()) if p.suffix.lower() in IMAGE_EXTS]
-            kept = 0
-            for img_path in images:
-                bgr = cv2.imread(str(img_path))
-                if bgr is None:
-                    skipped += 1
-                    continue
-
-                label_file = _find_yolo_label_file(img_path, input_dir)
-                yolo_boxes = parse_yolo_boxes(label_file) if label_file else None
-                if yolo_boxes:
-                    yolo_used += 1
-
-                res = extract_features_with_yolo_fallback(bgr, detector, yolo_boxes=yolo_boxes)
-                if res.features is None:
-                    skipped += 1
-                    continue
-
-                X_list.append(res.features)
-                y_list.append(label)
-                groups_list.append(f"{label}_{extract_base_group_id(img_path.name)}")
-                kept += 1
-
-            print(f"[{label}] extracted {kept}/{len(images)} images")
+        X, y, groups, discovered = extract_dataset_from_directory(
+            input_dir=input_dir,
+            classes=classes,
+            detector=detector,
+            allow_new_classes=args.allow_new_classes,
+            frame_stride=args.frame_stride,
+            find_yolo_fn=_find_yolo_label_file,
+        )
     finally:
         detector.close()
 
-    if not X_list:
-        raise RuntimeError("No hand landmarks extracted from any image.")
+    if len(X) == 0:
+        raise RuntimeError("No hand landmarks extracted from any image or video.")
 
-    X = np.stack(X_list, axis=0)
-    y = np.array(y_list, dtype=str)
-    groups = np.array(groups_list, dtype=str)
-    save_landmarks_npz(output_path, X, y, groups=groups)
-    print(
-        f"Saved {len(X)} samples to {output_path} "
-        f"(skipped={skipped}, yolo_annotations_found={yolo_used})"
-    )
+    counts = Counter(y.tolist())
+    for label in discovered:
+        print(f"[{label}] extracted {counts[label]} samples")
+
+    if args.append:
+        total = append_landmarks_npz(output_path, X, y, groups=groups)
+        print(f"Appended {len(X)} samples to {output_path} (total={total})")
+    else:
+        save_landmarks_npz(output_path, X, y, groups=groups)
+        print(f"Saved {len(X)} samples to {output_path}")
 
 
 if __name__ == "__main__":

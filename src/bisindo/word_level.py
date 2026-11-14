@@ -228,3 +228,278 @@ class WordLevelPredictor:
         ]
         preds.sort(key=lambda p: p.confidence, reverse=True)
         return preds
+
+
+def extract_wl_sequence_from_video_file(
+    video_path: str | Path,
+    hand_detector: Any,
+    pose_detector: Any,
+    sequence_len: int = WL_SEQUENCE_LEN,
+) -> np.ndarray:
+    """Extract a `(sequence_len, 300)` WL-BISINDO input tensor from a video clip."""
+    cap = cv2.VideoCapture(str(video_path))
+    if not cap.isOpened():
+        raise RuntimeError(f"Could not open video file: {video_path}")
+
+    raw_frames: list[np.ndarray] = []
+    try:
+        while True:
+            ok, frame = cap.read()
+            if not ok:
+                break
+            raw_frames.append(extract_wl_features_from_bgr(frame, hand_detector, pose_detector))
+    finally:
+        cap.release()
+
+    if not raw_frames:
+        raise ValueError(f"Video file contained no readable frames: {video_path}")
+    return prepare_wl_model_input(raw_frames, sequence_len=sequence_len)[0]
+
+
+def save_wl_sequences_npz(
+    path: str | Path,
+    X_seq: np.ndarray,
+    labels: np.ndarray,
+    groups: np.ndarray | None = None,
+) -> Path:
+    """Save `(N, 30, 300)` WL sequences, string word labels, and optional groups to NPZ."""
+    out_path = Path(path)
+    out_path.parent.mkdir(parents=True, exist_ok=True)
+
+    X_arr = np.asarray(X_seq, dtype=np.float32)
+    y_arr = np.asarray(labels, dtype=str)
+    if (
+        X_arr.ndim != 3
+        or X_arr.shape[1] != WL_SEQUENCE_LEN
+        or X_arr.shape[2] != WL_TEMPORAL_FEATURE_DIM
+    ):
+        raise ValueError(
+            f"Expected X_seq shape (N, {WL_SEQUENCE_LEN}, {WL_TEMPORAL_FEATURE_DIM}), got {X_arr.shape}"
+        )
+    if len(X_arr) != len(y_arr):
+        raise ValueError(f"Mismatched lengths: X_seq={len(X_arr)}, labels={len(y_arr)}")
+
+    payload: dict[str, np.ndarray] = {"X": X_arr, "y": y_arr}
+    if groups is not None:
+        g_arr = np.asarray(groups, dtype=str)
+        if len(g_arr) != len(X_arr):
+            raise ValueError(f"Mismatched lengths: X_seq={len(X_arr)}, groups={len(g_arr)}")
+        payload["groups"] = g_arr
+
+    np.savez_compressed(out_path, **payload)
+    return out_path
+
+
+def load_wl_sequences_npz(
+    path: str | Path,
+) -> tuple[np.ndarray, np.ndarray, np.ndarray | None]:
+    """Load `(N, 30, 300)` WL sequences, string labels, and optional group IDs from NPZ."""
+    data = np.load(Path(path), allow_pickle=False)
+    X = data["X"].astype(np.float32)
+    y = data["y"].astype(str)
+    groups = data["groups"].astype(str) if "groups" in data.files else None
+    return X, y, groups
+
+
+def append_wl_sequences_npz(
+    path: str | Path,
+    X_new: np.ndarray,
+    labels_new: np.ndarray,
+    groups_new: np.ndarray | None = None,
+) -> int:
+    """Append new `(N, 30, 300)` word sequences to an existing WL NPZ (or create it)."""
+    out_path = Path(path)
+    X_arr = np.asarray(X_new, dtype=np.float32)
+    y_arr = np.asarray(labels_new, dtype=str)
+
+    if (
+        X_arr.ndim != 3
+        or X_arr.shape[1] != WL_SEQUENCE_LEN
+        or X_arr.shape[2] != WL_TEMPORAL_FEATURE_DIM
+    ):
+        raise ValueError(
+            f"Expected X_new shape (N, {WL_SEQUENCE_LEN}, {WL_TEMPORAL_FEATURE_DIM}), got {X_arr.shape}"
+        )
+    if len(X_arr) != len(y_arr):
+        raise ValueError(f"Mismatched lengths: X_new={len(X_arr)}, labels_new={len(y_arr)}")
+
+    if out_path.exists():
+        X_old, y_old, g_old = load_wl_sequences_npz(out_path)
+        existing_n = len(X_old)
+        if len(X_arr) == 0:
+            return existing_n
+        if g_old is None:
+            g_old = np.array([f"old_{i}" for i in range(existing_n)], dtype=str)
+        if groups_new is None:
+            g_new = np.array(
+                [f"append_{existing_n}_{i}" for i in range(len(X_arr))], dtype=str
+            )
+        else:
+            g_new = np.asarray(groups_new, dtype=str)
+        X_all = np.concatenate([X_old, X_arr], axis=0)
+        y_all = np.concatenate([y_old, y_arr], axis=0)
+        g_all = np.concatenate([g_old, g_new], axis=0)
+    else:
+        if groups_new is None:
+            g_all = np.array([f"append_0_{i}" for i in range(len(X_arr))], dtype=str)
+        else:
+            g_all = np.asarray(groups_new, dtype=str)
+        X_all, y_all = X_arr, y_arr
+
+    save_wl_sequences_npz(out_path, X_all, y_all, groups=g_all)
+    return len(X_all)
+
+
+def extract_wl_backbone_embeddings(
+    tflite_path: str | Path,
+    X_seq: np.ndarray,
+) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
+    """Run WL Conformer backbone and extract penultimate 128-dim GAP embeddings + head weights."""
+    X_arr = np.asarray(X_seq, dtype=np.float32)
+    if X_arr.ndim != 3 or X_arr.shape[1] != WL_SEQUENCE_LEN or X_arr.shape[2] != WL_TEMPORAL_FEATURE_DIM:
+        raise ValueError(
+            f"Expected X_seq shape (N, {WL_SEQUENCE_LEN}, {WL_TEMPORAL_FEATURE_DIM}), got {X_arr.shape}"
+        )
+
+    interpreter = tf.lite.Interpreter(
+        model_path=str(tflite_path),
+        experimental_op_resolver_type=tf.lite.experimental.OpResolverType.BUILTIN_WITHOUT_DEFAULT_DELEGATES,
+        experimental_preserve_all_tensors=True,
+    )
+    interpreter.allocate_tensors()
+
+    ops = interpreter._get_ops_details()
+    fc_ops = [op for op in ops if op["op_name"] == "FULLY_CONNECTED"]
+    if not fc_ops:
+        raise ValueError(f"No FULLY_CONNECTED ops found in {tflite_path}")
+
+    final_fc = fc_ops[-1]
+    gap_idx = int(final_fc["inputs"][0])
+    weight_idx = int(final_fc["inputs"][1])
+    bias_idx = int(final_fc["inputs"][2]) if len(final_fc["inputs"]) > 2 else -1
+
+    in_idx = interpreter.get_input_details()[0]["index"]
+    w_head = interpreter.get_tensor(weight_idx).astype(np.float32).copy()
+    b_head = (
+        interpreter.get_tensor(bias_idx).astype(np.float32).copy()
+        if bias_idx >= 0
+        else np.zeros((w_head.shape[0],), dtype=np.float32)
+    )
+
+    emb_list: list[np.ndarray] = []
+    for seq in X_arr:
+        interpreter.set_tensor(in_idx, seq[np.newaxis, ...])
+        interpreter.invoke()
+        emb_list.append(interpreter.get_tensor(gap_idx)[0].astype(np.float32).copy())
+
+    embeddings = np.stack(emb_list, axis=0)
+    return embeddings, w_head, b_head
+
+
+def finetune_wl_head_in_place(
+    base_tflite_path: str | Path,
+    classes: list[str],
+    X_seq: np.ndarray,
+    y_labels: np.ndarray,
+    output_tflite_path: str | Path,
+    *,
+    epochs: int = 40,
+    learning_rate: float = 1e-3,
+    l2_sp_alpha: float = 1e-2,
+    seed: int = 42,
+) -> float:
+    """Fine-tune the final WL-BISINDO classifier head with L2-SP and patch the TFLite binary."""
+    from sklearn.utils.class_weight import compute_class_weight
+
+    from bisindo.model import L2SPRegularizer
+
+    label_to_idx = {label: idx for idx, label in enumerate(classes)}
+    y_str = [str(lbl) for lbl in y_labels]
+    unknown = sorted({lbl for lbl in y_str if lbl not in label_to_idx})
+    if unknown:
+        raise ValueError(f"Unknown WL class labels: {unknown}. Allowed: {classes}")
+    if len(X_seq) == 0:
+        raise ValueError("X_seq must contain at least one sequence")
+
+    y_idx = np.array([label_to_idx[lbl] for lbl in y_str], dtype=np.int64)
+    raw_bytes = Path(base_tflite_path).read_bytes()
+
+    embeddings, w0_tflite, b0_tflite = extract_wl_backbone_embeddings(base_tflite_path, X_seq)
+    if w0_tflite.shape[0] != len(classes):
+        raise ValueError(
+            f"WL model outputs {w0_tflite.shape[0]} classes, expected {len(classes)}"
+        )
+
+    tf.keras.utils.set_random_seed(seed)
+    w0_keras = w0_tflite.T.copy()
+
+    inp = tf.keras.Input(shape=(embeddings.shape[1],), dtype=tf.float32)
+    dense = tf.keras.layers.Dense(
+        units=len(classes),
+        activation="softmax",
+        use_bias=True,
+        kernel_regularizer=L2SPRegularizer(w0_keras, l2_sp_alpha) if l2_sp_alpha > 0.0 else None,
+        bias_regularizer=L2SPRegularizer(b0_tflite, l2_sp_alpha) if l2_sp_alpha > 0.0 else None,
+    )
+    out = dense(inp)
+    head_model = tf.keras.Model(inputs=inp, outputs=out)
+    dense.set_weights([w0_keras.copy(), b0_tflite.copy()])
+
+    head_model.compile(
+        optimizer=tf.keras.optimizers.Adam(learning_rate=learning_rate),
+        loss="sparse_categorical_crossentropy",
+        metrics=["accuracy"],
+    )
+
+    unique_cls = np.unique(y_idx)
+    weights = compute_class_weight("balanced", classes=unique_cls, y=y_idx)
+    class_weight = {int(c): float(w) for c, w in zip(unique_cls, weights)}
+
+    head_model.fit(
+        embeddings,
+        y_idx,
+        epochs=epochs,
+        batch_size=min(16, len(embeddings)),
+        class_weight=class_weight,
+        verbose=1,
+    )
+
+    present_set = set(unique_cls.tolist())
+    w_new_keras, b_new = dense.get_weights()
+    for c in range(len(classes)):
+        if c not in present_set:
+            w_new_keras[:, c] = w0_keras[:, c]
+            b_new[c] = b0_tflite[c]
+
+    w_new_bytes = w_new_keras.T.astype("<f4").tobytes()
+    b_new_bytes = b_new.astype("<f4").tobytes()
+    old_w_bytes = w0_tflite.astype("<f4").tobytes()
+    old_b_bytes = b0_tflite.astype("<f4").tobytes()
+
+    if raw_bytes.count(old_w_bytes) != 1 or raw_bytes.count(old_b_bytes) != 1:
+        raise RuntimeError(
+            "Could not uniquely locate WL classifier head weights inside TFLite binary."
+        )
+
+    w_off = raw_bytes.index(old_w_bytes)
+    b_off = raw_bytes.index(old_b_bytes)
+    patched = bytearray(raw_bytes)
+    patched[w_off : w_off + len(old_w_bytes)] = w_new_bytes
+    patched[b_off : b_off + len(old_b_bytes)] = b_new_bytes
+    out_path = Path(output_tflite_path)
+    out_path.parent.mkdir(parents=True, exist_ok=True)
+    out_path.write_bytes(bytes(patched))
+
+    # Evaluate patched TFLite model end-to-end on input sequences
+    eval_interp = tf.lite.Interpreter(model_path=str(out_path))
+    eval_interp.allocate_tensors()
+    e_in = eval_interp.get_input_details()[0]["index"]
+    e_out = eval_interp.get_output_details()[0]["index"]
+    correct = 0
+    for seq, target in zip(X_seq, y_idx):
+        eval_interp.set_tensor(e_in, seq[np.newaxis, ...].astype(np.float32))
+        eval_interp.invoke()
+        pred = int(np.argmax(eval_interp.get_tensor(e_out)[0]))
+        if pred == int(target):
+            correct += 1
+    return float(correct / len(y_idx))

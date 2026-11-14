@@ -8,6 +8,7 @@ import tensorflow as tf
 from bisindo.features import FEATURE_DIM
 from bisindo.model import (
     build_alphabet_mlp,
+    build_finetune_alphabet_model,
     convert_tflite_mlp_to_keras,
     export_tfjs_layers,
     export_tflite_f32,
@@ -118,3 +119,33 @@ def test_save_labels_json_format(tmp_path):
 
     loaded = json.loads(out.read_text(encoding="utf-8"))
     assert loaded == classes
+
+
+def test_build_finetune_alphabet_model_preserves_and_expands_classes(tmp_path):
+    base_classes = ["A", "B", "NOTHING", "Z"]
+    base_keras = build_alphabet_mlp(num_classes=len(base_classes), feature_dim=FEATURE_DIM)
+    base_tflite = tmp_path / "base.tflite"
+    export_tflite_f32(base_keras, base_tflite)
+
+    # Same classes -> exact prediction parity with reconstructed base model
+    model_same, shared_same, _ = build_finetune_alphabet_model(
+        base_tflite, base_classes, base_classes, l2_sp_alpha=1e-2
+    )
+    ref_keras = convert_tflite_mlp_to_keras(base_tflite)
+    x = np.random.default_rng(3).uniform(0.0, 1.0, size=(2, FEATURE_DIM)).astype(np.float32)
+    assert shared_same == {0: 0, 1: 1, 2: 2, 3: 3}
+    assert np.allclose(model_same(x, training=False).numpy(), ref_keras(x, training=False).numpy(), atol=1e-5)
+
+    # Expanded classes -> adds "HALO" while copying original weights
+    target_classes = [*base_classes, "HALO"]
+    model_exp, shared_exp, (w_init, b_init) = build_finetune_alphabet_model(
+        base_tflite, base_classes, target_classes, l2_sp_alpha=1e-2
+    )
+    assert model_exp.output_shape == (None, 5)
+    assert len(shared_exp) == 4
+    ref_weights = ref_keras.layers[-1].get_weights()
+    w_ref = ref_weights[0]
+    b_ref = ref_weights[1] if len(ref_weights) > 1 else np.zeros((4,), dtype=np.float32)
+    assert np.allclose(w_init[:, :4], w_ref)
+    assert np.allclose(b_init[:4], b_ref)
+    assert any(layer.kernel_regularizer is not None for layer in model_exp.layers[1:])

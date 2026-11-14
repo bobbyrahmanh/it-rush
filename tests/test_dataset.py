@@ -1,15 +1,22 @@
+from types import SimpleNamespace
+from unittest.mock import MagicMock
+
+import cv2
 import numpy as np
 
 from bisindo.dataset import (
+    append_landmarks_npz,
     extract_base_group_id,
+    extract_dataset_from_directory,
     load_landmarks_npz,
     load_landmarks_with_groups,
     merge_datasets,
     merge_datasets_with_groups,
     save_landmarks_npz,
     split_dataset,
+    summarize_dataset_npz,
 )
-from bisindo.features import FEATURE_DIM
+from bisindo.features import FEATURE_DIM, NUM_LANDMARKS
 
 
 def test_extract_base_group_id_strips_augmentation_tokens():
@@ -99,3 +106,63 @@ def test_split_dataset_prevents_group_leakage():
     assert train_groups.isdisjoint(test_groups)
     assert val_groups.isdisjoint(test_groups)
     assert len(splits.X_train) + len(splits.X_val) + len(splits.X_test) == 90
+
+
+def test_append_landmarks_npz_and_summarize(tmp_path):
+    npz_path = tmp_path / "webcam.npz"
+    X1 = np.ones((3, FEATURE_DIM), dtype=np.float32)
+    y1 = np.array(["A", "A", "B"])
+    save_landmarks_npz(npz_path, X1, y1)  # intentionally without groups
+
+    X2 = np.zeros((2, FEATURE_DIM), dtype=np.float32)
+    y2 = np.array(["B", "HALO"])
+    total = append_landmarks_npz(npz_path, X2, y2)
+    assert total == 5
+
+    X_all, y_all, g_all = load_landmarks_with_groups(npz_path)
+    assert X_all.shape == (5, FEATURE_DIM)
+    assert list(y_all) == ["A", "A", "B", "B", "HALO"]
+    assert g_all is not None and list(g_all[:3]) == ["old_0", "old_1", "old_2"]
+
+    counts = summarize_dataset_npz([npz_path, tmp_path / "missing.npz"])
+    assert counts == {"A": 2, "B": 2, "HALO": 1}
+
+
+def test_extract_dataset_from_directory_images_videos_and_new_classes(tmp_path):
+    raw_dir = tmp_path / "raw"
+    (raw_dir / "A").mkdir(parents=True)
+    (raw_dir / "CUSTOM").mkdir(parents=True)
+
+    blank = np.zeros((64, 64, 3), dtype=np.uint8)
+    cv2.imwrite(str(raw_dir / "A" / "a_001.jpg"), blank)
+
+    vid_path = raw_dir / "CUSTOM" / "clip1.mp4"
+    writer = cv2.VideoWriter(str(vid_path), cv2.VideoWriter_fourcc(*"mp4v"), 10, (64, 64))
+    for _ in range(4):
+        writer.write(blank)
+    writer.release()
+
+    fake_hand = [
+        SimpleNamespace(x=0.1 + 0.02 * i, y=0.2 + 0.01 * i, z=0.0)
+        for i in range(NUM_LANDMARKS)
+    ]
+    detector = MagicMock(spec=["detect"])
+    detector.detect.return_value = SimpleNamespace(hand_landmarks=[fake_hand])
+
+    # Disallow new classes -> only A extracted
+    X1, y1, g1, disc1 = extract_dataset_from_directory(
+        raw_dir, {"A", "B"}, detector, allow_new_classes=False, frame_stride=2
+    )
+    assert X1.shape == (1, FEATURE_DIM)
+    assert list(y1) == ["A"]
+    assert list(g1) == ["A_a_001"]
+    assert disc1 == ["A"]
+
+    # Allow new classes -> A image + 2 strided frames from CUSTOM video
+    X2, y2, g2, disc2 = extract_dataset_from_directory(
+        raw_dir, {"A", "B"}, detector, allow_new_classes=True, frame_stride=2
+    )
+    assert X2.shape == (3, FEATURE_DIM)
+    assert list(y2) == ["A", "CUSTOM", "CUSTOM"]
+    assert list(g2) == ["A_a_001", "CUSTOM_vid_clip1", "CUSTOM_vid_clip1"]
+    assert disc2 == ["A", "CUSTOM"]

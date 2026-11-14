@@ -280,3 +280,121 @@ def convert_tflite_mlp_to_keras(tflite_path: str | Path) -> tf.keras.Model:
         layer.set_weights(weights)
 
     return model
+
+
+class L2SPRegularizer(tf.keras.regularizers.Regularizer):
+    """L2-SP regularization anchoring fine-tuned weights toward pretrained values."""
+
+    def __init__(self, w0: np.ndarray, alpha: float = 1e-2) -> None:
+        self.alpha = float(alpha)
+        self._w0_np = np.asarray(w0, dtype=np.float32)
+        self._w0_tensor = tf.constant(self._w0_np, dtype=tf.float32)
+
+    def __call__(self, x: tf.Tensor) -> tf.Tensor:
+        return self.alpha * tf.reduce_sum(tf.square(tf.cast(x, tf.float32) - self._w0_tensor))
+
+    def get_config(self) -> dict[str, Any]:
+        return {"alpha": self.alpha}
+
+
+def build_finetune_alphabet_model(
+    base_tflite_path: str | Path,
+    base_classes: list[str],
+    target_classes: list[str],
+    *,
+    learning_rate: float = 1e-4,
+    l2_sp_alpha: float = 1e-2,
+    seed: int = 42,
+) -> tuple[tf.keras.Model, dict[int, int], tuple[np.ndarray, np.ndarray]]:
+    """Build a fine-tunable Keras MLP initialized from a pretrained Float32 TFLite model.
+
+    Supports keeping the same class list or expanding `target_classes` with new labels,
+    returning `(model, shared_target_to_base_idx, (w_out_init, b_out_init))`.
+    """
+    base_model = convert_tflite_mlp_to_keras(base_tflite_path)
+    base_dense_layers = [
+        layer for layer in base_model.layers if isinstance(layer, tf.keras.layers.Dense)
+    ]
+    if not base_dense_layers:
+        raise ValueError(f"No Dense layers reconstructed from {base_tflite_path}")
+
+    feature_dim = int(base_model.input_shape[-1])
+    inputs = tf.keras.Input(shape=(feature_dim,), dtype=tf.float32, name="landmarks")
+    x = inputs
+
+    layers_and_weights: list[tuple[tf.keras.layers.Dense, list[np.ndarray]]] = []
+    for b_layer in base_dense_layers[:-1]:
+        b_weights = b_layer.get_weights()
+        w_ref = b_weights[0].astype(np.float32)
+        use_bias = len(b_weights) > 1
+        b_ref = b_weights[1].astype(np.float32) if use_bias else None
+
+        k_reg = L2SPRegularizer(w_ref, l2_sp_alpha) if l2_sp_alpha > 0.0 else None
+        b_reg = (
+            L2SPRegularizer(b_ref, l2_sp_alpha)
+            if (use_bias and b_ref is not None and l2_sp_alpha > 0.0)
+            else None
+        )
+
+        layer = tf.keras.layers.Dense(
+            units=int(b_layer.units),
+            activation=_activation_name(b_layer.activation),
+            use_bias=use_bias,
+            kernel_regularizer=k_reg,
+            bias_regularizer=b_reg,
+            name=b_layer.name,
+        )
+        x = layer(x)
+        layers_and_weights.append((layer, [w.copy() for w in b_weights]))
+
+    head_layer = base_dense_layers[-1]
+    head_weights = head_layer.get_weights()
+    w_base = head_weights[0].astype(np.float32)
+    b_base = (
+        head_weights[1].astype(np.float32)
+        if len(head_weights) > 1
+        else np.zeros((len(base_classes),), dtype=np.float32)
+    )
+    if w_base.shape[1] != len(base_classes):
+        raise ValueError(
+            f"Base model output units ({w_base.shape[1]}) != len(base_classes) ({len(base_classes)})"
+        )
+
+    base_idx_by_name = {label: idx for idx, label in enumerate(base_classes)}
+    shared_map: dict[int, int] = {}
+    for t_idx, label in enumerate(target_classes):
+        if label in base_idx_by_name:
+            shared_map[t_idx] = base_idx_by_name[label]
+
+    rng = np.random.default_rng(seed)
+    w_out = rng.normal(0.0, 0.02, size=(w_base.shape[0], len(target_classes))).astype(np.float32)
+    b_out = np.zeros((len(target_classes),), dtype=np.float32)
+    for t_idx, b_idx in shared_map.items():
+        w_out[:, t_idx] = w_base[:, b_idx]
+        b_out[t_idx] = b_base[b_idx]
+
+    out_k_reg = L2SPRegularizer(w_out, l2_sp_alpha) if l2_sp_alpha > 0.0 else None
+    out_b_reg = L2SPRegularizer(b_out, l2_sp_alpha) if l2_sp_alpha > 0.0 else None
+    out_layer = tf.keras.layers.Dense(
+        units=len(target_classes),
+        activation="softmax",
+        use_bias=True,
+        kernel_regularizer=out_k_reg,
+        bias_regularizer=out_b_reg,
+        name=head_layer.name,
+    )
+    outputs = out_layer(x)
+    layers_and_weights.append((out_layer, [w_out.copy(), b_out.copy()]))
+
+    model = tf.keras.Model(
+        inputs=inputs, outputs=outputs, name="bisindo_alphabet_finetuned"
+    )
+    for layer, weights in layers_and_weights:
+        layer.set_weights(weights)
+
+    model.compile(
+        optimizer=tf.keras.optimizers.Adam(learning_rate=learning_rate),
+        loss="sparse_categorical_crossentropy",
+        metrics=["accuracy"],
+    )
+    return model, shared_map, (w_out.copy(), b_out.copy())

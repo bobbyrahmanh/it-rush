@@ -45,8 +45,8 @@ Tim pengembang terdiri dari:
   - `bisindo_wl_model.tflite` & `bisindo_wl_labels.json` — Model TFLite WL-BISINDO 8 kata dinamis.
 - `lib/cv/normalizeLandmarks.ts` — Implementasi TypeScript ekstraksi fitur 86-dim Boháček 2D (`extractBisindo86Features`) dan validator tahan pose (`HoldPoseValidator`).
 - `src/bisindo/` — Paket Python inti (`features.py`, `landmarks.py`, `dataset.py`, `model.py`, `train.py`, `word_level.py`).
-- `scripts/` — Skrip CLI ekstraksi dataset, perekaman webcam, training & ekspor TF.js/TFLite, konversi model, serta uji webcam (`prepare_dataset.py`, `collect_webcam.py`, `train_model.py`, `convert_kawanisyarat_to_tfjs.py`, `infer_webcam.py`, `infer_word_webcam.py`).
-- `configs/config.yaml` — Konfigurasi pipeline dataset, normalisasi, dan training.
+- `scripts/` — Skrip CLI ekstraksi dataset, perekaman webcam, training & fine-tuning model, ekspor TF.js/TFLite, serta uji webcam (`prepare_dataset.py`, `collect_webcam.py`, `train_model.py`, `finetune_model.py`, `finetune_word_model.py`, `convert_kawanisyarat_to_tfjs.py`, `infer_webcam.py`, `infer_word_webcam.py`).
+- `configs/config.yaml` — Konfigurasi pipeline dataset, normalisasi, training, dan fine-tuning.
 - `tests/` — Unit test Python (`pytest`) untuk seluruh modul CV.
 - `artifacts/` & `exports/ts/` — Artefak hasil konversi/ekspor dari pipeline Python.
 
@@ -59,25 +59,31 @@ source .venv/bin/activate
 pip install -e ".[dev]"
 ```
 
-Ekstrak dataset, rekam tambahan, latih, atau uji model:
+Penambahan dataset, fine-tuning anti-forgetting, training, dan pengujian model:
 ```zsh
-# 1. Ekstrak landmark dari dataset gambar (mendukung fallback YOLO .txt & anti-leakage)
-python scripts/prepare_dataset.py
+# 1. Ekstrak landmark dari folder gambar/video (mendukung YOLO fallback, --append & --allow-new-classes)
+python scripts/prepare_dataset.py --input-dir data/raw_images --append --allow-new-classes
 
-# 2. Rekam dataset tambahan via webcam
-python scripts/collect_webcam.py
+# 2. Rekam dataset tambahan via webcam (bisa langsung lompat ke kelas tertentu/baru)
+python scripts/collect_webcam.py --class-name J
 
-# 3. Training & ekspor ke TFLite + TensorFlow.js
+# 3. Fine-tuning model Alfabet BISINDO dari pretrained + L2-SP regularization & sync ke public/models/bisindo/
+python scripts/finetune_model.py
+
+# 4. Fine-tuning kepala model Kata Dinamis (WL-BISINDO) dari folder video kata
+python scripts/finetune_word_model.py --video-dir data/raw_word_videos
+
+# 5. (Opsional) Training ulang dari nol & ekspor ke TFLite + TensorFlow.js
 python scripts/train_model.py
 
-# 4. Konversi cepat model TFLite KawanIsyarat ke TensorFlow.js
+# 6. Konversi cepat model TFLite KawanIsyarat ke TensorFlow.js
 python scripts/convert_kawanisyarat_to_tfjs.py
 
-# 5. Uji webcam real-time (alfabet & kata dinamis)
+# 7. Uji webcam real-time (alfabet & kata dinamis)
 python scripts/infer_webcam.py
 python scripts/infer_word_webcam.py
 
-# 6. Jalankan unit test Python
+# 8. Jalankan unit test Python
 pytest --cov=bisindo --cov-report=term-missing
 ```
 
