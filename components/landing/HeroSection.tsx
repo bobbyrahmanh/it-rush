@@ -2,15 +2,16 @@ import Link from "next/link";
 import Mascot from "@/components/Mascot";
 
 const CHIPS = [
-  { t: "A", c: "bg-sun", p: "left-[2%] top-[12%]", d: "0s" },
+  { t: "A", c: "bg-sun", p: "left-[-7%] top-[7%]", r: "rotate-6", d: "0s" },
   {
     t: "⠿",
     c: "bg-grape text-white",
     p: "right-[4%] top-[10%]",
+    r: "-rotate-6",
     d: ".6s",
   },
-  { t: "K", c: "bg-coral", p: "left-[7%] bottom-[12%]", d: "1.1s" },
-  { t: "⠓", c: "bg-mint", p: "right-[8%] bottom-[14%]", d: ".3s" },
+  { t: "K", c: "bg-coral", p: "left-[-5%] bottom-[22%]", r: "rotate-12", d: "1.1s" },
+  { t: "⠓", c: "bg-mint", p: "right-[8%] bottom-[14%]", r: "-rotate-6", d: ".3s" },
 ];
 
 export default function HeroSection() {
@@ -18,14 +19,18 @@ export default function HeroSection() {
     <section className="relative flex min-h-[100svh] items-center overflow-hidden">
       <div className="relative mx-auto grid w-full max-w-6xl items-center gap-10 px-4 py-16 md:grid-cols-2 md:py-20">
         {CHIPS.map((chip) => (
-          <span
+        <span
             key={chip.t + chip.p}
             aria-hidden="true"
+            className={`absolute hidden md:flex ${chip.p} ${chip.r}`}
+        >
+            <span
             style={{ animationDelay: chip.d }}
-            className={`absolute hidden h-14 w-14 animate-floaty items-center justify-center rounded-2xl border-4 border-ink font-display text-2xl font-bold shadow-popsm md:flex ${chip.c} ${chip.p}`}
-          >
+            className={`flex h-14 w-14 animate-floaty items-center justify-center rounded-2xl border-4 border-ink font-display text-2xl font-bold shadow-popsm ${chip.c}`}
+            >
             {chip.t}
-          </span>
+            </span>
+        </span>
         ))}
 
         <div className="relative z-10">
@@ -47,7 +52,7 @@ export default function HeroSection() {
 
           <p className="mt-6 max-w-xl text-lg leading-relaxed">
             Pelajari alfabet Bahasa Isyarat Indonesia (BISINDO) dengan deteksi
-            tangan langsung di kamera perangkatmu, dan pahami logika pola tulis
+            tangan langsung di kamera perangkatmu dan pahami logika pola tulis
             Braille secara interaktif. Tanpa instalasi, tanpa daftar akun.
           </p>
 
