@@ -1,4 +1,5 @@
 "use client";
+import { WORD_ITEMS } from "@/lib/bisindo";
 import Link from "next/link";
 import { useState } from "react";
 import Mascot from "@/components/Mascot";
@@ -44,6 +45,29 @@ export default function ProgressPage() {
         {stats.map((s) => <div key={s.l} className={`card p-5 ${s.c}`}><p className="font-semibold">{s.l}</p><p className="font-display text-4xl font-bold">{s.v}</p></div>)}
       </div>
       <Grid title="Huruf BISINDO" learned={data.bisindo.learnedLetters} />
+      <section className="card space-y-4 bg-white p-5">
+        <div className="flex flex-wrap items-center justify-between gap-2">
+          <h2 className="font-display text-2xl font-bold">
+            Kata Dasar BISINDO ({(data.bisindo.learnedWords ?? []).length}/{WORD_ITEMS.length})
+          </h2>
+        </div>
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+          {WORD_ITEMS.map((item) => {
+            const done = (data.bisindo.learnedWords ?? []).includes(item.id);
+            return (
+              <div
+                key={item.id}
+                className={`rounded-xl border-2 border-ink p-3 ${done ? "bg-mint text-ink" : "bg-paper text-ink/75"}`}
+              >
+                <div className="flex items-center justify-between gap-2">
+                  <span className="font-bold">{item.title}</span>
+                  <span className="text-xs font-bold">{done ? "✓" : `${item.hands}T`}</span>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </section>
       <Grid title="Huruf Braille" learned={data.braille.learnedLetters} />
       <p>Progres belajarmu saat ini disimpan secara lokal pada peramban perangkat ini.</p>
       {confirm ? (

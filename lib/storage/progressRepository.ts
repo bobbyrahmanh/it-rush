@@ -6,7 +6,7 @@ export interface ProgressData {
   xp: number;
   streak: { current: number; longest: number; lastActiveDate: string | null };
   settings: { audioEnabled: boolean; showLandmarks: boolean };
-  bisindo: { learnedLetters: string[]; practiceSessionsCompleted: number; guessTheSignBestScore: number };
+  bisindo: { learnedLetters: string[]; learnedWords: string[]; practiceSessionsCompleted: number; guessTheSignBestScore: number };
   braille: { learnedLetters: string[]; quizSessionsCompleted: number };
 }
 
@@ -16,7 +16,7 @@ export const DEFAULT_PROGRESS: ProgressData = {
   schemaVersion: 1, xp: 0,
   streak: { current: 0, longest: 0, lastActiveDate: null },
   settings: { audioEnabled: true, showLandmarks: true },
-  bisindo: { learnedLetters: [], practiceSessionsCompleted: 0, guessTheSignBestScore: 0 },
+  bisindo: { learnedLetters: [], learnedWords: [], practiceSessionsCompleted: 0, guessTheSignBestScore: 0 },
   braille: { learnedLetters: [], quizSessionsCompleted: 0 },
 };
 
@@ -61,6 +61,12 @@ export const progressRepository = {
       const p = current();
       if (p[mod].learnedLetters.includes(letter)) return;
       commit(withStreak({ ...p, xp: p.xp + xp, [mod]: { ...p[mod], learnedLetters: [...p[mod].learnedLetters, letter] } }));
+    },
+    markWordLearned(word: string, xp = 15) {
+      const p = current();
+      const learnedWords = p.bisindo.learnedWords ?? [];
+      if (learnedWords.includes(word)) return;
+      commit(withStreak({ ...p, xp: p.xp + xp, bisindo: { ...p.bisindo, learnedWords: [...learnedWords, word] } }));
     },
     completeBrailleQuiz(xp = 15) {
       const p = current();
