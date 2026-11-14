@@ -1,0 +1,480 @@
+
+.detailContent {
+  width: 100%;
+  height: 100%;
+  animation: detailEnter 0.35s ease both;
+}
+
+@keyframes detailEnter {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.demoStage {
+  width: 100%;
+  max-width: 340px;
+  min-height: 340px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  color: #171717;
+  animation: stageEnter 0.5s ease both;
+}
+
+@keyframes stageEnter {
+  from {
+    opacity: 0;
+    transform: scale(0.94);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.demoCaption {
+  margin-top: 12px;
+  text-align: center;
+  color: white;
+  font-size: 11px;
+  opacity: 0.75;
+}
+
+/* BISINDO CAMERA SIMULATION */
+
+.cameraFrame {
+  overflow: hidden;
+  border: 4px solid #171717;
+  border-radius: 22px;
+  background: white;
+  box-shadow: 5px 5px 0 #171717;
+}
+
+.cameraTop {
+  display: flex;
+  justify-content: space-between;
+  padding: 12px;
+  font-size: 10px;
+  font-weight: 800;
+}
+
+.liveDot {
+  color: #e45d4f;
+  animation: blink 1.2s infinite;
+}
+
+.handScene {
+  position: relative;
+  display: flex;
+  height: 205px;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background-color: #d9efff;
+  background-image: linear-gradient(
+    rgba(23, 23, 23, 0.06) 1px,
+    transparent 1px
+  ), linear-gradient(
+    90deg,
+    rgba(23, 23, 23, 0.06) 1px,
+    transparent 1px
+  );
+  background-size: 22px 22px;
+}
+
+.hand {
+  font-size: 112px;
+  transform-origin: center bottom;
+  animation: handMove 2.5s ease-in-out infinite;
+}
+
+.landmark {
+  position: absolute;
+  z-index: 2;
+  width: 9px;
+  height: 9px;
+  border: 2px solid #171717;
+  border-radius: 50%;
+  background: #ef7163;
+  animation: landmarkPulse 1.2s ease-in-out infinite alternate;
+}
+
+.point1 { top: 20%; left: 47%; }
+.point2 { top: 34%; left: 38%; }
+.point3 { top: 25%; left: 53%; }
+.point4 { top: 18%; left: 60%; }
+.point5 { top: 38%; left: 67%; }
+.point6 { top: 53%; left: 42%; }
+.point7 { top: 57%; left: 56%; }
+.point8 { top: 70%; left: 49%; }
+
+.scanLine {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: #8a65bd;
+  box-shadow: 0 0 12px #8a65bd;
+  animation: scan 2.5s linear infinite;
+}
+
+.recognition {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px;
+  gap: 8px;
+  font-size: 9px;
+  font-weight: 800;
+}
+
+.recognition strong {
+  font-size: 28px;
+}
+
+.confidence {
+  color: #777;
+  font-size: 8px;
+}
+
+/* BRAILLE SIMULATION */
+
+.brailleDemo {
+  padding: 22px;
+  border: 4px solid #171717;
+  border-radius: 22px;
+  background: white;
+  box-shadow: 5px 5px 0 #171717;
+}
+
+.demoLabel {
+  text-align: center;
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: 1px;
+}
+
+.brailleCell {
+  display: grid;
+  width: fit-content;
+  grid-template-columns: repeat(2, 55px);
+  gap: 14px;
+  margin: 24px auto;
+  padding: 18px;
+  border: 3px solid #171717;
+  border-radius: 18px;
+  background: #b8e5d4;
+}
+
+.brailleDot {
+  width: 55px;
+  height: 55px;
+  border: 3px solid #171717;
+  border-radius: 50%;
+  background: white;
+}
+
+.activeDot {
+  background: #8062ad;
+  animation: dotPress 1.8s ease-in-out infinite alternate;
+}
+
+.brailleResult {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  border: 2px solid #171717;
+  border-radius: 12px;
+  background: #ffe36c;
+  font-size: 10px;
+  font-weight: 800;
+}
+
+.brailleResult strong {
+  font-size: 28px;
+}
+
+.keyboardDemo {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  margin-top: 16px;
+}
+
+.key {
+  display: flex;
+  width: 34px;
+  height: 34px;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid #171717;
+  border-radius: 8px;
+  background: #fff;
+  font-size: 12px;
+  font-weight: 900;
+  animation: keyPress 2s ease-in-out infinite;
+}
+
+/* GUESS THE SIGN */
+
+.quizDemo {
+  padding: 22px;
+  border: 4px solid #171717;
+  border-radius: 22px;
+  background: white;
+  box-shadow: 5px 5px 0 #171717;
+  
+}
+
+.quizQuestion {
+  margin-top: 18px;
+  padding: 15px;
+  border: 2px solid #171717;
+  border-radius: 14px;
+  background: #ffe1dc;
+  text-align: center;
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.quizHand {
+  margin-top: 10px;
+  font-size: 65px;
+  animation: quizHandMove 2s ease-in-out infinite;
+}
+
+.quizOptions {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.quizOption {
+  display: flex;
+  height: 45px;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid #171717;
+  border-radius: 10px;
+  background: white;
+  font-size: 20px;
+  font-weight: 900;
+  animation: optionFloat 2s ease-in-out infinite;
+}
+
+.correctOption {
+  background: #b8e5d4;
+}
+
+.quizFeedback {
+  margin-top: 16px;
+  padding: 11px;
+  border: 2px solid #171717;
+  border-radius: 10px;
+  background: #b8e5d4;
+  font-size: 10px;
+  font-weight: 800;
+  text-align: center;
+}
+
+/* PROGRESS SIMULATION */
+
+.progressDemo {
+  padding: 22px;
+  border: 4px solid #171717;
+  border-radius: 22px;
+  background: white;
+  box-shadow: 5px 5px 0 #171717;
+}
+
+.progressStats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-top: 18px;
+}
+
+.progressStats > div {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  padding: 12px;
+  border: 2px solid #171717;
+  border-radius: 12px;
+  background: #ffe36c;
+}
+
+.progressStats > div:last-child {
+  background: #ffdcd5;
+}
+
+.progressStats span {
+  font-size: 9px;
+  font-weight: 800;
+}
+
+.progressStats strong {
+  font-size: 21px;
+}
+
+.chart {
+  display: flex;
+  height: 125px;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 9px;
+  margin-top: 24px;
+  padding: 12px;
+  border: 2px solid #171717;
+  border-radius: 12px;
+  background: #b8e5d4;
+}
+
+.chartColumn {
+  display: flex;
+  height: 100%;
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 6px;
+}
+
+.chartColumn span {
+  font-size: 9px;
+  font-weight: 800;
+}
+
+.chartBar {
+  width: 100%;
+  min-height: 8px;
+  border: 2px solid #171717;
+  border-radius: 5px 5px 0 0;
+  background: #8062ad;
+  transform-origin: bottom;
+  animation: barGrow 1s ease both;
+}
+
+.progressTrack {
+  height: 13px;
+  overflow: hidden;
+  margin-top: 18px;
+  border: 2px solid #171717;
+  border-radius: 20px;
+  background: white;
+}
+
+.progressFill {
+  width: 0;
+  height: 100%;
+  border-right: 2px solid #171717;
+  border-radius: 20px;
+  background: #ffe36c;
+  animation: progressGrow 2s ease forwards;
+}
+
+.progressCaption {
+  display: block;
+  margin-top: 9px;
+  font-size: 9px;
+  font-weight: 700;
+  text-align: center;
+}
+
+/* SHARED ANIMATIONS */
+
+@keyframes blink {
+  50% { opacity: 0.35; }
+}
+
+@keyframes handMove {
+  0%, 100% { transform: translateY(5px) rotate(-4deg); }
+  50% { transform: translateY(-8px) rotate(4deg); }
+}
+
+@keyframes landmarkPulse {
+  from { transform: scale(0.8); }
+  to { transform: scale(1.35); }
+}
+
+@keyframes scan {
+  from { transform: translateY(0); }
+  to { transform: translateY(205px); }
+}
+
+@keyframes dotPress {
+  from { transform: scale(0.9); }
+  to { transform: scale(1.08); }
+}
+
+@keyframes keyPress {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(3px); }
+}
+
+@keyframes quizHandMove {
+  0%, 100% { transform: rotate(-8deg) translateY(0); }
+  50% { transform: rotate(8deg) translateY(-6px); }
+}
+
+@keyframes optionFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-3px); }
+}
+
+@keyframes barGrow {
+  from { transform: scaleY(0); }
+  to { transform: scaleY(1); }
+}
+
+@keyframes progressGrow {
+  to { width: 75%; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .detailContent,
+  .demoStage,
+  .hand,
+  .landmark,
+  .scanLine,
+  .activeDot,
+  .key,
+  .quizHand,
+  .quizOption,
+  .chartBar,
+  .progressFill,
+  .liveDot {
+    animation: none !important;
+  }
+
+  .progressFill {
+    width: 75%;
+  }
+}
+
+.demoTransition {
+  width: 100%;
+  max-width: 100%;
+  animation: demoFadeIn 0.4s ease both;
+}
+
+@keyframes demoFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(14px) scale(0.98);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
