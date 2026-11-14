@@ -8,7 +8,7 @@
     "model_config": {
       "class_name": "Sequential",
       "config": {
-        "name": "kawanisyarat_bisindo_alphabet_mlp",
+        "name": "bisindo_alphabet_finetuned",
         "layers": [
           {
             "class_name": "InputLayer",
