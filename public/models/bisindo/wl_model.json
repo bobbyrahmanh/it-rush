@@ -1,0 +1,753 @@
+{
+  "format": "wl-conformer-v3",
+  "tensors": {
+    "1": {
+      "name": "arith.constant",
+      "shape": [
+        128
+      ],
+      "dtype": "float32",
+      "byteOffset": 0,
+      "byteLength": 512
+    },
+    "2": {
+      "name": "arith.constant1",
+      "shape": [
+        128
+      ],
+      "dtype": "float32",
+      "byteOffset": 512,
+      "byteLength": 512
+    },
+    "3": {
+      "name": "arith.constant2",
+      "shape": [
+        128
+      ],
+      "dtype": "float32",
+      "byteOffset": 1024,
+      "byteLength": 512
+    },
+    "4": {
+      "name": "arith.constant3",
+      "shape": [
+        128
+      ],
+      "dtype": "float32",
+      "byteOffset": 1536,
+      "byteLength": 512
+    },
+    "5": {
+      "name": "arith.constant4",
+      "shape": [
+        1,
+        1,
+        11,
+        128
+      ],
+      "dtype": "float32",
+      "byteOffset": 2048,
+      "byteLength": 5632
+    },
+    "6": {
+      "name": "arith.constant5",
+      "shape": [
+        1,
+        1,
+        11,
+        128
+      ],
+      "dtype": "float32",
+      "byteOffset": 7680,
+      "byteLength": 5632
+    },
+    "7": {
+      "name": "arith.constant6",
+      "shape": [
+        1,
+        1,
+        11,
+        128
+      ],
+      "dtype": "float32",
+      "byteOffset": 13312,
+      "byteLength": 5632
+    },
+    "8": {
+      "name": "arith.constant7",
+      "shape": [
+        1,
+        1,
+        11,
+        128
+      ],
+      "dtype": "float32",
+      "byteOffset": 18944,
+      "byteLength": 5632
+    },
+    "9": {
+      "name": "arith.constant8",
+      "shape": [
+        128,
+        64
+      ],
+      "dtype": "float32",
+      "byteOffset": 24576,
+      "byteLength": 32768
+    },
+    "10": {
+      "name": "arith.constant9",
+      "shape": [
+        128
+      ],
+      "dtype": "float32",
+      "byteOffset": 57344,
+      "byteLength": 512
+    },
+    "11": {
+      "name": "arith.constant10",
+      "shape": [
+        128,
+        64
+      ],
+      "dtype": "float32",
+      "byteOffset": 57856,
+      "byteLength": 32768
+    },
+    "12": {
+      "name": "arith.constant11",
+      "shape": [
+        128
+      ],
+      "dtype": "float32",
+      "byteOffset": 90624,
+      "byteLength": 512
+    },
+    "13": {
+      "name": "arith.constant12",
+      "shape": [
+        3
+      ],
+      "dtype": "int32",
+      "byteOffset": 91136,
+      "byteLength": 12
+    },
+    "14": {
+      "name": "arith.constant13",
+      "shape": [
+        128,
+        64
+      ],
+      "dtype": "float32",
+      "byteOffset": 91148,
+      "byteLength": 32768
+    },
+    "15": {
+      "name": "arith.constant14",
+      "shape": [
+        128
+      ],
+      "dtype": "float32",
+      "byteOffset": 123916,
+      "byteLength": 512
+    },
+    "16": {
+      "name": "arith.constant15",
+      "shape": [
+        128,
+        64
+      ],
+      "dtype": "float32",
+      "byteOffset": 124428,
+      "byteLength": 32768
+    },
+    "17": {
+      "name": "arith.constant16",
+      "shape": [
+        64,
+        128
+      ],
+      "dtype": "float32",
+      "byteOffset": 157196,
+      "byteLength": 32768
+    },
+    "18": {
+      "name": "arith.constant17",
+      "shape": [
+        64,
+        64
+      ],
+      "dtype": "float32",
+      "byteOffset": 189964,
+      "byteLength": 16384
+    },
+    "19": {
+      "name": "arith.constant18",
+      "shape": [
+        64,
+        64
+      ],
+      "dtype": "float32",
+      "byteOffset": 206348,
+      "byteLength": 16384
+    },
+    "20": {
+      "name": "arith.constant19",
+      "shape": [
+        64,
+        64
+      ],
+      "dtype": "float32",
+      "byteOffset": 222732,
+      "byteLength": 16384
+    },
+    "21": {
+      "name": "arith.constant20",
+      "shape": [
+        64,
+        64
+      ],
+      "dtype": "float32",
+      "byteOffset": 239116,
+      "byteLength": 16384
+    },
+    "22": {
+      "name": "arith.constant21",
+      "shape": [
+        64,
+        128
+      ],
+      "dtype": "float32",
+      "byteOffset": 255500,
+      "byteLength": 32768
+    },
+    "23": {
+      "name": "arith.constant22",
+      "shape": [
+        128,
+        64
+      ],
+      "dtype": "float32",
+      "byteOffset": 288268,
+      "byteLength": 32768
+    },
+    "24": {
+      "name": "arith.constant23",
+      "shape": [
+        64,
+        128
+      ],
+      "dtype": "float32",
+      "byteOffset": 321036,
+      "byteLength": 32768
+    },
+    "25": {
+      "name": "arith.constant24",
+      "shape": [
+        128,
+        64
+      ],
+      "dtype": "float32",
+      "byteOffset": 353804,
+      "byteLength": 32768
+    },
+    "26": {
+      "name": "arith.constant25",
+      "shape": [
+        64,
+        128
+      ],
+      "dtype": "float32",
+      "byteOffset": 386572,
+      "byteLength": 32768
+    },
+    "27": {
+      "name": "arith.constant26",
+      "shape": [
+        64,
+        64
+      ],
+      "dtype": "float32",
+      "byteOffset": 419340,
+      "byteLength": 16384
+    },
+    "28": {
+      "name": "arith.constant27",
+      "shape": [
+        64,
+        64
+      ],
+      "dtype": "float32",
+      "byteOffset": 435724,
+      "byteLength": 16384
+    },
+    "29": {
+      "name": "arith.constant28",
+      "shape": [
+        64,
+        64
+      ],
+      "dtype": "float32",
+      "byteOffset": 452108,
+      "byteLength": 16384
+    },
+    "30": {
+      "name": "arith.constant29",
+      "shape": [
+        64,
+        64
+      ],
+      "dtype": "float32",
+      "byteOffset": 468492,
+      "byteLength": 16384
+    },
+    "31": {
+      "name": "arith.constant30",
+      "shape": [
+        64,
+        128
+      ],
+      "dtype": "float32",
+      "byteOffset": 484876,
+      "byteLength": 32768
+    },
+    "32": {
+      "name": "arith.constant31",
+      "shape": [
+        128,
+        64
+      ],
+      "dtype": "float32",
+      "byteOffset": 517644,
+      "byteLength": 32768
+    },
+    "33": {
+      "name": "arith.constant32",
+      "shape": [
+        64,
+        128
+      ],
+      "dtype": "float32",
+      "byteOffset": 550412,
+      "byteLength": 32768
+    },
+    "34": {
+      "name": "arith.constant33",
+      "shape": [
+        1,
+        1,
+        5,
+        1
+      ],
+      "dtype": "float32",
+      "byteOffset": 583180,
+      "byteLength": 20
+    },
+    "35": {
+      "name": "arith.constant34",
+      "shape": [
+        1,
+        1,
+        5,
+        1
+      ],
+      "dtype": "float32",
+      "byteOffset": 583200,
+      "byteLength": 20
+    },
+    "36": {
+      "name": "arith.constant35",
+      "shape": [
+        1,
+        1,
+        5,
+        1
+      ],
+      "dtype": "float32",
+      "byteOffset": 583220,
+      "byteLength": 20
+    },
+    "37": {
+      "name": "arith.constant36",
+      "shape": [
+        3
+      ],
+      "dtype": "int32",
+      "byteOffset": 583240,
+      "byteLength": 12
+    },
+    "38": {
+      "name": "arith.constant37",
+      "shape": [
+        1,
+        1,
+        5,
+        1
+      ],
+      "dtype": "float32",
+      "byteOffset": 583252,
+      "byteLength": 20
+    },
+    "39": {
+      "name": "arith.constant38",
+      "shape": [
+        1
+      ],
+      "dtype": "float32",
+      "byteOffset": 583272,
+      "byteLength": 4
+    },
+    "40": {
+      "name": "arith.constant39",
+      "shape": [
+        8,
+        128
+      ],
+      "dtype": "float32",
+      "byteOffset": 583276,
+      "byteLength": 4096
+    },
+    "41": {
+      "name": "arith.constant40",
+      "shape": [
+        2,
+        32
+      ],
+      "dtype": "float32",
+      "byteOffset": 587372,
+      "byteLength": 256
+    },
+    "42": {
+      "name": "arith.constant41",
+      "shape": [
+        2,
+        32
+      ],
+      "dtype": "float32",
+      "byteOffset": 587628,
+      "byteLength": 256
+    },
+    "43": {
+      "name": "arith.constant42",
+      "shape": [
+        2,
+        32
+      ],
+      "dtype": "float32",
+      "byteOffset": 587884,
+      "byteLength": 256
+    },
+    "44": {
+      "name": "arith.constant43",
+      "shape": [
+        64
+      ],
+      "dtype": "float32",
+      "byteOffset": 588140,
+      "byteLength": 256
+    },
+    "45": {
+      "name": "arith.constant44",
+      "shape": [
+        2,
+        32
+      ],
+      "dtype": "float32",
+      "byteOffset": 588396,
+      "byteLength": 256
+    },
+    "46": {
+      "name": "arith.constant45",
+      "shape": [
+        2,
+        32
+      ],
+      "dtype": "float32",
+      "byteOffset": 588652,
+      "byteLength": 256
+    },
+    "47": {
+      "name": "arith.constant46",
+      "shape": [
+        2,
+        32
+      ],
+      "dtype": "float32",
+      "byteOffset": 588908,
+      "byteLength": 256
+    },
+    "48": {
+      "name": "arith.constant47",
+      "shape": [
+        64
+      ],
+      "dtype": "float32",
+      "byteOffset": 589164,
+      "byteLength": 256
+    },
+    "49": {
+      "name": "arith.constant48",
+      "shape": [
+        128
+      ],
+      "dtype": "float32",
+      "byteOffset": 589420,
+      "byteLength": 512
+    },
+    "50": {
+      "name": "arith.constant49",
+      "shape": [
+        64
+      ],
+      "dtype": "float32",
+      "byteOffset": 589932,
+      "byteLength": 256
+    },
+    "51": {
+      "name": "arith.constant50",
+      "shape": [
+        128
+      ],
+      "dtype": "float32",
+      "byteOffset": 590188,
+      "byteLength": 512
+    },
+    "52": {
+      "name": "arith.constant51",
+      "shape": [
+        64
+      ],
+      "dtype": "float32",
+      "byteOffset": 590700,
+      "byteLength": 256
+    },
+    "53": {
+      "name": "arith.constant52",
+      "shape": [
+        128
+      ],
+      "dtype": "float32",
+      "byteOffset": 590956,
+      "byteLength": 512
+    },
+    "54": {
+      "name": "arith.constant53",
+      "shape": [
+        64
+      ],
+      "dtype": "float32",
+      "byteOffset": 591468,
+      "byteLength": 256
+    },
+    "55": {
+      "name": "arith.constant54",
+      "shape": [
+        64
+      ],
+      "dtype": "float32",
+      "byteOffset": 591724,
+      "byteLength": 256
+    },
+    "56": {
+      "name": "arith.constant55",
+      "shape": [
+        128
+      ],
+      "dtype": "float32",
+      "byteOffset": 591980,
+      "byteLength": 512
+    },
+    "57": {
+      "name": "arith.constant56",
+      "shape": [
+        64
+      ],
+      "dtype": "float32",
+      "byteOffset": 592492,
+      "byteLength": 256
+    },
+    "58": {
+      "name": "arith.constant57",
+      "shape": [
+        64
+      ],
+      "dtype": "float32",
+      "byteOffset": 592748,
+      "byteLength": 256
+    },
+    "59": {
+      "name": "arith.constant58",
+      "shape": [
+        8
+      ],
+      "dtype": "float32",
+      "byteOffset": 593004,
+      "byteLength": 32
+    },
+    "60": {
+      "name": "arith.constant59",
+      "shape": [],
+      "dtype": "int32",
+      "byteOffset": 593036,
+      "byteLength": 4
+    },
+    "61": {
+      "name": "arith.constant60",
+      "shape": [
+        3,
+        2
+      ],
+      "dtype": "int32",
+      "byteOffset": 593040,
+      "byteLength": 24
+    },
+    "62": {
+      "name": "arith.constant61",
+      "shape": [],
+      "dtype": "int32",
+      "byteOffset": 593064,
+      "byteLength": 4
+    },
+    "63": {
+      "name": "arith.constant62",
+      "shape": [],
+      "dtype": "int32",
+      "byteOffset": 593068,
+      "byteLength": 4
+    },
+    "64": {
+      "name": "arith.constant63",
+      "shape": [
+        3
+      ],
+      "dtype": "int32",
+      "byteOffset": 593072,
+      "byteLength": 12
+    },
+    "65": {
+      "name": "arith.constant64",
+      "shape": [
+        3
+      ],
+      "dtype": "int32",
+      "byteOffset": 593084,
+      "byteLength": 12
+    },
+    "66": {
+      "name": "arith.constant65",
+      "shape": [],
+      "dtype": "float32",
+      "byteOffset": 593096,
+      "byteLength": 4
+    },
+    "67": {
+      "name": "arith.constant66",
+      "shape": [
+        3
+      ],
+      "dtype": "int32",
+      "byteOffset": 593100,
+      "byteLength": 12
+    },
+    "68": {
+      "name": "arith.constant67",
+      "shape": [
+        4
+      ],
+      "dtype": "int32",
+      "byteOffset": 593112,
+      "byteLength": 16
+    },
+    "69": {
+      "name": "arith.constant68",
+      "shape": [
+        4
+      ],
+      "dtype": "int32",
+      "byteOffset": 593128,
+      "byteLength": 16
+    },
+    "70": {
+      "name": "arith.constant69",
+      "shape": [
+        4
+      ],
+      "dtype": "int32",
+      "byteOffset": 593144,
+      "byteLength": 16
+    },
+    "71": {
+      "name": "arith.constant70",
+      "shape": [
+        4
+      ],
+      "dtype": "int32",
+      "byteOffset": 593160,
+      "byteLength": 16
+    },
+    "72": {
+      "name": "bisindo_wl_v3_1/batch_normalization_2_1/batchnorm/mul",
+      "shape": [
+        64
+      ],
+      "dtype": "float32",
+      "byteOffset": 593176,
+      "byteLength": 256
+    },
+    "73": {
+      "name": "bisindo_wl_v3_1/batch_normalization_2_1/batchnorm/sub",
+      "shape": [
+        64
+      ],
+      "dtype": "float32",
+      "byteOffset": 593432,
+      "byteLength": 256
+    },
+    "74": {
+      "name": "bisindo_wl_v3_1/batch_normalization_6_1/batchnorm/mul",
+      "shape": [
+        64
+      ],
+      "dtype": "float32",
+      "byteOffset": 593688,
+      "byteLength": 256
+    },
+    "75": {
+      "name": "bisindo_wl_v3_1/batch_normalization_6_1/batchnorm/sub",
+      "shape": [
+        64
+      ],
+      "dtype": "float32",
+      "byteOffset": 593944,
+      "byteLength": 256
+    },
+    "76": {
+      "name": "bisindo_wl_v3_1/stem_bn_1/batchnorm/mul",
+      "shape": [
+        64
+      ],
+      "dtype": "float32",
+      "byteOffset": 594200,
+      "byteLength": 256
+    },
+    "77": {
+      "name": "bisindo_wl_v3_1/stem_bn_1/batchnorm/sub",
+      "shape": [
+        64
+      ],
+      "dtype": "float32",
+      "byteOffset": 594456,
+      "byteLength": 256
+    },
+    "78": {
+      "name": "bisindo_wl_v3_1/stem_proj_1/MatMul",
+      "shape": [
+        64,
+        300
+      ],
+      "dtype": "float32",
+      "byteOffset": 594712,
+      "byteLength": 76800
+    }
+  }
+}
