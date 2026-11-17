@@ -212,7 +212,7 @@ export default function BisindoPage() {
           <div className="relative z-10 grid items-center gap-8 lg:grid-cols-[1.1fr_0.9fr]">
             <div>
               <span className="inline-flex items-center gap-2 rounded-full border-2 border-white/40 bg-white/15 px-4 py-2 text-xs font-bold tracking-wide">
-                <span className="h-2.5 w-2.5 animate-pulse rounded-full bg-mint" />
+                <span className="h-2.5 w-2.5 animate-pulse rounded-full bg-sun" />
                 SIGNIFY • INCLUSIVE LEARNING
               </span>
 
