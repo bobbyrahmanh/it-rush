@@ -18,3 +18,5 @@ public/models/mediapipe/
 build/
 dist/
 .env.local
+.env
+.env.*
