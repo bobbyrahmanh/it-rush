@@ -335,8 +335,8 @@ export default function CameraSlot({ letter }: { letter: string }) {
   const holdPercent = Math.round(holdState.progress * 100);
 
   return (
-    <div className="card overflow-hidden bg-ink p-5 text-white">
-      <div className="relative aspect-[4/3] w-full overflow-hidden rounded-2xl border-2 border-white/20 bg-black/50">
+    <div className="card overflow-hidden bg-ink p-3 text-white sm:p-4">
+      <div className="relative aspect-[16/10] max-h-[42vh] min-h-[200px] w-full overflow-hidden rounded-2xl border-2 border-white/20 bg-black/50">
         <video
           ref={videoRef}
           muted
@@ -383,10 +383,10 @@ export default function CameraSlot({ letter }: { letter: string }) {
         )}
 
         {mode === "idle" && !isLoadingEngine && (
-          <div className="flex h-full flex-col items-center justify-center gap-4 p-6 text-center">
-            <p className="font-display text-xl font-semibold">Area kamera untuk huruf {letter}</p>
-            <p className="max-w-sm text-sm text-white/90">
-              Video diproses di perangkatmu menggunakan MediaPipe dan model TensorFlow.js, tidak dikirim ke server mana pun.
+          <div className="flex h-full flex-col items-center justify-center gap-3 p-4 text-center">
+            <p className="font-display text-lg font-semibold">Area kamera untuk huruf {letter}</p>
+            <p className="max-w-sm text-xs text-white/90">
+              Diproses di perangkatmu, tidak dikirim ke server mana pun.
             </p>
 
             {cameraError && (
@@ -408,67 +408,8 @@ export default function CameraSlot({ letter }: { letter: string }) {
       </div>
 
       {mode !== "idle" && (
-        <div className="mt-4 space-y-4">
-          {justCompleted ? (
-            <div
-              role="status"
-              aria-live="polite"
-              className="flex flex-wrap items-center justify-between gap-2 rounded-2xl border-2 border-ink bg-mint px-4 py-3 text-ink"
-            >
-              <span className="font-display text-lg font-bold">
-                Huruf {letter} Berhasil Dikuasai! (+10 XP)
-              </span>
-              <span className="rounded-full bg-white px-3 py-1 text-xs font-bold">SELESAI</span>
-            </div>
-          ) : (
-            <div className="rounded-2xl border-2 border-white/20 bg-white/10 p-3">
-              <div className="flex items-center justify-between text-sm font-semibold">
-                <span>
-                  Target: Huruf <strong className="text-sun">{letter}</strong>
-                  {isAlreadyLearned ? " (Sudah Dikuasai)" : ""}
-                </span>
-                <span>{holdPercent}% (Tahan 1,5 dtk)</span>
-              </div>
-              <div className="mt-2 h-3 w-full overflow-hidden rounded-full bg-black/50">
-                <div
-                  className="h-full rounded-full bg-mint transition-all duration-100"
-                  style={{ width: `${holdPercent}%` }}
-                />
-              </div>
-            </div>
-          )}
-
-          <div className="rounded-2xl border-2 border-white/20 bg-white/10 p-3">
-            <p className="text-xs font-semibold uppercase tracking-wider text-white/75">
-              Prediksi Model AI Secara Langsung
-            </p>
-            {holdState.topCandidates.length > 0 ? (
-              <div className="mt-2 grid grid-cols-3 gap-2">
-                {holdState.topCandidates.map((cand, idx) => {
-                  const pct = Math.round(cand.confidence * 100);
-                  const isTarget = cand.label === letter;
-                  return (
-                    <div
-                      key={cand.label}
-                      className={`rounded-xl border-2 px-3 py-2 text-center ${
-                        isTarget
-                          ? "border-mint bg-mint/20 text-white"
-                          : idx === 0
-                            ? "border-sun/70 bg-white/10 text-white"
-                            : "border-white/15 bg-black/30 text-white/80"
-                      }`}
-                    >
-                      <div className="font-display text-xl font-bold">{cand.label}</div>
-                      <div className="text-xs font-semibold">{pct}%</div>
-                    </div>
-                  );
-                })}
-              </div>
-            ) : (
-              <p className="mt-1 text-sm text-white/75">Menunggu deteksi tangan dari kamera...</p>
-            )}
-          </div>
-
+        <div className="mt-2 space-y-2">
+          {/* KONTROL: tepat di bawah video agar selalu terlihat */}
           <div className="flex flex-wrap items-center gap-2">
             <button
               type="button"
@@ -523,6 +464,78 @@ export default function CameraSlot({ letter }: { letter: string }) {
             >
               Matikan
             </button>
+          </div>
+
+          {justCompleted ? (
+            <div
+              role="status"
+              aria-live="polite"
+              className="flex h-[60px] items-center justify-between gap-2 rounded-2xl border-2 border-ink bg-mint px-3 text-ink"
+            >
+              <span className="font-display text-base font-bold">
+                Huruf {letter} Berhasil Dikuasai! (+10 XP)
+              </span>
+              <span className="rounded-full bg-white px-3 py-1 text-xs font-bold">SELESAI</span>
+            </div>
+          ) : (
+            <div className="flex h-[60px] flex-col justify-center rounded-2xl border-2 border-white/20 bg-white/10 px-3">
+              <div className="flex items-center justify-between gap-2 text-sm font-semibold">
+                <span>
+                  Target: Huruf <strong className="text-sun">{letter}</strong>
+                  {isAlreadyLearned ? " (Sudah Dikuasai)" : ""}
+                </span>
+                <span className="shrink-0 tabular-nums">{holdPercent}% (Tahan 1,5 dtk)</span>
+              </div>
+              <div className="mt-1.5 h-2.5 w-full overflow-hidden rounded-full bg-black/50">
+                <div
+                  className="h-full rounded-full bg-mint transition-all duration-100"
+                  style={{ width: `${holdPercent}%` }}
+                />
+              </div>
+            </div>
+          )}
+
+          <div className="flex h-[52px] items-center gap-2 rounded-2xl border-2 border-white/20 bg-white/10 px-3">
+            <p className="w-12 shrink-0 text-[10px] font-semibold uppercase leading-tight tracking-wider text-white/75">
+              Prediksi AI
+            </p>
+            <div className="flex flex-1 justify-end gap-2" aria-live="off">
+              {Array.from({ length: 3 }).map((_, i) => {
+                const cand = holdState.topCandidates[i];
+                const base =
+                  "flex h-8 w-[4.75rem] shrink-0 items-center justify-center gap-1.5 rounded-lg border-2 tabular-nums";
+                if (!cand) {
+                  return (
+                    <div
+                      key={i}
+                      className={`${base} border-white/10 bg-black/20 text-white/40`}
+                      aria-hidden="true"
+                    >
+                      <span className="font-display text-base font-bold">–</span>
+                    </div>
+                  );
+                }
+                const pct = Math.round(cand.confidence * 100);
+                const isTarget = cand.label === letter;
+                return (
+                  <div
+                    key={i}
+                    className={`${base} ${
+                      isTarget
+                        ? "border-mint bg-mint/20 text-white"
+                        : i === 0
+                          ? "border-sun/70 bg-white/10 text-white"
+                          : "border-white/15 bg-black/30 text-white/80"
+                    }`}
+                  >
+                    <span className="w-4 text-center font-display text-base font-bold">
+                      {cand.label}
+                    </span>
+                    <span className="w-9 text-right text-xs font-semibold">{pct}%</span>
+                  </div>
+                );
+              })}
+            </div>
           </div>
         </div>
       )}

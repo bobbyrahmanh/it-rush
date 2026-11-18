@@ -15,8 +15,8 @@ import { Volume2, Camera, BookOpen, CheckCircle, Check, Globe, Shield, HelpCircl
 type Mode = "learn" | "view" | "guess";
 
 const modes: { id: Mode; icon: Icon; label: string; desc: string }[] = [
-  { id: "view", icon: Eye, label: "Lihat Isyarat", desc: "Lihat & pelajari alfabet" },
   { id: "learn", icon: BookOpen, label: "Belajar", desc: "Kenali alfabet & kosakata" },
+  { id: "view", icon: Eye, label: "Lihat Isyarat", desc: "Lihat & pelajari alfabet" },
   { id: "guess", icon: HelpCircle, label: "Guess the Sign", desc: "Tebak huruf dari isyarat" },
 ];
 
@@ -161,6 +161,17 @@ function EnvironmentContext() {
         />
       </section>
     </Reveal>
+  );
+}
+
+function StepHeader({ step, title }: { step: string; title: string }) {
+  return (
+    <div className="flex items-center gap-2">
+      <span className="shrink-0 rounded-full border-2 border-ink bg-grape px-2.5 py-0.5 text-[10px] font-bold tracking-wider text-white">
+        STEP {step}
+      </span>
+      <h2 className="text-lg font-bold leading-tight">{title}</h2>
+    </div>
   );
 }
 
@@ -516,27 +527,19 @@ export default function BisindoPage() {
           </Reveal>
         </div>
 
-        {/* RIGHT COLUMN: REFERENCE AND CAMERA */}
-        <div className="space-y-5 lg:sticky lg:top-24 lg:self-start">
+        {/* RIGHT COLUMN: REFERENCE AND CAMERA (kompak agar Step 1 & 2 terlihat tanpa scroll) */}
+        <div className="space-y-3 lg:sticky lg:top-20 lg:self-start">
           {selectedWord ? (
             <>
-              <div className="space-y-1">
-                <span className="text-xs font-bold tracking-wider text-grape">
-                  STEP 01 — LEARN THE SIGN
-                </span>
-                <h2 className="text-xl font-bold">Kenali Kosakata</h2>
-                <p className="text-sm leading-relaxed text-ink/70">
-                  Pelajari referensi dan petunjuk gerakan sebelum melakukan praktik melalui kamera.
-                </p>
-              </div>
+              <StepHeader step="01" title="Kenali Kosakata" />
 
               <div
                 key={selectedWord.id}
-                className="card animate-pop space-y-3 bg-white p-5"
+                className="card animate-pop space-y-2 bg-white p-4"
               >
-                <div className="flex flex-wrap items-center justify-between gap-3">
-                  <div className="flex flex-wrap items-center gap-3">
-                    <span className="rounded-2xl border-2 border-ink bg-grape px-4 py-2 font-display text-2xl font-bold text-white shadow-[3px_3px_0px_#1B1B3A]">
+                <div className="flex flex-wrap items-center justify-between gap-2">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <span className="rounded-2xl border-2 border-ink bg-grape px-3 py-1.5 font-display text-xl font-bold text-white shadow-[3px_3px_0px_#1B1B3A]">
                       {selectedWord.title}
                     </span>
                     <span className="rounded-full border-2 border-ink bg-mint px-3 py-1 text-sm font-bold text-ink">
@@ -555,62 +558,45 @@ export default function BisindoPage() {
                     onClick={() =>
                       speak(selectedWord.title, data.settings.audioEnabled)
                     }
-                    className="btn min-h-[44px] min-w-[44px] bg-sun px-3 py-2 text-ink"
+                    className="btn !min-h-[44px] min-w-[44px] bg-sun !px-3 py-2 text-ink"
                   >
                     <Volume2 className="h-5 w-5" />
                   </button>
                 </div>
 
-                <p className="text-sm leading-relaxed text-ink">
+                <p className="text-sm leading-snug text-ink">
                   {selectedWord.guide}
                 </p>
               </div>
 
-              <div className="space-y-1">
-                <span className="text-xs font-bold tracking-wider text-grape">
-                  STEP 02 — AI PRACTICE
-                </span>
-                <h2 className="text-xl font-bold">Praktikkan Gerakan</h2>
-                <p className="text-sm leading-relaxed text-ink/70">
-                  Ikuti gerakan sesuai referensi dan praktikkan melalui pengenalan gestur berbasis AI.
-                </p>
-              </div>
+              <StepHeader step="02" title="Praktikkan Gerakan" />
 
               <WordCameraSlot word={selectedWord} />
             </>
           ) : (
             <>
-              <div className="space-y-1">
-                <span className="text-xs font-bold tracking-wider text-grape">
-                  STEP 01 — LEARN THE SIGN
-                </span>
-                <h2 className="text-xl font-bold">Kenali Bentuk Isyarat</h2>
-                <p className="text-sm leading-relaxed text-ink/70">
-                  Amati referensi visual dan pahami posisi tangan sebelum memulai latihan.
-                </p>
-              </div>
+              <StepHeader step="01" title="Kenali Bentuk Isyarat" />
 
               {/* LETTER REFERENCE */}
               <div
                 key={sel}
-                className="card animate-pop flex items-start gap-3 bg-white p-4"
+                className="card animate-pop flex items-center gap-3 bg-white p-2.5"
               >
                 <img
                   src={`/images/bisindo/${sel}.webp`}
                   alt={`Contoh pose tangan huruf BISINDO ${sel}`}
-                  className="h-24 w-24 shrink-0 rounded-2xl border-4 border-ink bg-sun/20 object-cover sm:h-28 sm:w-28"
+                  className="h-16 w-16 shrink-0 rounded-2xl border-4 border-ink bg-sun/20 object-cover"
                 />
 
                 <div className="min-w-0 flex-1">
-                  {/* Huruf + label tangan + suara */}
                   <div className="flex flex-wrap items-center gap-2">
-                    <span className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl border-4 border-ink bg-grape font-display text-3xl font-bold text-white">
+                    <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border-4 border-ink bg-grape font-display text-xl font-bold text-white">
                       {sel}
                     </span>
 
                     <div className="min-w-0">
-                      <h3 className="text-base font-bold">Huruf {sel}</h3>
-                      <span className="inline-block rounded-full border-2 border-ink bg-mint px-3 py-1 text-xs font-semibold">
+                      <h3 className="text-base font-bold leading-tight">Huruf {sel}</h3>
+                      <span className="inline-block rounded-full border-2 border-ink bg-mint px-2.5 py-0.5 text-xs font-semibold">
                         {handsOf(sel)} Tangan
                       </span>
                     </div>
@@ -625,42 +611,28 @@ export default function BisindoPage() {
                     </button>
                   </div>
 
-                  {/* Deskripsi */}
-                  <p className="mt-2 text-sm leading-snug text-ink/80">
-                    Tirukan bentuk tangan pada foto contoh, lalu tahan selama 1,5 detik di kamera.
-                  </p>
-
                   {/* Catatan khusus huruf J */}
                   {sel === "J" && (
-                    <p className="mt-2 rounded-xl border-2 border-ink/10 bg-sun p-3 text-sm leading-snug">
-                      <strong>Catatan praktik:</strong> Dalam penggunaan sehari-hari,
-                      huruf J digerakkan melengkung di udara. Untuk latihan kamera,
-                      tahan pose akhir kelingking mengarah ke samping.
+                    <p className="mt-2 rounded-xl border-2 border-ink/10 bg-sun p-2 text-xs leading-snug">
+                      <strong>Catatan:</strong> J digerakkan melengkung di udara.
+                      Untuk kamera, tahan pose akhir (kelingking ke samping).
                     </p>
                   )}
                 </div>
               </div>
 
               {/* CAMERA PRACTICE */}
-              <div className="space-y-1">
-                <span className="text-xs font-bold tracking-wider text-grape">
-                  STEP 02 — AI PRACTICE
-                </span>
-                <div className="flex items-center gap-2">
-                  <Camera className="h-5 w-5" />
-                  <h2 className="text-xl font-bold">
-                    Praktikkan Melalui Kamera
-                  </h2>
-                </div>
-                <p className="text-sm leading-relaxed text-ink/70">
-                  Tunjukkan isyarat yang sesuai dengan referensi. Pertahankan pose agar sistem AI dapat mengenali gestur tanganmu.
-                </p>
-              </div>
+              <StepHeader step="02" title="Praktikkan Melalui Kamera" />
 
               <CameraSlot letter={sel} />
             </>
           )}
+        </div>
+      </div>
+      )}
 
+      {mode === "learn" && (
+        <div className="mt-8 grid gap-4 sm:grid-cols-2">
           {/* LEARNING MESSAGE */}
           <div className="card flex items-start gap-3 bg-mint p-4">
             <CheckCircle className="mt-0.5 h-5 w-5 shrink-0" />
@@ -685,7 +657,6 @@ export default function BisindoPage() {
             </div>
           </div>
         </div>
-      </div>
       )}
 
       {/* LEARNING PROGRESS */}
