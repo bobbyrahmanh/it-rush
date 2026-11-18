@@ -214,8 +214,10 @@ export default function CameraSlot({ letter }: { letter: string }) {
           if (nextState.completed && !celebratedRef.current) {
             celebratedRef.current = true;
             setJustCompleted(true);
-            markLearned("bisindo", targetLetterRef.current, 10);
-            speak(`Berhasil! Huruf ${targetLetterRef.current}`, audioEnabledRef.current);
+            if (activeMode === "webcam") {
+              markLearned("bisindo", targetLetterRef.current, 10);
+              speak(`Berhasil! Huruf ${targetLetterRef.current}`, audioEnabledRef.current);
+            }
           }
         } else {
           validatorRef.current.reset();
@@ -470,12 +472,18 @@ export default function CameraSlot({ letter }: { letter: string }) {
             <div
               role="status"
               aria-live="polite"
-              className="flex h-[60px] items-center justify-between gap-2 rounded-2xl border-2 border-ink bg-mint px-3 text-ink"
+              className={`flex h-[60px] items-center justify-between gap-2 rounded-2xl border-2 border-ink px-3 text-ink ${
+                mode === "webcam" ? "bg-mint" : "bg-sky"
+              }`}
             >
-              <span className="font-display text-base font-bold">
-                Huruf {letter} Berhasil Dikuasai! (+10 XP)
+              <span className="font-display text-sm font-bold sm:text-base">
+                {mode === "webcam"
+                  ? `Huruf ${letter} Berhasil Dikuasai! (+10 XP)`
+                  : `Simulasi Huruf ${simLetter} Terbaca (Gunakan Kamera untuk Progres)`}
               </span>
-              <span className="rounded-full bg-white px-3 py-1 text-xs font-bold">SELESAI</span>
+              <span className="shrink-0 rounded-full bg-white px-3 py-1 text-xs font-bold">
+                {mode === "webcam" ? "SELESAI" : "SIMULASI"}
+              </span>
             </div>
           ) : (
             <div className="flex h-[60px] flex-col justify-center rounded-2xl border-2 border-white/20 bg-white/10 px-3">

@@ -129,12 +129,16 @@ export default function WordCameraSlot({ word }: WordCameraSlotProps) {
   }, [word.id, resetPracticeState]);
 
   const handlePredictions = useCallback(
-    (candidates: WordPredictionCandidate[], threshold: number) => {
+    (
+      candidates: WordPredictionCandidate[],
+      threshold: number,
+      sourceMode: "webcam" | "simulation"
+    ) => {
       setPredictions(candidates.slice(0, 3));
       const top = candidates[0];
       const isMatch = Boolean(top && top.word === word.id && top.confidence >= threshold);
       setMatched(isMatch);
-      if (isMatch && !celebratedRef.current) {
+      if (isMatch && !celebratedRef.current && sourceMode === "webcam") {
         celebratedRef.current = true;
         markWordLearned(word.id, 15);
         speak(`Bagus! Gerakan kata ${word.title} berhasil dikenali.`, audioEnabledRef.current);
@@ -265,7 +269,7 @@ export default function WordCameraSlot({ word }: WordCameraSlotProps) {
                   } else if (classifierRef.current) {
                     setErrorMsg(null);
                     const ranked = classifierRef.current.predictFromFeatures(collected);
-                    handlePredictions(ranked, WEBCAM_MATCH_THRESHOLD);
+                    handlePredictions(ranked, WEBCAM_MATCH_THRESHOLD, "webcam");
                   }
                 }
               }
@@ -362,7 +366,7 @@ export default function WordCameraSlot({ word }: WordCameraSlotProps) {
             inferredOnce = true;
             const featureSequence = parsedFrames.map((item) => item.features);
             const ranked = classifier.predictFromFeatures(featureSequence);
-            handlePredictions(ranked, SIM_MATCH_THRESHOLD);
+            handlePredictions(ranked, SIM_MATCH_THRESHOLD, "simulation");
           }
 
           idx = (idx + 1) % parsedFrames.length;
@@ -569,14 +573,22 @@ export default function WordCameraSlot({ word }: WordCameraSlotProps) {
       )}
 
       {matched && (
-        <div className="rounded-2xl border-2 border-ink bg-mint p-4 text-ink">
+        <div
+          className={`rounded-2xl border-2 border-ink p-4 text-ink ${
+            mode === "webcam" ? "bg-mint" : "bg-sky"
+          }`}
+        >
           <p className="font-display text-lg font-bold">
-            Hebat! Gerakan kata {word.title} berhasil dikenali!
+            {mode === "webcam"
+              ? `Hebat! Gerakan kata ${word.title} berhasil dikenali!`
+              : `Simulasi AI Mengenali Kata ${word.title}`}
           </p>
           <p className="mt-1 text-sm font-semibold">
-            {alreadyLearned
-              ? `Kata ${word.title} sudah tercatat di progresmu (+15 XP).`
-              : `+15 XP diraih untuk kata ${word.title}!`}
+            {mode === "webcam"
+              ? alreadyLearned
+                ? `Kata ${word.title} sudah tercatat di progresmu (+15 XP).`
+                : `+15 XP diraih untuk kata ${word.title}!`
+              : "Mode simulasi hanya untuk demonstrasi model AI. Gunakan Kamera Langsung untuk menyimpan progres dan meraih +15 XP."}
           </p>
         </div>
       )}

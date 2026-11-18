@@ -33,7 +33,6 @@ export interface LeaderboardEntry {
   streakCurrent: number;
   badgeCount: number;
   isCurrentUser?: boolean;
-  isDemoSeed?: boolean;
 }
 
 export interface ProgressData {
@@ -53,60 +52,13 @@ export interface ProgressData {
   leaderboard: LeaderboardEntry[];
 }
 
-interface StoredLocalAccount {
-  id: string;
-  email: string;
-  passwordHash: string;
-  displayName: string;
-  xp: number;
-  streak: { current: number; longest: number; lastActiveDate: string | null };
-  bisindo: ProgressData["bisindo"];
-  braille: ProgressData["braille"];
-  badges: string[];
-}
-
 const KEY = "signify_progress_v1";
 const GUEST_KEY = "signify_guest_progress_v1";
 const SESSION_KEY = "signify_auth_session_v1";
-const ACCOUNTS_KEY = "signify_local_accounts_v1";
+const MISSING_ENV_MSG =
+  "Konfigurasi Supabase (.env.local) belum terpasang di perangkat ini. Silakan pasang .env.local untuk menggunakan fitur Akun, atau lanjut belajar sebagai Tamu.";
 
 const day = (d: Date) => d.toLocaleDateString("sv-SE");
-
-// Data contoh tim pengembang (berdasarkan README.md) sebagai pembanding awal di Papan Peringkat
-const TEAM_SEED_LEADERBOARD: LeaderboardEntry[] = [
-  {
-    id: "seed-diayu",
-    displayName: "Diayu Nur Aini (Contoh Tim)",
-    xp: 340,
-    streakCurrent: 5,
-    badgeCount: 6,
-    isDemoSeed: true,
-  },
-  {
-    id: "seed-bobby",
-    displayName: "Bobby Rahman H. (Contoh Tim)",
-    xp: 295,
-    streakCurrent: 4,
-    badgeCount: 5,
-    isDemoSeed: true,
-  },
-  {
-    id: "seed-hammam",
-    displayName: "Hammam M. Yazid (Contoh Tim)",
-    xp: 230,
-    streakCurrent: 3,
-    badgeCount: 4,
-    isDemoSeed: true,
-  },
-  {
-    id: "seed-mahardika",
-    displayName: "Mahardika R. (Contoh Tim)",
-    xp: 185,
-    streakCurrent: 2,
-    badgeCount: 3,
-    isDemoSeed: true,
-  },
-];
 
 export const DEFAULT_PROGRESS: ProgressData = {
   schemaVersion: 1,
@@ -127,12 +79,12 @@ export const DEFAULT_PROGRESS: ProgressData = {
     source: "local",
     syncing: false,
   },
-  leaderboard: TEAM_SEED_LEADERBOARD,
+  leaderboard: [],
 };
 
 let cache: ProgressData | null = null;
 let activeAccessToken: string | undefined = undefined;
-let remoteLeaderboardCache: LeaderboardEntry[] | null = null;
+let remoteLeaderboardCache: LeaderboardEntry[] = [];
 const listeners = new Set<() => void>();
 
 function uniqueStrings(items: string[]): string[] {
@@ -151,52 +103,14 @@ function minimumXpFromProgress(
   return bisindoLettersXp + bisindoWordsXp + guessXp + brailleLettersXp + brailleQuizXp;
 }
 
-function loadLocalAccounts(): Record<string, StoredLocalAccount> {
-  if (typeof window === "undefined") return {};
-  try {
-    const raw = window.localStorage.getItem(ACCOUNTS_KEY);
-    if (!raw) return {};
-    return JSON.parse(raw) as Record<string, StoredLocalAccount>;
-  } catch {
-    return {};
-  }
-}
-
-function saveLocalAccounts(accounts: Record<string, StoredLocalAccount>) {
-  if (typeof window === "undefined") return;
-  try {
-    window.localStorage.setItem(ACCOUNTS_KEY, JSON.stringify(accounts));
-  } catch {
-    // Mode penjelajahan privat: simpan di memori
-  }
-}
-
 function buildLeaderboard(state: ProgressData): LeaderboardEntry[] {
   const entries = new Map<string, LeaderboardEntry>();
 
-  for (const seed of TEAM_SEED_LEADERBOARD) {
-    entries.set(seed.id, { ...seed });
-  }
-
-  const localAccounts = loadLocalAccounts();
-  for (const acc of Object.values(localAccounts)) {
-    entries.set(acc.id, {
-      id: acc.id,
-      displayName: acc.displayName,
-      xp: acc.xp,
-      streakCurrent: acc.streak.current,
-      badgeCount: acc.badges.length,
-      isCurrentUser: state.auth.user?.id === acc.id,
+  for (const row of remoteLeaderboardCache) {
+    entries.set(row.id, {
+      ...row,
+      isCurrentUser: state.auth.user?.id === row.id,
     });
-  }
-
-  if (remoteLeaderboardCache) {
-    for (const row of remoteLeaderboardCache) {
-      entries.set(row.id, {
-        ...row,
-        isCurrentUser: state.auth.user?.id === row.id,
-      });
-    }
   }
 
   if (state.auth.mode === "authenticated" && state.auth.user) {
@@ -217,7 +131,15 @@ function buildLeaderboard(state: ProgressData): LeaderboardEntry[] {
 
 function sanitizeProgress(raw: Partial<ProgressData> | null | undefined): ProgressData {
   if (!raw || raw.schemaVersion !== 1) return DEFAULT_PROGRESS;
-  const authMode = raw.auth?.mode === "authenticated" && raw.auth?.user ? "authenticated" : "guest";
+
+  const isValidSupabaseAuth =
+    isSupabaseConfigured() &&
+    raw.auth?.mode === "authenticated" &&
+    raw.auth?.source === "supabase" &&
+    Boolean(raw.auth?.user);
+
+  const authMode = isValidSupabaseAuth ? "authenticated" : "guest";
+
   const bisindo: ProgressData["bisindo"] = {
     learnedLetters: uniqueStrings(raw.bisindo?.learnedLetters ?? []),
     learnedWords: uniqueStrings(raw.bisindo?.learnedWords ?? []),
@@ -256,7 +178,7 @@ function sanitizeProgress(raw: Partial<ProgressData> | null | undefined): Progre
     auth: {
       mode: authMode,
       user: authMode === "authenticated" ? raw.auth?.user ?? null : null,
-      source: raw.auth?.source === "supabase" ? "supabase" : "local",
+      source: authMode === "authenticated" ? "supabase" : "local",
       syncing: false,
     },
     leaderboard: [],
@@ -277,24 +199,6 @@ function load(): ProgressData {
   } catch {
     return DEFAULT_PROGRESS;
   }
-}
-
-function persistLocalAccountIfAuthenticated(state: ProgressData) {
-  if (state.auth.mode !== "authenticated" || !state.auth.user) return;
-  const accounts = loadLocalAccounts();
-  const existing = accounts[state.auth.user.email.toLowerCase()];
-  accounts[state.auth.user.email.toLowerCase()] = {
-    id: state.auth.user.id,
-    email: state.auth.user.email.toLowerCase(),
-    passwordHash: existing?.passwordHash ?? "demo-auth",
-    displayName: state.auth.user.displayName,
-    xp: state.xp,
-    streak: state.streak,
-    bisindo: state.bisindo,
-    braille: state.braille,
-    badges: state.badges,
-  };
-  saveLocalAccounts(accounts);
 }
 
 async function syncToSupabaseIfActive(state: ProgressData) {
@@ -356,7 +260,6 @@ function commit(next: ProgressData, triggerRemoteSync = true) {
     }
   }
 
-  persistLocalAccountIfAuthenticated(withMeta);
   if (triggerRemoteSync) {
     void syncToSupabaseIfActive(withMeta);
   }
@@ -522,114 +425,74 @@ export const progressRepository = {
       email: string,
       password: string
     ): Promise<{ ok: boolean; error?: string }> {
+      if (!isSupabaseConfigured()) {
+        return { ok: false, error: MISSING_ENV_MSG };
+      }
+
       const cleanEmail = email.trim().toLowerCase();
       if (!cleanEmail || !password) {
         return { ok: false, error: "Email dan kata sandi wajib diisi." };
       }
 
       const p = current();
-
-      if (isSupabaseConfigured()) {
-        const { session, error } = await supabaseSignIn(cleanEmail, password);
-        if (session) {
-          activeAccessToken = session.accessToken;
-          if (typeof window !== "undefined") {
-            try {
-              window.localStorage.setItem(SESSION_KEY, session.accessToken);
-            } catch {
-              // Abaikan jika localStorage penuh
-            }
-          }
-
-          const remoteProfile = await fetchSupabaseProfile(
-            session.user.id,
-            session.accessToken
-          );
-          const merged = mergeProgressSets(
-            p.bisindo,
-            p.braille,
-            remoteProfile?.progress_data?.bisindo,
-            remoteProfile?.progress_data?.braille
-          );
-          const calcXp = Math.max(
-            remoteProfile?.xp ?? 0,
-            minimumXpFromProgress(merged.bisindo, merged.braille)
-          );
-          const today = day(new Date());
-          const streakCurrent = Math.max(remoteProfile?.streak_current ?? 1, 1);
-          const streakLongest = Math.max(remoteProfile?.streak_longest ?? 1, streakCurrent);
-
-          commit({
-            ...p,
-            xp: calcXp,
-            streak: {
-              current: streakCurrent,
-              longest: streakLongest,
-              lastActiveDate: remoteProfile?.last_active_date ?? today,
-            },
-            bisindo: merged.bisindo,
-            braille: merged.braille,
-            auth: {
-              mode: "authenticated",
-              user: {
-                id: session.user.id,
-                email: session.user.email,
-                displayName: remoteProfile?.display_name || session.user.displayName,
-              },
-              source: "supabase",
-              syncing: false,
-            },
-          });
-
-          void this.refreshLeaderboard();
-          return { ok: true };
-        }
-
-        // Jika belum ada di Supabase namun ada di akun lokal, izinkan fallback
-        const localAccounts = loadLocalAccounts();
-        if (!localAccounts[cleanEmail]) {
-          return { ok: false, error: error ?? "Gagal masuk dengan email tersebut." };
-        }
-      }
-
-      const accounts = loadLocalAccounts();
-      const found = accounts[cleanEmail];
-      if (!found) {
+      const { session, error } = await supabaseSignIn(cleanEmail, password);
+      if (!session) {
         return {
           ok: false,
-          error: "Akun belum terdaftar. Silakan gunakan tab Daftar Akun Baru atau tombol Akun Demo Juri.",
+          error: error ?? "Email atau kata sandi tidak sesuai, atau akun belum terdaftar di Supabase.",
         };
       }
-      if (found.passwordHash !== password && found.passwordHash !== "demo-auth") {
-        return { ok: false, error: "Kata sandi yang Anda masukkan tidak sesuai." };
+
+      activeAccessToken = session.accessToken;
+      if (typeof window !== "undefined") {
+        try {
+          window.localStorage.setItem(SESSION_KEY, session.accessToken);
+        } catch {
+          // Abaikan jika localStorage penuh
+        }
       }
 
-      const merged = mergeProgressSets(p.bisindo, p.braille, found.bisindo, found.braille);
-      const calcXp = Math.max(found.xp, minimumXpFromProgress(merged.bisindo, merged.braille));
+      const remoteProfile = await fetchSupabaseProfile(
+        session.user.id,
+        session.accessToken
+      );
+      const merged = mergeProgressSets(
+        p.bisindo,
+        p.braille,
+        remoteProfile?.progress_data?.bisindo,
+        remoteProfile?.progress_data?.braille
+      );
+      const calcXp = Math.max(
+        remoteProfile?.xp ?? 0,
+        minimumXpFromProgress(merged.bisindo, merged.braille)
+      );
       const today = day(new Date());
+      const streakCurrent = Math.max(remoteProfile?.streak_current ?? 1, 1);
+      const streakLongest = Math.max(remoteProfile?.streak_longest ?? 1, streakCurrent);
 
       commit({
         ...p,
         xp: calcXp,
         streak: {
-          current: Math.max(found.streak.current, 1),
-          longest: Math.max(found.streak.longest, 1),
-          lastActiveDate: today,
+          current: streakCurrent,
+          longest: streakLongest,
+          lastActiveDate: remoteProfile?.last_active_date ?? today,
         },
         bisindo: merged.bisindo,
         braille: merged.braille,
         auth: {
           mode: "authenticated",
           user: {
-            id: found.id,
-            email: found.email,
-            displayName: found.displayName,
+            id: session.user.id,
+            email: session.user.email,
+            displayName: remoteProfile?.display_name || session.user.displayName,
           },
-          source: "local",
+          source: "supabase",
           syncing: false,
         },
       });
 
+      void syncToSupabaseIfActive(current()).then(() => this.refreshLeaderboard());
       return { ok: true };
     },
 
@@ -638,6 +501,10 @@ export const progressRepository = {
       email: string,
       password: string
     ): Promise<{ ok: boolean; error?: string }> {
+      if (!isSupabaseConfigured()) {
+        return { ok: false, error: MISSING_ENV_MSG };
+      }
+
       const cleanName = displayName.trim();
       const cleanEmail = email.trim().toLowerCase();
 
@@ -654,77 +521,29 @@ export const progressRepository = {
       const p = current();
       const today = day(new Date());
 
-      if (isSupabaseConfigured()) {
-        const { session, error } = await supabaseSignUp(
-          cleanName,
-          cleanEmail,
-          password
-        );
-        if (session) {
-          activeAccessToken = session.accessToken;
-          if (typeof window !== "undefined") {
-            try {
-              window.localStorage.setItem(SESSION_KEY, session.accessToken);
-            } catch {
-              // Abaikan jika penyimpanan lokal penuh
-            }
-          }
+      const { session, error } = await supabaseSignUp(
+        cleanName,
+        cleanEmail,
+        password
+      );
+      if (!session) {
+        return {
+          ok: false,
+          error: error ?? "Gagal mendaftarkan akun ke database Supabase.",
+        };
+      }
 
-          const merged = mergeProgressSets(p.bisindo, p.braille);
-          const calcXp = minimumXpFromProgress(merged.bisindo, merged.braille);
-
-          commit({
-            ...p,
-            xp: calcXp,
-            streak: { current: 1, longest: 1, lastActiveDate: today },
-            bisindo: merged.bisindo,
-            braille: merged.braille,
-            auth: {
-              mode: "authenticated",
-              user: {
-                id: session.user.id,
-                email: session.user.email,
-                displayName: cleanName,
-              },
-              source: "supabase",
-              syncing: false,
-            },
-          });
-
-          void syncToSupabaseIfActive(current()).then(() => this.refreshLeaderboard());
-          return { ok: true };
-        }
-        if (error) {
-          return { ok: false, error };
+      activeAccessToken = session.accessToken;
+      if (typeof window !== "undefined") {
+        try {
+          window.localStorage.setItem(SESSION_KEY, session.accessToken);
+        } catch {
+          // Abaikan jika penyimpanan lokal penuh
         }
       }
 
-      const accounts = loadLocalAccounts();
-      const userId = `local-${cleanEmail.replace(/[^a-z0-9]/g, "-")}`;
-      const existing = accounts[cleanEmail];
-      const merged = mergeProgressSets(
-        p.bisindo,
-        p.braille,
-        existing?.bisindo,
-        existing?.braille
-      );
-      const calcXp = Math.max(
-        existing?.xp ?? 0,
-        minimumXpFromProgress(merged.bisindo, merged.braille)
-      );
-
-      accounts[cleanEmail] = {
-        id: userId,
-        email: cleanEmail,
-        passwordHash: password,
-        displayName: cleanName,
-        xp: calcXp,
-        streak: { current: 1, longest: 1, lastActiveDate: today },
-        bisindo: merged.bisindo,
-        braille: merged.braille,
-        badges: [],
-      };
-      saveLocalAccounts(accounts);
+      const merged = mergeProgressSets(p.bisindo, p.braille);
+      const calcXp = minimumXpFromProgress(merged.bisindo, merged.braille);
 
       commit({
         ...p,
@@ -735,19 +554,24 @@ export const progressRepository = {
         auth: {
           mode: "authenticated",
           user: {
-            id: userId,
-            email: cleanEmail,
+            id: session.user.id,
+            email: session.user.email,
             displayName: cleanName,
           },
-          source: isSupabaseConfigured() ? "supabase" : "local",
+          source: "supabase",
           syncing: false,
         },
       });
 
+      void syncToSupabaseIfActive(current()).then(() => this.refreshLeaderboard());
       return { ok: true };
     },
 
-    async loginAsJudgeDemo(): Promise<{ ok: boolean }> {
+    async loginAsJudgeDemo(): Promise<{ ok: boolean; error?: string }> {
+      if (!isSupabaseConfigured()) {
+        return { ok: false, error: MISSING_ENV_MSG };
+      }
+
       const p = current();
       const demoEmail =
         process.env.NEXT_PUBLIC_DEMO_JUDGE_EMAIL?.trim() || "juri.demo@signify.id";
@@ -775,45 +599,13 @@ export const progressRepository = {
       const demoXp = Math.max(315, minimumXpFromProgress(merged.bisindo, merged.braille));
       const today = day(new Date());
 
-      if (isSupabaseConfigured()) {
-        const signInRes = await supabaseSignIn(demoEmail, demoPassword);
-        const session =
-          signInRes.session ??
-          (await supabaseSignUp(demoName, demoEmail, demoPassword)).session;
+      const signInRes = await supabaseSignIn(demoEmail, demoPassword);
+      const session =
+        signInRes.session ??
+        (await supabaseSignUp(demoName, demoEmail, demoPassword)).session;
 
-        if (session) {
-          activeAccessToken = session.accessToken;
-          if (typeof window !== "undefined") {
-            try {
-              window.localStorage.setItem(SESSION_KEY, session.accessToken);
-            } catch {
-              // Abaikan jika penyimpanan lokal penuh
-            }
-          }
-
-          commit({
-            ...p,
-            xp: demoXp,
-            streak: { current: 4, longest: 4, lastActiveDate: today },
-            bisindo: merged.bisindo,
-            braille: merged.braille,
-            auth: {
-              mode: "authenticated",
-              user: {
-                id: session.user.id,
-                email: demoEmail,
-                displayName: demoName,
-                isDemo: true,
-              },
-              source: "supabase",
-              syncing: false,
-            },
-          });
-
-          void syncToSupabaseIfActive(current()).then(() => this.refreshLeaderboard());
-          return { ok: true };
-        }
-      }
+      const userId = session?.user.id || "demo-judge-itrush";
+      activeAccessToken = session?.accessToken ?? "";
 
       commit({
         ...p,
@@ -824,12 +616,12 @@ export const progressRepository = {
         auth: {
           mode: "authenticated",
           user: {
-            id: "demo-judge-itrush",
+            id: userId,
             email: demoEmail,
             displayName: demoName,
             isDemo: true,
           },
-          source: isSupabaseConfigured() ? "supabase" : "local",
+          source: "supabase",
           syncing: false,
         },
       });
