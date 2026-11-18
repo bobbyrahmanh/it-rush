@@ -7,6 +7,8 @@ import {
   AlertCircle,
   Award,
   CheckCircle,
+  Eye,
+  EyeOff,
   Lock,
   LogIn,
   Shield,
@@ -15,6 +17,11 @@ import {
   Users,
   Zap,
 } from "react-feather";
+import {
+  AuthMascot,
+  type AuthMascotPose,
+  type TypingGazeTarget,
+} from "@/components/Mascot";
 import { useProgress } from "@/lib/storage/useProgress";
 
 type AuthTab = "login" | "register";
@@ -32,6 +39,9 @@ export default function LoginPage() {
   const [displayName, setDisplayName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [isPasswordFocused, setIsPasswordFocused] = useState(false);
+  const [typingTarget, setTypingTarget] = useState<TypingGazeTarget | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [statusMessage, setStatusMessage] = useState<string | null>(null);
@@ -44,6 +54,20 @@ export default function LoginPage() {
       router.replace("/progress");
     }
   }, [isAuthenticated, router]);
+
+  const mascotPose: AuthMascotPose = showPassword
+    ? "peeking"
+    : isPasswordFocused
+      ? "covering"
+      : "idle";
+
+  function updateTypingGaze(
+    field: "name" | "email" | "password",
+    el: HTMLInputElement
+  ) {
+    const charIndex = el.selectionStart ?? el.value.length;
+    setTypingTarget({ charIndex, field, seq: Date.now() });
+  }
 
   const guestLearnedCount =
     data.bisindo.learnedLetters.length +
@@ -86,7 +110,12 @@ export default function LoginPage() {
     setStatusMessage(null);
     setSubmitting(true);
     try {
-      await loginAsJudgeDemo();
+      const res = await loginAsJudgeDemo();
+      if (!res.ok) {
+        setErrorMessage(res.error ?? "Gagal mengaktifkan Akun Demo Juri.");
+        setSubmitting(false);
+        return;
+      }
       setStatusMessage("Akun Demo Juri aktif. Mengalihkan ke Progres Saya...");
       router.replace("/progress");
     } catch {
@@ -195,7 +224,7 @@ export default function LoginPage() {
           </div>
         </section>
 
-        {/* Kolom Kanan: Form Login / Register */}
+        {/* Kolom Kanan: Maskot Interaktif Owli & Form Login / Register */}
         <section className="card bg-white p-6 sm:p-8">
           {isAuthenticated && data.auth.user ? (
             <div className="py-8 text-center" role="status" aria-live="polite">
@@ -209,6 +238,15 @@ export default function LoginPage() {
             </div>
           ) : (
             <>
+              {/* Maskot Owli yang merespons kursor, ketikan huruf, dan kata sandi */}
+              <div className="mb-4 rounded-2xl border-2 border-ink bg-paper pt-3 pb-1">
+                <AuthMascot
+                  pose={mascotPose}
+                  mode={tab}
+                  typingTarget={typingTarget}
+                />
+              </div>
+
               <div
                 className="grid grid-cols-2 gap-2 rounded-2xl border-2 border-ink bg-paper p-1.5"
                 role="tablist"
@@ -273,7 +311,16 @@ export default function LoginPage() {
                       required
                       autoComplete="name"
                       value={displayName}
-                      onChange={(e) => setDisplayName(e.target.value)}
+                      onFocus={(e) => {
+                        setIsPasswordFocused(false);
+                        updateTypingGaze("name", e.currentTarget);
+                      }}
+                      onClick={(e) => updateTypingGaze("name", e.currentTarget)}
+                      onKeyUp={(e) => updateTypingGaze("name", e.currentTarget)}
+                      onChange={(e) => {
+                        setDisplayName(e.target.value);
+                        updateTypingGaze("name", e.currentTarget);
+                      }}
                       placeholder="Nama panggilan Anda"
                       className="mt-1.5 min-h-[48px] w-full rounded-xl border-2 border-ink bg-paper px-4 py-2.5 font-semibold text-ink outline-none focus:bg-white focus:ring-4 focus:ring-grape/30"
                     />
@@ -293,7 +340,16 @@ export default function LoginPage() {
                     required
                     autoComplete="email"
                     value={email}
-                    onChange={(e) => setEmail(e.target.value)}
+                    onFocus={(e) => {
+                      setIsPasswordFocused(false);
+                      updateTypingGaze("email", e.currentTarget);
+                    }}
+                    onClick={(e) => updateTypingGaze("email", e.currentTarget)}
+                    onKeyUp={(e) => updateTypingGaze("email", e.currentTarget)}
+                    onChange={(e) => {
+                      setEmail(e.target.value);
+                      updateTypingGaze("email", e.currentTarget);
+                    }}
                     placeholder="nama@email.com"
                     className="mt-1.5 min-h-[48px] w-full rounded-xl border-2 border-ink bg-paper px-4 py-2.5 font-semibold text-ink outline-none focus:bg-white focus:ring-4 focus:ring-grape/30"
                   />
@@ -306,16 +362,44 @@ export default function LoginPage() {
                   >
                     Kata Sandi
                   </label>
-                  <input
-                    id="auth-password"
-                    type="password"
-                    required
-                    autoComplete={tab === "login" ? "current-password" : "new-password"}
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    placeholder="Minimal 6 karakter"
-                    className="mt-1.5 min-h-[48px] w-full rounded-xl border-2 border-ink bg-paper px-4 py-2.5 font-semibold text-ink outline-none focus:bg-white focus:ring-4 focus:ring-grape/30"
-                  />
+                  <div className="relative mt-1.5">
+                    <input
+                      id="auth-password"
+                      type={showPassword ? "text" : "password"}
+                      required
+                      autoComplete={tab === "login" ? "current-password" : "new-password"}
+                      value={password}
+                      onFocus={(e) => {
+                        setIsPasswordFocused(true);
+                        updateTypingGaze("password", e.currentTarget);
+                      }}
+                      onBlur={() => setIsPasswordFocused(false)}
+                      onClick={(e) => updateTypingGaze("password", e.currentTarget)}
+                      onKeyUp={(e) => updateTypingGaze("password", e.currentTarget)}
+                      onChange={(e) => {
+                        setPassword(e.target.value);
+                        updateTypingGaze("password", e.currentTarget);
+                      }}
+                      placeholder="Minimal 6 karakter"
+                      className="min-h-[48px] w-full rounded-xl border-2 border-ink bg-paper py-2.5 pl-4 pr-12 font-semibold text-ink outline-none focus:bg-white focus:ring-4 focus:ring-grape/30"
+                    />
+                    <button
+                      type="button"
+                      onMouseDown={(e) => e.preventDefault()}
+                      onClick={() => setShowPassword((prev) => !prev)}
+                      aria-pressed={showPassword}
+                      aria-label={
+                        showPassword ? "Sembunyikan kata sandi" : "Tampilkan kata sandi"
+                      }
+                      className="absolute right-1.5 top-1/2 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-lg text-ink/75 transition hover:bg-sun/50 hover:text-ink focus:outline-none focus:ring-2 focus:ring-ink"
+                    >
+                      {showPassword ? (
+                        <EyeOff className="h-5 w-5" aria-hidden="true" />
+                      ) : (
+                        <Eye className="h-5 w-5" aria-hidden="true" />
+                      )}
+                    </button>
+                  </div>
                 </div>
 
                 {errorMessage && (
