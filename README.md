@@ -1,4 +1,16 @@
-# 🌟 SIGNIFY — Platform Pembelajaran Interaktif BISINDO & Braille Berbasis AI On-Device
+<div align="center">
+
+# SIGNIFY
+
+**Membangun Jembatan Komunikasi Dua Arah yang Inklusif, Interaktif, dan Berwawasan Lingkungan**
+
+<p>
+SIGNIFY adalah platform edukasi interaktif berbasis web untuk mempelajari Bahasa Isyarat Indonesia (BISINDO) dan sistem tulisan Braille 6-titik secara mandiri. Ditenagai kecerdasan buatan on-device (MediaPipe & TensorFlow.js), SIGNIFY memproses deteksi gestur tangan secara real-time langsung di browser pengguna tanpa mengirimkan rekaman video ke server, menjamin privasi penuh dan efisiensi komputasi hijau.
+</p>
+
+[![Vercel](https://img.shields.io/badge/Vercel-Visit%20Live%20Site-A5B4FC?style=for-the-badge&logo=vercel&logoColor=white)](https://it-rush.vercel.app/)
+
+<br>
 
 <p align="center">
   <img src="https://img.shields.io/badge/Next.js-14.2.15-000000?style=for-the-badge&logo=nextdotjs&logoColor=white" alt="Next.js" />
@@ -8,16 +20,16 @@
   <img src="https://img.shields.io/badge/MediaPipe-Vision_WASM-0078D4?style=for-the-badge&logo=google&logoColor=white" alt="MediaPipe" />
   <img src="https://img.shields.io/badge/TensorFlow.js-Client_Side_AI-FF6F00?style=for-the-badge&logo=tensorflow&logoColor=white" alt="TensorFlow.js" />
   <img src="https://img.shields.io/badge/Supabase-Auth_%26_DB-3ECF8E?style=for-the-badge&logo=supabase&logoColor=white" alt="Supabase" />
-  <img src="https://img.shields.io/badge/Vercel-Deployed-000000?style=for-the-badge&logo=vercel&logoColor=white" alt="Vercel" />
 </p>
 
 > **Karya Inovasi Web Development — IT RUSH 2026**  
-> **Subtema 5:** *Pendidikan, Tata Kelola, dan Teknologi Inklusif*  
-> *Membangun Jembatan Komunikasi Dua Arah yang Inklusif, Interaktif, dan Berwawasan Lingkungan.*
+> **Subtema 5:** *Pendidikan, Tata Kelola, dan Teknologi Inklusif*
+
+</div>
 
 ---
 
-## 🚀 Tautan Deployment & Akses Evaluasi Juri
+## 🚀 Akses Evaluasi Juri
 
 Aplikasi web **SIGNIFY** telah di-deploy dan dapat diakses publik secara *live* melalui protokol HTTPS aman:
 
@@ -36,14 +48,14 @@ Aplikasi web **SIGNIFY** telah di-deploy dan dapat diakses publik secara *live* 
 
 ## 👥 Tim Pengembang (Team Members)
 
-Proyek **SIGNIFY** dirancang, dikembangkan, dan diuji secara kolaboratif untuk kompetisi **IT RUSH 2026**. Berdasarkan riwayat komit (*commit history*) repositori Git, kontribusi masing-masing anggota tim adalah sebagai berikut:
+Proyek **SIGNIFY** dirancang, dikembangkan, dan diuji secara kolaboratif untuk kompetisi **IT RUSH 2026**. Berdasarkan riwayat komit Git, kontribusi masing-masing anggota adalah:
 
-| No | Nama Anggota & Akun GitHub | Peran Utama | Tanggung Jawab & Kontribusi Berdasarkan Git History |
+| No | Nama Anggota & GitHub | Peran Utama | Fokus Kontribusi |
 | :-: | :--- | :--- | :--- |
-| 1 | **Bobby Rahman Hartanto**<br>([@bobbyrahmanh](https://github.com/bobbyrahmanh)) | **Ketua Tim**<br>*(Frontend & Interactive Features Engineer)* | • Menginisialisasi repositori proyek, arsitektur dasar, dan dokumentasi awal.<br>• Mengembangkan mini-game interaktif *"Guess the Sign"* (Tebak Isyarat) beserta integrasi selektor aktivitas.<br>• Membangun komponen galeri visual isyarat (*Sign Gallery*).<br>• Melakukan optimasi tata letak responsif, *viewport card positioning*, dan penyempurnaan alur belajar (*UX*) pada halaman BISINDO. |
-| 2 | **Diayu Nur Aini**<br>([@diayuunr](https://github.com/diayuunr)) | **Anggota Tim**<br>*(Lead Frontend Engineer & UI/UX Specialist)* | • Membangun fondasi utama antarmuka Next.js App Router & Tailwind CSS neobrutalisme.<br>• Merancang modul pembelajaran dan simulator Braille 6-titik, panduan Perkins Brailler, serta fitur konversi kata (*Turn Words to Braille*).<br>• Mengembangkan seksi edukasi kesadaran lingkungan (*Environmental Awareness*), About, dan Footer.<br>• Mendesain komponen Maskot interaktif, animasi visual, dan menyempurnakan *copywriting* edukatif di seluruh web. |
-| 3 | **Hammam Muhammad Yazid**<br>([@crispyrinux](https://github.com/crispyrinux)) | **Anggota Tim**<br>*(Backend, Cloud Systems & Gamification Engineer)* | • Membangun integrasi basis data dan autentikasi cloud Supabase (PostgreSQL + RLS).<br>• Merancang arsitektur penyimpanan status hybrid `ProgressRepository` dan sistem akun demo juri 1-klik.<br>• Mengembangkan modul gamifikasi: perhitungan level, akumulasi XP, streak belajar harian, 8 lencana pencapaian (*badges*), dan papan peringkat global (*leaderboard*).<br>• Menegakkan validasi integritas perolehan progres (kamera langsung) dan mengelola rilis penggabungan cabang Git (*Pull Requests*). |
-| 4 | **Mahardika Ramadhana**<br>([@mdikaramadhana](https://github.com/mdikaramadhana)) | **Anggota Tim**<br>*(Lead AI & Computer Vision Engineer)* | • Merancang dan membangun arsitektur Computer Vision hulu ke hilir (MediaPipe Hand & Pose Landmarker WASM/WebGL).<br>• Mengimplementasikan algoritma ekstraksi fitur 86-dimensi Boháček 2D dan model klasifikasi TensorFlow.js alfabet BISINDO.<br>• Membangun model pengenalan kata dinamis sekuensial (WL-BISINDO 8 kata) berbasis Hand + Upper Body Pose.<br>• Mengembangkan pipeline training Python, augmentasi dataset, skrip koleksi webcam, serta fine-tuning anti-forgetting regularisasi L2-SP.<br>• Mengintegrasikan *Judge Testing Mode* (Mode Simulasi Video tanpa webcam fisik) di browser. |
+| 1 | **Bobby Rahman Hartanto**<br>([@bobbyrahmanh](https://github.com/bobbyrahmanh)) | **Ketua Tim**<br>*(Frontend & Interactive Features)* | Setup awal repositori, pengembangan mini-game *Guess the Sign*, komponen *Sign Gallery*, serta optimasi UI/UX dan responsivitas halaman BISINDO. |
+| 2 | **Diayu Nur Aini**<br>([@diayuunr](https://github.com/diayuunr)) | **Anggota Tim**<br>*(Lead Frontend & UI/UX Specialist)* | Arsitektur antarmuka Neobrutalisme Next.js, perancangan modul simulator Braille 6-titik & konversi kata, seksi edukasi lingkungan, Maskot, serta *copywriting*. |
+| 3 | **Hammam Muhammad Yazid**<br>([@crispyrinux](https://github.com/crispyrinux)) | **Anggota Tim**<br>*(Backend, Auth & Gamification)* | Integrasi Supabase Auth & DB (RLS), akun demo juri 1-klik, modul gamifikasi (level, XP, streak, badges, leaderboard), serta pengelolaan rilis Git PR. |
+| 4 | **Mahardika Ramadhana**<br>([@mdikaramadhana](https://github.com/mdikaramadhana)) | **Anggota Tim**<br>*(Lead AI & Computer Vision)* | Arsitektur AI MediaPipe & TF.js (alfabet 27-kelas & kata dinamis 8-kelas), normalisasi Boháček 86-dim, pipeline training L2-SP, serta *Judge Testing Mode*. |
 
 ---
 
