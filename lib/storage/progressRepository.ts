@@ -1,72 +1,897 @@
-// Satu-satunya tempat yang boleh menyentuh localStorage. Komponen memakai useProgress().
+import { evaluateBadges } from "@/lib/badges";
+import {
+  fetchSupabaseLeaderboard,
+  fetchSupabaseProfile,
+  isSupabaseConfigured,
+  supabaseSignIn,
+  supabaseSignOut,
+  supabaseSignUp,
+  upsertSupabaseProfile,
+  type RemoteProfileRow,
+} from "@/lib/supabase/client";
+
 export type Mod = "bisindo" | "braille";
+
+export interface AuthUser {
+  id: string;
+  email: string;
+  displayName: string;
+  isDemo?: boolean;
+}
+
+export interface AuthState {
+  mode: "guest" | "authenticated";
+  user: AuthUser | null;
+  source: "supabase" | "local";
+  syncing: boolean;
+}
+
+export interface LeaderboardEntry {
+  id: string;
+  displayName: string;
+  xp: number;
+  streakCurrent: number;
+  badgeCount: number;
+  isCurrentUser?: boolean;
+  isDemoSeed?: boolean;
+}
 
 export interface ProgressData {
   schemaVersion: 1;
   xp: number;
   streak: { current: number; longest: number; lastActiveDate: string | null };
   settings: { audioEnabled: boolean; showLandmarks: boolean };
-  bisindo: { learnedLetters: string[]; practiceSessionsCompleted: number; guessTheSignBestScore: number };
+  bisindo: {
+    learnedLetters: string[];
+    learnedWords: string[];
+    practiceSessionsCompleted: number;
+    guessTheSignBestScore: number;
+  };
   braille: { learnedLetters: string[]; quizSessionsCompleted: number };
+  badges: string[];
+  auth: AuthState;
+  leaderboard: LeaderboardEntry[];
+}
+
+interface StoredLocalAccount {
+  id: string;
+  email: string;
+  passwordHash: string;
+  displayName: string;
+  xp: number;
+  streak: { current: number; longest: number; lastActiveDate: string | null };
+  bisindo: ProgressData["bisindo"];
+  braille: ProgressData["braille"];
+  badges: string[];
 }
 
 const KEY = "signify_progress_v1";
-
-export const DEFAULT_PROGRESS: ProgressData = {
-  schemaVersion: 1, xp: 0,
-  streak: { current: 0, longest: 0, lastActiveDate: null },
-  settings: { audioEnabled: true, showLandmarks: true },
-  bisindo: { learnedLetters: [], practiceSessionsCompleted: 0, guessTheSignBestScore: 0 },
-  braille: { learnedLetters: [], quizSessionsCompleted: 0 },
-};
+const GUEST_KEY = "signify_guest_progress_v1";
+const SESSION_KEY = "signify_auth_session_v1";
+const ACCOUNTS_KEY = "signify_local_accounts_v1";
 
 const day = (d: Date) => d.toLocaleDateString("sv-SE");
+
+// Data contoh tim pengembang (berdasarkan README.md) sebagai pembanding awal di Papan Peringkat
+const TEAM_SEED_LEADERBOARD: LeaderboardEntry[] = [
+  {
+    id: "seed-diayu",
+    displayName: "Diayu Nur Aini (Contoh Tim)",
+    xp: 340,
+    streakCurrent: 5,
+    badgeCount: 6,
+    isDemoSeed: true,
+  },
+  {
+    id: "seed-bobby",
+    displayName: "Bobby Rahman H. (Contoh Tim)",
+    xp: 295,
+    streakCurrent: 4,
+    badgeCount: 5,
+    isDemoSeed: true,
+  },
+  {
+    id: "seed-hammam",
+    displayName: "Hammam M. Yazid (Contoh Tim)",
+    xp: 230,
+    streakCurrent: 3,
+    badgeCount: 4,
+    isDemoSeed: true,
+  },
+  {
+    id: "seed-mahardika",
+    displayName: "Mahardika R. (Contoh Tim)",
+    xp: 185,
+    streakCurrent: 2,
+    badgeCount: 3,
+    isDemoSeed: true,
+  },
+];
+
+export const DEFAULT_PROGRESS: ProgressData = {
+  schemaVersion: 1,
+  xp: 0,
+  streak: { current: 0, longest: 0, lastActiveDate: null },
+  settings: { audioEnabled: true, showLandmarks: true },
+  bisindo: {
+    learnedLetters: [],
+    learnedWords: [],
+    practiceSessionsCompleted: 0,
+    guessTheSignBestScore: 0,
+  },
+  braille: { learnedLetters: [], quizSessionsCompleted: 0 },
+  badges: [],
+  auth: {
+    mode: "guest",
+    user: null,
+    source: "local",
+    syncing: false,
+  },
+  leaderboard: TEAM_SEED_LEADERBOARD,
+};
+
 let cache: ProgressData | null = null;
+let activeAccessToken: string | undefined = undefined;
+let remoteLeaderboardCache: LeaderboardEntry[] | null = null;
 const listeners = new Set<() => void>();
 
-function load(): ProgressData {
+function uniqueStrings(items: string[]): string[] {
+  return Array.from(new Set(items.filter((x) => typeof x === "string" && x.length > 0)));
+}
+
+function minimumXpFromProgress(
+  bisindo: ProgressData["bisindo"],
+  braille: ProgressData["braille"]
+): number {
+  const bisindoLettersXp = bisindo.learnedLetters.length * 10;
+  const bisindoWordsXp = (bisindo.learnedWords ?? []).length * 15;
+  const guessXp = (bisindo.guessTheSignBestScore ?? 0) > 0 ? 20 : 0;
+  const brailleLettersXp = braille.learnedLetters.length * 10;
+  const brailleQuizXp = braille.quizSessionsCompleted * 15;
+  return bisindoLettersXp + bisindoWordsXp + guessXp + brailleLettersXp + brailleQuizXp;
+}
+
+function loadLocalAccounts(): Record<string, StoredLocalAccount> {
+  if (typeof window === "undefined") return {};
   try {
+    const raw = window.localStorage.getItem(ACCOUNTS_KEY);
+    if (!raw) return {};
+    return JSON.parse(raw) as Record<string, StoredLocalAccount>;
+  } catch {
+    return {};
+  }
+}
+
+function saveLocalAccounts(accounts: Record<string, StoredLocalAccount>) {
+  if (typeof window === "undefined") return;
+  try {
+    window.localStorage.setItem(ACCOUNTS_KEY, JSON.stringify(accounts));
+  } catch {
+    // Mode penjelajahan privat: simpan di memori
+  }
+}
+
+function buildLeaderboard(state: ProgressData): LeaderboardEntry[] {
+  const entries = new Map<string, LeaderboardEntry>();
+
+  for (const seed of TEAM_SEED_LEADERBOARD) {
+    entries.set(seed.id, { ...seed });
+  }
+
+  const localAccounts = loadLocalAccounts();
+  for (const acc of Object.values(localAccounts)) {
+    entries.set(acc.id, {
+      id: acc.id,
+      displayName: acc.displayName,
+      xp: acc.xp,
+      streakCurrent: acc.streak.current,
+      badgeCount: acc.badges.length,
+      isCurrentUser: state.auth.user?.id === acc.id,
+    });
+  }
+
+  if (remoteLeaderboardCache) {
+    for (const row of remoteLeaderboardCache) {
+      entries.set(row.id, {
+        ...row,
+        isCurrentUser: state.auth.user?.id === row.id,
+      });
+    }
+  }
+
+  if (state.auth.mode === "authenticated" && state.auth.user) {
+    entries.set(state.auth.user.id, {
+      id: state.auth.user.id,
+      displayName: state.auth.user.displayName,
+      xp: state.xp,
+      streakCurrent: state.streak.current,
+      badgeCount: state.badges.length,
+      isCurrentUser: true,
+    });
+  }
+
+  return Array.from(entries.values())
+    .sort((a, b) => b.xp - a.xp || b.streakCurrent - a.streakCurrent)
+    .slice(0, 10);
+}
+
+function sanitizeProgress(raw: Partial<ProgressData> | null | undefined): ProgressData {
+  if (!raw || raw.schemaVersion !== 1) return DEFAULT_PROGRESS;
+  const authMode = raw.auth?.mode === "authenticated" && raw.auth?.user ? "authenticated" : "guest";
+  const bisindo: ProgressData["bisindo"] = {
+    learnedLetters: uniqueStrings(raw.bisindo?.learnedLetters ?? []),
+    learnedWords: uniqueStrings(raw.bisindo?.learnedWords ?? []),
+    practiceSessionsCompleted: Number(raw.bisindo?.practiceSessionsCompleted ?? 0),
+    guessTheSignBestScore: Number(raw.bisindo?.guessTheSignBestScore ?? 0),
+  };
+  const braille: ProgressData["braille"] = {
+    learnedLetters: uniqueStrings(raw.braille?.learnedLetters ?? []),
+    quizSessionsCompleted: Number(raw.braille?.quizSessionsCompleted ?? 0),
+  };
+  const streak =
+    authMode === "authenticated"
+      ? {
+          current: Number(raw.streak?.current ?? 0),
+          longest: Number(raw.streak?.longest ?? 0),
+          lastActiveDate: raw.streak?.lastActiveDate ?? null,
+        }
+      : { current: 0, longest: 0, lastActiveDate: null };
+
+  const xp =
+    authMode === "authenticated"
+      ? Math.max(Number(raw.xp ?? 0), minimumXpFromProgress(bisindo, braille))
+      : 0;
+
+  const base: ProgressData = {
+    schemaVersion: 1,
+    xp,
+    streak,
+    settings: {
+      audioEnabled: raw.settings?.audioEnabled ?? true,
+      showLandmarks: raw.settings?.showLandmarks ?? true,
+    },
+    bisindo,
+    braille,
+    badges: authMode === "authenticated" ? evaluateBadges({ xp, streak, bisindo, braille }) : [],
+    auth: {
+      mode: authMode,
+      user: authMode === "authenticated" ? raw.auth?.user ?? null : null,
+      source: raw.auth?.source === "supabase" ? "supabase" : "local",
+      syncing: false,
+    },
+    leaderboard: [],
+  };
+
+  base.leaderboard = buildLeaderboard(base);
+  return base;
+}
+
+function load(): ProgressData {
+  if (typeof window === "undefined") return DEFAULT_PROGRESS;
+  try {
+    const savedToken = window.localStorage.getItem(SESSION_KEY);
+    if (savedToken) activeAccessToken = savedToken;
     const raw = window.localStorage.getItem(KEY);
     if (!raw) return DEFAULT_PROGRESS;
-    const p = JSON.parse(raw);
-    if (p?.schemaVersion !== 1) return DEFAULT_PROGRESS;
-    return { ...DEFAULT_PROGRESS, ...p, streak: { ...DEFAULT_PROGRESS.streak, ...p.streak }, settings: { ...DEFAULT_PROGRESS.settings, ...p.settings }, bisindo: { ...DEFAULT_PROGRESS.bisindo, ...p.bisindo }, braille: { ...DEFAULT_PROGRESS.braille, ...p.braille } };
+    return sanitizeProgress(JSON.parse(raw));
   } catch {
     return DEFAULT_PROGRESS;
   }
 }
 
-function commit(next: ProgressData) {
-  cache = next;
-  try { window.localStorage.setItem(KEY, JSON.stringify(next)); } catch { /* mode privat: tetap jalan di memori */ }
+function persistLocalAccountIfAuthenticated(state: ProgressData) {
+  if (state.auth.mode !== "authenticated" || !state.auth.user) return;
+  const accounts = loadLocalAccounts();
+  const existing = accounts[state.auth.user.email.toLowerCase()];
+  accounts[state.auth.user.email.toLowerCase()] = {
+    id: state.auth.user.id,
+    email: state.auth.user.email.toLowerCase(),
+    passwordHash: existing?.passwordHash ?? "demo-auth",
+    displayName: state.auth.user.displayName,
+    xp: state.xp,
+    streak: state.streak,
+    bisindo: state.bisindo,
+    braille: state.braille,
+    badges: state.badges,
+  };
+  saveLocalAccounts(accounts);
+}
+
+async function syncToSupabaseIfActive(state: ProgressData) {
+  if (
+    state.auth.mode !== "authenticated" ||
+    !state.auth.user ||
+    !isSupabaseConfigured()
+  ) {
+    return;
+  }
+
+  const row: RemoteProfileRow = {
+    id: state.auth.user.id,
+    email: state.auth.user.email,
+    display_name: state.auth.user.displayName,
+    xp: state.xp,
+    streak_current: state.streak.current,
+    streak_longest: state.streak.longest,
+    last_active_date: state.streak.lastActiveDate,
+    badges: state.badges,
+    progress_data: {
+      bisindo: state.bisindo,
+      braille: state.braille,
+    },
+  };
+
+  await upsertSupabaseProfile(row, activeAccessToken);
+}
+
+function commit(next: ProgressData, triggerRemoteSync = true) {
+  const evaluatedBadges =
+    next.auth.mode === "authenticated"
+      ? evaluateBadges({
+          xp: next.xp,
+          streak: next.streak,
+          bisindo: next.bisindo,
+          braille: next.braille,
+        })
+      : [];
+
+  const withMeta: ProgressData = {
+    ...next,
+    badges: evaluatedBadges,
+  };
+  withMeta.leaderboard = buildLeaderboard(withMeta);
+  cache = withMeta;
+
+  if (typeof window !== "undefined") {
+    try {
+      window.localStorage.setItem(KEY, JSON.stringify(withMeta));
+      if (withMeta.auth.mode === "guest") {
+        window.localStorage.setItem(
+          GUEST_KEY,
+          JSON.stringify({ bisindo: withMeta.bisindo, braille: withMeta.braille })
+        );
+      }
+    } catch {
+      // Abaikan jika penyimpanan lokal dibatasi
+    }
+  }
+
+  persistLocalAccountIfAuthenticated(withMeta);
+  if (triggerRemoteSync) {
+    void syncToSupabaseIfActive(withMeta);
+  }
   listeners.forEach((l) => l());
 }
 
 const current = () => (cache ??= load());
 
 function withStreak(p: ProgressData): ProgressData {
+  if (p.auth.mode !== "authenticated") {
+    return {
+      ...p,
+      xp: 0,
+      streak: { current: 0, longest: 0, lastActiveDate: null },
+    };
+  }
   const today = day(new Date());
   const last = p.streak.lastActiveDate;
-  if (last === today) return p;
-  const cur = last === day(new Date(Date.now() - 864e5)) ? p.streak.current + 1 : 1;
-  return { ...p, streak: { current: cur, longest: Math.max(cur, p.streak.longest), lastActiveDate: today } };
+  if (last === today && p.streak.current > 0) return p;
+  const cur =
+    last === day(new Date(Date.now() - 864e5))
+      ? p.streak.current + 1
+      : Math.max(1, p.streak.current);
+  return {
+    ...p,
+    streak: {
+      current: cur,
+      longest: Math.max(cur, p.streak.longest),
+      lastActiveDate: today,
+    },
+  };
+}
+
+function mergeProgressSets(
+  guestBisindo: ProgressData["bisindo"],
+  guestBraille: ProgressData["braille"],
+  accountBisindo?: Partial<ProgressData["bisindo"]>,
+  accountBraille?: Partial<ProgressData["braille"]>
+): { bisindo: ProgressData["bisindo"]; braille: ProgressData["braille"] } {
+  const bisindo: ProgressData["bisindo"] = {
+    learnedLetters: uniqueStrings([
+      ...(accountBisindo?.learnedLetters ?? []),
+      ...guestBisindo.learnedLetters,
+    ]),
+    learnedWords: uniqueStrings([
+      ...(accountBisindo?.learnedWords ?? []),
+      ...(guestBisindo.learnedWords ?? []),
+    ]),
+    practiceSessionsCompleted: Math.max(
+      Number(accountBisindo?.practiceSessionsCompleted ?? 0),
+      guestBisindo.practiceSessionsCompleted
+    ),
+    guessTheSignBestScore: Math.max(
+      Number(accountBisindo?.guessTheSignBestScore ?? 0),
+      guestBisindo.guessTheSignBestScore
+    ),
+  };
+
+  const braille: ProgressData["braille"] = {
+    learnedLetters: uniqueStrings([
+      ...(accountBraille?.learnedLetters ?? []),
+      ...guestBraille.learnedLetters,
+    ]),
+    quizSessionsCompleted: Math.max(
+      Number(accountBraille?.quizSessionsCompleted ?? 0),
+      guestBraille.quizSessionsCompleted
+    ),
+  };
+
+  return { bisindo, braille };
 }
 
 export const progressRepository = {
-  subscribe(cb: () => void) { listeners.add(cb); return () => { listeners.delete(cb); }; },
+  subscribe(cb: () => void) {
+    listeners.add(cb);
+    return () => {
+      listeners.delete(cb);
+    };
+  },
   getSnapshot: () => current(),
   getServerSnapshot: () => DEFAULT_PROGRESS,
   actions: {
     markLearned(mod: Mod, letter: string, xp = 10) {
       const p = current();
       if (p[mod].learnedLetters.includes(letter)) return;
-      commit(withStreak({ ...p, xp: p.xp + xp, [mod]: { ...p[mod], learnedLetters: [...p[mod].learnedLetters, letter] } }));
+      const nextMod = {
+        ...p[mod],
+        learnedLetters: [...p[mod].learnedLetters, letter],
+      };
+      const nextXp = p.auth.mode === "authenticated" ? p.xp + xp : 0;
+      commit(withStreak({ ...p, xp: nextXp, [mod]: nextMod }));
     },
+
+    markWordLearned(word: string, xp = 15) {
+      const p = current();
+      const learnedWords = p.bisindo.learnedWords ?? [];
+      if (learnedWords.includes(word)) return;
+      const nextXp = p.auth.mode === "authenticated" ? p.xp + xp : 0;
+      commit(
+        withStreak({
+          ...p,
+          xp: nextXp,
+          bisindo: { ...p.bisindo, learnedWords: [...learnedWords, word] },
+        })
+      );
+    },
+
+    completeGuessTheSign(score: number, total: number, xp = 20) {
+      const p = current();
+      const percent = total > 0 ? Math.round((score / total) * 100) : 0;
+      const nextXp = p.auth.mode === "authenticated" ? p.xp + xp : 0;
+      commit(
+        withStreak({
+          ...p,
+          xp: nextXp,
+          bisindo: {
+            ...p.bisindo,
+            guessTheSignBestScore: Math.max(p.bisindo.guessTheSignBestScore ?? 0, percent),
+          },
+        })
+      );
+    },
+
     completeBrailleQuiz(xp = 15) {
       const p = current();
-      commit(withStreak({ ...p, xp: p.xp + xp, braille: { ...p.braille, quizSessionsCompleted: p.braille.quizSessionsCompleted + 1 } }));
+      const nextXp = p.auth.mode === "authenticated" ? p.xp + xp : 0;
+      commit(
+        withStreak({
+          ...p,
+          xp: nextXp,
+          braille: {
+            ...p.braille,
+            quizSessionsCompleted: p.braille.quizSessionsCompleted + 1,
+          },
+        })
+      );
     },
-    setAudio(enabled: boolean) { const p = current(); commit({ ...p, settings: { ...p.settings, audioEnabled: enabled } }); },
-    reset() { commit(DEFAULT_PROGRESS); },
+
+    setAudio(enabled: boolean) {
+      const p = current();
+      commit({ ...p, settings: { ...p.settings, audioEnabled: enabled } }, false);
+    },
+
+    reset() {
+      const p = current();
+      if (p.auth.mode === "authenticated" && p.auth.user) {
+        const today = day(new Date());
+        commit({
+          ...DEFAULT_PROGRESS,
+          settings: p.settings,
+          streak: { current: 1, longest: 1, lastActiveDate: today },
+          auth: p.auth,
+        });
+      } else {
+        commit({
+          ...DEFAULT_PROGRESS,
+          settings: p.settings,
+        });
+      }
+    },
+
+    async loginWithEmail(
+      email: string,
+      password: string
+    ): Promise<{ ok: boolean; error?: string }> {
+      const cleanEmail = email.trim().toLowerCase();
+      if (!cleanEmail || !password) {
+        return { ok: false, error: "Email dan kata sandi wajib diisi." };
+      }
+
+      const p = current();
+
+      if (isSupabaseConfigured()) {
+        const { session, error } = await supabaseSignIn(cleanEmail, password);
+        if (session) {
+          activeAccessToken = session.accessToken;
+          if (typeof window !== "undefined") {
+            try {
+              window.localStorage.setItem(SESSION_KEY, session.accessToken);
+            } catch {
+              // Abaikan jika localStorage penuh
+            }
+          }
+
+          const remoteProfile = await fetchSupabaseProfile(
+            session.user.id,
+            session.accessToken
+          );
+          const merged = mergeProgressSets(
+            p.bisindo,
+            p.braille,
+            remoteProfile?.progress_data?.bisindo,
+            remoteProfile?.progress_data?.braille
+          );
+          const calcXp = Math.max(
+            remoteProfile?.xp ?? 0,
+            minimumXpFromProgress(merged.bisindo, merged.braille)
+          );
+          const today = day(new Date());
+          const streakCurrent = Math.max(remoteProfile?.streak_current ?? 1, 1);
+          const streakLongest = Math.max(remoteProfile?.streak_longest ?? 1, streakCurrent);
+
+          commit({
+            ...p,
+            xp: calcXp,
+            streak: {
+              current: streakCurrent,
+              longest: streakLongest,
+              lastActiveDate: remoteProfile?.last_active_date ?? today,
+            },
+            bisindo: merged.bisindo,
+            braille: merged.braille,
+            auth: {
+              mode: "authenticated",
+              user: {
+                id: session.user.id,
+                email: session.user.email,
+                displayName: remoteProfile?.display_name || session.user.displayName,
+              },
+              source: "supabase",
+              syncing: false,
+            },
+          });
+
+          void this.refreshLeaderboard();
+          return { ok: true };
+        }
+
+        // Jika belum ada di Supabase namun ada di akun lokal, izinkan fallback
+        const localAccounts = loadLocalAccounts();
+        if (!localAccounts[cleanEmail]) {
+          return { ok: false, error: error ?? "Gagal masuk dengan email tersebut." };
+        }
+      }
+
+      const accounts = loadLocalAccounts();
+      const found = accounts[cleanEmail];
+      if (!found) {
+        return {
+          ok: false,
+          error: "Akun belum terdaftar. Silakan gunakan tab Daftar Akun Baru atau tombol Akun Demo Juri.",
+        };
+      }
+      if (found.passwordHash !== password && found.passwordHash !== "demo-auth") {
+        return { ok: false, error: "Kata sandi yang Anda masukkan tidak sesuai." };
+      }
+
+      const merged = mergeProgressSets(p.bisindo, p.braille, found.bisindo, found.braille);
+      const calcXp = Math.max(found.xp, minimumXpFromProgress(merged.bisindo, merged.braille));
+      const today = day(new Date());
+
+      commit({
+        ...p,
+        xp: calcXp,
+        streak: {
+          current: Math.max(found.streak.current, 1),
+          longest: Math.max(found.streak.longest, 1),
+          lastActiveDate: today,
+        },
+        bisindo: merged.bisindo,
+        braille: merged.braille,
+        auth: {
+          mode: "authenticated",
+          user: {
+            id: found.id,
+            email: found.email,
+            displayName: found.displayName,
+          },
+          source: "local",
+          syncing: false,
+        },
+      });
+
+      return { ok: true };
+    },
+
+    async registerWithEmail(
+      displayName: string,
+      email: string,
+      password: string
+    ): Promise<{ ok: boolean; error?: string }> {
+      const cleanName = displayName.trim();
+      const cleanEmail = email.trim().toLowerCase();
+
+      if (cleanName.length < 2) {
+        return { ok: false, error: "Nama tampilan minimal terdiri dari 2 karakter." };
+      }
+      if (!cleanEmail.includes("@")) {
+        return { ok: false, error: "Masukkan alamat email yang valid." };
+      }
+      if (password.length < 6) {
+        return { ok: false, error: "Kata sandi minimal terdiri dari 6 karakter." };
+      }
+
+      const p = current();
+      const today = day(new Date());
+
+      if (isSupabaseConfigured()) {
+        const { session, error } = await supabaseSignUp(
+          cleanName,
+          cleanEmail,
+          password
+        );
+        if (session) {
+          activeAccessToken = session.accessToken;
+          if (typeof window !== "undefined") {
+            try {
+              window.localStorage.setItem(SESSION_KEY, session.accessToken);
+            } catch {
+              // Abaikan jika penyimpanan lokal penuh
+            }
+          }
+
+          const merged = mergeProgressSets(p.bisindo, p.braille);
+          const calcXp = minimumXpFromProgress(merged.bisindo, merged.braille);
+
+          commit({
+            ...p,
+            xp: calcXp,
+            streak: { current: 1, longest: 1, lastActiveDate: today },
+            bisindo: merged.bisindo,
+            braille: merged.braille,
+            auth: {
+              mode: "authenticated",
+              user: {
+                id: session.user.id,
+                email: session.user.email,
+                displayName: cleanName,
+              },
+              source: "supabase",
+              syncing: false,
+            },
+          });
+
+          void syncToSupabaseIfActive(current()).then(() => this.refreshLeaderboard());
+          return { ok: true };
+        }
+        if (error) {
+          return { ok: false, error };
+        }
+      }
+
+      const accounts = loadLocalAccounts();
+      const userId = `local-${cleanEmail.replace(/[^a-z0-9]/g, "-")}`;
+      const existing = accounts[cleanEmail];
+      const merged = mergeProgressSets(
+        p.bisindo,
+        p.braille,
+        existing?.bisindo,
+        existing?.braille
+      );
+      const calcXp = Math.max(
+        existing?.xp ?? 0,
+        minimumXpFromProgress(merged.bisindo, merged.braille)
+      );
+
+      accounts[cleanEmail] = {
+        id: userId,
+        email: cleanEmail,
+        passwordHash: password,
+        displayName: cleanName,
+        xp: calcXp,
+        streak: { current: 1, longest: 1, lastActiveDate: today },
+        bisindo: merged.bisindo,
+        braille: merged.braille,
+        badges: [],
+      };
+      saveLocalAccounts(accounts);
+
+      commit({
+        ...p,
+        xp: calcXp,
+        streak: { current: 1, longest: 1, lastActiveDate: today },
+        bisindo: merged.bisindo,
+        braille: merged.braille,
+        auth: {
+          mode: "authenticated",
+          user: {
+            id: userId,
+            email: cleanEmail,
+            displayName: cleanName,
+          },
+          source: isSupabaseConfigured() ? "supabase" : "local",
+          syncing: false,
+        },
+      });
+
+      return { ok: true };
+    },
+
+    async loginAsJudgeDemo(): Promise<{ ok: boolean }> {
+      const p = current();
+      const demoEmail =
+        process.env.NEXT_PUBLIC_DEMO_JUDGE_EMAIL?.trim() || "juri.demo@signify.id";
+      const demoPassword =
+        process.env.NEXT_PUBLIC_DEMO_JUDGE_PASSWORD?.trim() || "SignifyItRush2026!";
+      const demoName = "Juri IT RUSH 2026 (Akun Demo)";
+
+      const demoPresetBisindo: ProgressData["bisindo"] = {
+        learnedLetters: ["A", "E", "I", "O", "U", "B", "D", "F", "H", "K", "C", "L"],
+        learnedWords: ["saya", "belajar", "terima_kasih"],
+        practiceSessionsCompleted: 2,
+        guessTheSignBestScore: 90,
+      };
+      const demoPresetBraille: ProgressData["braille"] = {
+        learnedLetters: ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"],
+        quizSessionsCompleted: 2,
+      };
+
+      const merged = mergeProgressSets(
+        p.bisindo,
+        p.braille,
+        demoPresetBisindo,
+        demoPresetBraille
+      );
+      const demoXp = Math.max(315, minimumXpFromProgress(merged.bisindo, merged.braille));
+      const today = day(new Date());
+
+      if (isSupabaseConfigured()) {
+        const signInRes = await supabaseSignIn(demoEmail, demoPassword);
+        const session =
+          signInRes.session ??
+          (await supabaseSignUp(demoName, demoEmail, demoPassword)).session;
+
+        if (session) {
+          activeAccessToken = session.accessToken;
+          if (typeof window !== "undefined") {
+            try {
+              window.localStorage.setItem(SESSION_KEY, session.accessToken);
+            } catch {
+              // Abaikan jika penyimpanan lokal penuh
+            }
+          }
+
+          commit({
+            ...p,
+            xp: demoXp,
+            streak: { current: 4, longest: 4, lastActiveDate: today },
+            bisindo: merged.bisindo,
+            braille: merged.braille,
+            auth: {
+              mode: "authenticated",
+              user: {
+                id: session.user.id,
+                email: demoEmail,
+                displayName: demoName,
+                isDemo: true,
+              },
+              source: "supabase",
+              syncing: false,
+            },
+          });
+
+          void syncToSupabaseIfActive(current()).then(() => this.refreshLeaderboard());
+          return { ok: true };
+        }
+      }
+
+      commit({
+        ...p,
+        xp: demoXp,
+        streak: { current: 4, longest: 4, lastActiveDate: today },
+        bisindo: merged.bisindo,
+        braille: merged.braille,
+        auth: {
+          mode: "authenticated",
+          user: {
+            id: "demo-judge-itrush",
+            email: demoEmail,
+            displayName: demoName,
+            isDemo: true,
+          },
+          source: isSupabaseConfigured() ? "supabase" : "local",
+          syncing: false,
+        },
+      });
+
+      void syncToSupabaseIfActive(current()).then(() => this.refreshLeaderboard());
+      return { ok: true };
+    },
+
+    async logout() {
+      const p = current();
+      if (activeAccessToken) {
+        void supabaseSignOut(activeAccessToken);
+      }
+      activeAccessToken = undefined;
+
+      let guestBisindo = DEFAULT_PROGRESS.bisindo;
+      let guestBraille = DEFAULT_PROGRESS.braille;
+
+      if (typeof window !== "undefined") {
+        try {
+          window.localStorage.removeItem(SESSION_KEY);
+          const rawGuest = window.localStorage.getItem(GUEST_KEY);
+          if (rawGuest) {
+            const parsed = JSON.parse(rawGuest);
+            guestBisindo = { ...DEFAULT_PROGRESS.bisindo, ...parsed.bisindo };
+            guestBraille = { ...DEFAULT_PROGRESS.braille, ...parsed.braille };
+          }
+        } catch {
+          // Gunakan default jika kosong
+        }
+      }
+
+      commit(
+        {
+          ...DEFAULT_PROGRESS,
+          settings: p.settings,
+          bisindo: guestBisindo,
+          braille: guestBraille,
+          auth: {
+            mode: "guest",
+            user: null,
+            source: "local",
+            syncing: false,
+          },
+        },
+        false
+      );
+    },
+
+    async refreshLeaderboard() {
+      if (!isSupabaseConfigured()) return;
+      const rows = await fetchSupabaseLeaderboard(10, activeAccessToken);
+      if (!rows) return;
+      remoteLeaderboardCache = rows.map((r) => ({
+        id: r.id,
+        displayName: r.display_name,
+        xp: r.xp,
+        streakCurrent: r.streak_current,
+        badgeCount: Array.isArray(r.badges) ? r.badges.length : 0,
+      }));
+      const p = current();
+      commit({ ...p }, false);
+    },
   },
 };

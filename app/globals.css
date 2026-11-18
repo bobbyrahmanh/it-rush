@@ -171,3 +171,106 @@
   }
 }
 
+
+/* Owli: reading */
+.mascot-wing-left-reading {
+  animation: wing-read 2s ease-in-out infinite;
+}
+
+.mascot-book {
+  transform-box: view-box;
+  transform-origin: 137px 230px;
+  animation: book-read 2.4s ease-in-out infinite;
+}
+
+/* Owli: writing */
+.mascot-pencil {
+  animation: pencil-write 0.65s ease-in-out infinite;
+}
+
+.mascot-wing-left-writing {
+  animation: wing-write 0.9s ease-in-out infinite;
+}
+
+/* Owli: thinking */
+.mascot-wing-thinking {
+  animation: wing-think 2s ease-in-out infinite;
+}
+
+.mascot-wing-thinking + * {
+  transform-origin: center;
+}
+
+.mascot-wing-thinking {
+  transform-box: view-box;
+}
+
+/* Owli: celebrating */
+.mascot-celebrate {
+  transform-box: view-box;
+  transform-origin: center bottom;
+  animation: body-celebrate 0.8s ease-in-out infinite;
+}
+
+.mascot-wing-left-celebrate {
+  animation: wing-flap-left 0.45s ease-in-out infinite alternate;
+}
+
+.mascot-wing-right-celebrate {
+  animation: wing-flap-right 0.45s ease-in-out infinite alternate;
+}
+
+/* Keyframes */
+@keyframes wing-read {
+  0%, 100% { transform: rotate(0deg); }
+  50% { transform: rotate(-9deg); }
+}
+
+@keyframes book-read {
+  0%, 100% { transform: rotate(0deg); }
+  50% { transform: rotate(-2deg); }
+}
+
+@keyframes pencil-write {
+  0%, 100% { transform: rotate(-4deg) translate(0, 0); }
+  50% { transform: rotate(5deg) translate(-2px, 3px); }
+}
+
+@keyframes wing-write {
+  0%, 100% { transform: rotate(0deg); }
+  50% { transform: rotate(-5deg); }
+}
+
+@keyframes wing-think {
+  0%, 100% { transform: rotate(0deg); }
+  50% { transform: rotate(-7deg); }
+}
+
+@keyframes body-celebrate {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-9px) rotate(-2deg); }
+}
+
+@keyframes wing-flap-left {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(-22deg); }
+}
+
+@keyframes wing-flap-right {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(22deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mascot-wing-left-reading,
+  .mascot-book,
+  .mascot-pencil,
+  .mascot-wing-left-writing,
+  .mascot-wing-thinking,
+  .mascot-celebrate,
+  .mascot-wing-left-celebrate,
+  .mascot-wing-right-celebrate {
+    animation: none !important;
+  }
+}
+
