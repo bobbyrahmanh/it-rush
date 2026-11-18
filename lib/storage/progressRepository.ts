@@ -33,10 +33,6 @@ export interface LeaderboardEntry {
   streakCurrent: number;
   badgeCount: number;
   isCurrentUser?: boolean;
-<<<<<<< Updated upstream
-  isDemoSeed?: boolean;
-=======
->>>>>>> Stashed changes
 }
 
 export interface ProgressData {
@@ -54,74 +50,16 @@ export interface ProgressData {
   badges: string[];
   auth: AuthState;
   leaderboard: LeaderboardEntry[];
-<<<<<<< Updated upstream
-}
-
-interface StoredLocalAccount {
-  id: string;
-  email: string;
-  passwordHash: string;
-  displayName: string;
-  xp: number;
-  streak: { current: number; longest: number; lastActiveDate: string | null };
-  bisindo: ProgressData["bisindo"];
-  braille: ProgressData["braille"];
-  badges: string[];
-=======
->>>>>>> Stashed changes
 }
 
 const KEY = "signify_progress_v1";
 const GUEST_KEY = "signify_guest_progress_v1";
 const SESSION_KEY = "signify_auth_session_v1";
-<<<<<<< Updated upstream
-const ACCOUNTS_KEY = "signify_local_accounts_v1";
-
-const day = (d: Date) => d.toLocaleDateString("sv-SE");
-
-// Data contoh tim pengembang (berdasarkan README.md) sebagai pembanding awal di Papan Peringkat
-const TEAM_SEED_LEADERBOARD: LeaderboardEntry[] = [
-  {
-    id: "seed-diayu",
-    displayName: "Diayu Nur Aini (Contoh Tim)",
-    xp: 340,
-    streakCurrent: 5,
-    badgeCount: 6,
-    isDemoSeed: true,
-  },
-  {
-    id: "seed-bobby",
-    displayName: "Bobby Rahman H. (Contoh Tim)",
-    xp: 295,
-    streakCurrent: 4,
-    badgeCount: 5,
-    isDemoSeed: true,
-  },
-  {
-    id: "seed-hammam",
-    displayName: "Hammam M. Yazid (Contoh Tim)",
-    xp: 230,
-    streakCurrent: 3,
-    badgeCount: 4,
-    isDemoSeed: true,
-  },
-  {
-    id: "seed-mahardika",
-    displayName: "Mahardika R. (Contoh Tim)",
-    xp: 185,
-    streakCurrent: 2,
-    badgeCount: 3,
-    isDemoSeed: true,
-  },
-];
-
-=======
 const MISSING_ENV_MSG =
   "Konfigurasi Supabase (.env.local) belum terpasang di perangkat ini. Silakan pasang .env.local untuk menggunakan fitur Akun, atau lanjut belajar sebagai Tamu.";
 
 const day = (d: Date) => d.toLocaleDateString("sv-SE");
 
->>>>>>> Stashed changes
 export const DEFAULT_PROGRESS: ProgressData = {
   schemaVersion: 1,
   xp: 0,
@@ -141,20 +79,12 @@ export const DEFAULT_PROGRESS: ProgressData = {
     source: "local",
     syncing: false,
   },
-<<<<<<< Updated upstream
-  leaderboard: TEAM_SEED_LEADERBOARD,
-=======
   leaderboard: [],
->>>>>>> Stashed changes
 };
 
 let cache: ProgressData | null = null;
 let activeAccessToken: string | undefined = undefined;
-<<<<<<< Updated upstream
-let remoteLeaderboardCache: LeaderboardEntry[] | null = null;
-=======
 let remoteLeaderboardCache: LeaderboardEntry[] = [];
->>>>>>> Stashed changes
 const listeners = new Set<() => void>();
 
 function uniqueStrings(items: string[]): string[] {
@@ -173,126 +103,6 @@ function minimumXpFromProgress(
   return bisindoLettersXp + bisindoWordsXp + guessXp + brailleLettersXp + brailleQuizXp;
 }
 
-<<<<<<< Updated upstream
-function loadLocalAccounts(): Record<string, StoredLocalAccount> {
-  if (typeof window === "undefined") return {};
-  try {
-    const raw = window.localStorage.getItem(ACCOUNTS_KEY);
-    if (!raw) return {};
-    return JSON.parse(raw) as Record<string, StoredLocalAccount>;
-  } catch {
-    return {};
-  }
-}
-
-function saveLocalAccounts(accounts: Record<string, StoredLocalAccount>) {
-  if (typeof window === "undefined") return;
-  try {
-    window.localStorage.setItem(ACCOUNTS_KEY, JSON.stringify(accounts));
-  } catch {
-    // Mode penjelajahan privat: simpan di memori
-  }
-}
-
-function buildLeaderboard(state: ProgressData): LeaderboardEntry[] {
-  const entries = new Map<string, LeaderboardEntry>();
-
-  for (const seed of TEAM_SEED_LEADERBOARD) {
-    entries.set(seed.id, { ...seed });
-  }
-
-  const localAccounts = loadLocalAccounts();
-  for (const acc of Object.values(localAccounts)) {
-    entries.set(acc.id, {
-      id: acc.id,
-      displayName: acc.displayName,
-      xp: acc.xp,
-      streakCurrent: acc.streak.current,
-      badgeCount: acc.badges.length,
-      isCurrentUser: state.auth.user?.id === acc.id,
-    });
-  }
-
-  if (remoteLeaderboardCache) {
-    for (const row of remoteLeaderboardCache) {
-      entries.set(row.id, {
-        ...row,
-        isCurrentUser: state.auth.user?.id === row.id,
-      });
-    }
-  }
-
-  if (state.auth.mode === "authenticated" && state.auth.user) {
-    entries.set(state.auth.user.id, {
-      id: state.auth.user.id,
-      displayName: state.auth.user.displayName,
-      xp: state.xp,
-      streakCurrent: state.streak.current,
-      badgeCount: state.badges.length,
-      isCurrentUser: true,
-    });
-  }
-
-  return Array.from(entries.values())
-    .sort((a, b) => b.xp - a.xp || b.streakCurrent - a.streakCurrent)
-    .slice(0, 10);
-}
-
-function sanitizeProgress(raw: Partial<ProgressData> | null | undefined): ProgressData {
-  if (!raw || raw.schemaVersion !== 1) return DEFAULT_PROGRESS;
-  const authMode = raw.auth?.mode === "authenticated" && raw.auth?.user ? "authenticated" : "guest";
-  const bisindo: ProgressData["bisindo"] = {
-    learnedLetters: uniqueStrings(raw.bisindo?.learnedLetters ?? []),
-    learnedWords: uniqueStrings(raw.bisindo?.learnedWords ?? []),
-    practiceSessionsCompleted: Number(raw.bisindo?.practiceSessionsCompleted ?? 0),
-    guessTheSignBestScore: Number(raw.bisindo?.guessTheSignBestScore ?? 0),
-  };
-  const braille: ProgressData["braille"] = {
-    learnedLetters: uniqueStrings(raw.braille?.learnedLetters ?? []),
-    quizSessionsCompleted: Number(raw.braille?.quizSessionsCompleted ?? 0),
-  };
-  const streak =
-    authMode === "authenticated"
-      ? {
-          current: Number(raw.streak?.current ?? 0),
-          longest: Number(raw.streak?.longest ?? 0),
-          lastActiveDate: raw.streak?.lastActiveDate ?? null,
-        }
-      : { current: 0, longest: 0, lastActiveDate: null };
-
-  const xp =
-    authMode === "authenticated"
-      ? Math.max(Number(raw.xp ?? 0), minimumXpFromProgress(bisindo, braille))
-      : 0;
-
-  const base: ProgressData = {
-    schemaVersion: 1,
-    xp,
-    streak,
-    settings: {
-      audioEnabled: raw.settings?.audioEnabled ?? true,
-      showLandmarks: raw.settings?.showLandmarks ?? true,
-    },
-    bisindo,
-    braille,
-    badges: authMode === "authenticated" ? evaluateBadges({ xp, streak, bisindo, braille }) : [],
-    auth: {
-      mode: authMode,
-      user: authMode === "authenticated" ? raw.auth?.user ?? null : null,
-      source: raw.auth?.source === "supabase" ? "supabase" : "local",
-      syncing: false,
-    },
-    leaderboard: [],
-  };
-
-  base.leaderboard = buildLeaderboard(base);
-  return base;
-}
-
-function load(): ProgressData {
-  if (typeof window === "undefined") return DEFAULT_PROGRESS;
-  try {
-=======
 function buildLeaderboard(state: ProgressData): LeaderboardEntry[] {
   const entries = new Map<string, LeaderboardEntry>();
 
@@ -381,7 +191,6 @@ function sanitizeProgress(raw: Partial<ProgressData> | null | undefined): Progre
 function load(): ProgressData {
   if (typeof window === "undefined") return DEFAULT_PROGRESS;
   try {
->>>>>>> Stashed changes
     const savedToken = window.localStorage.getItem(SESSION_KEY);
     if (savedToken) activeAccessToken = savedToken;
     const raw = window.localStorage.getItem(KEY);
@@ -392,27 +201,6 @@ function load(): ProgressData {
   }
 }
 
-<<<<<<< Updated upstream
-function persistLocalAccountIfAuthenticated(state: ProgressData) {
-  if (state.auth.mode !== "authenticated" || !state.auth.user) return;
-  const accounts = loadLocalAccounts();
-  const existing = accounts[state.auth.user.email.toLowerCase()];
-  accounts[state.auth.user.email.toLowerCase()] = {
-    id: state.auth.user.id,
-    email: state.auth.user.email.toLowerCase(),
-    passwordHash: existing?.passwordHash ?? "demo-auth",
-    displayName: state.auth.user.displayName,
-    xp: state.xp,
-    streak: state.streak,
-    bisindo: state.bisindo,
-    braille: state.braille,
-    badges: state.badges,
-  };
-  saveLocalAccounts(accounts);
-}
-
-=======
->>>>>>> Stashed changes
 async function syncToSupabaseIfActive(state: ProgressData) {
   if (
     state.auth.mode !== "authenticated" ||
@@ -472,10 +260,6 @@ function commit(next: ProgressData, triggerRemoteSync = true) {
     }
   }
 
-<<<<<<< Updated upstream
-  persistLocalAccountIfAuthenticated(withMeta);
-=======
->>>>>>> Stashed changes
   if (triggerRemoteSync) {
     void syncToSupabaseIfActive(withMeta);
   }
@@ -641,100 +425,16 @@ export const progressRepository = {
       email: string,
       password: string
     ): Promise<{ ok: boolean; error?: string }> {
-<<<<<<< Updated upstream
-=======
       if (!isSupabaseConfigured()) {
         return { ok: false, error: MISSING_ENV_MSG };
       }
 
->>>>>>> Stashed changes
       const cleanEmail = email.trim().toLowerCase();
       if (!cleanEmail || !password) {
         return { ok: false, error: "Email dan kata sandi wajib diisi." };
       }
 
       const p = current();
-<<<<<<< Updated upstream
-
-      if (isSupabaseConfigured()) {
-        const { session, error } = await supabaseSignIn(cleanEmail, password);
-        if (session) {
-          activeAccessToken = session.accessToken;
-          if (typeof window !== "undefined") {
-            try {
-              window.localStorage.setItem(SESSION_KEY, session.accessToken);
-            } catch {
-              // Abaikan jika localStorage penuh
-            }
-          }
-
-          const remoteProfile = await fetchSupabaseProfile(
-            session.user.id,
-            session.accessToken
-          );
-          const merged = mergeProgressSets(
-            p.bisindo,
-            p.braille,
-            remoteProfile?.progress_data?.bisindo,
-            remoteProfile?.progress_data?.braille
-          );
-          const calcXp = Math.max(
-            remoteProfile?.xp ?? 0,
-            minimumXpFromProgress(merged.bisindo, merged.braille)
-          );
-          const today = day(new Date());
-          const streakCurrent = Math.max(remoteProfile?.streak_current ?? 1, 1);
-          const streakLongest = Math.max(remoteProfile?.streak_longest ?? 1, streakCurrent);
-
-          commit({
-            ...p,
-            xp: calcXp,
-            streak: {
-              current: streakCurrent,
-              longest: streakLongest,
-              lastActiveDate: remoteProfile?.last_active_date ?? today,
-            },
-            bisindo: merged.bisindo,
-            braille: merged.braille,
-            auth: {
-              mode: "authenticated",
-              user: {
-                id: session.user.id,
-                email: session.user.email,
-                displayName: remoteProfile?.display_name || session.user.displayName,
-              },
-              source: "supabase",
-              syncing: false,
-            },
-          });
-
-          void this.refreshLeaderboard();
-          return { ok: true };
-        }
-
-        // Jika belum ada di Supabase namun ada di akun lokal, izinkan fallback
-        const localAccounts = loadLocalAccounts();
-        if (!localAccounts[cleanEmail]) {
-          return { ok: false, error: error ?? "Gagal masuk dengan email tersebut." };
-        }
-      }
-
-      const accounts = loadLocalAccounts();
-      const found = accounts[cleanEmail];
-      if (!found) {
-        return {
-          ok: false,
-          error: "Akun belum terdaftar. Silakan gunakan tab Daftar Akun Baru atau tombol Akun Demo Juri.",
-        };
-      }
-      if (found.passwordHash !== password && found.passwordHash !== "demo-auth") {
-        return { ok: false, error: "Kata sandi yang Anda masukkan tidak sesuai." };
-      }
-
-      const merged = mergeProgressSets(p.bisindo, p.braille, found.bisindo, found.braille);
-      const calcXp = Math.max(found.xp, minimumXpFromProgress(merged.bisindo, merged.braille));
-      const today = day(new Date());
-=======
       const { session, error } = await supabaseSignIn(cleanEmail, password);
       if (!session) {
         return {
@@ -769,48 +469,30 @@ export const progressRepository = {
       const today = day(new Date());
       const streakCurrent = Math.max(remoteProfile?.streak_current ?? 1, 1);
       const streakLongest = Math.max(remoteProfile?.streak_longest ?? 1, streakCurrent);
->>>>>>> Stashed changes
 
       commit({
         ...p,
         xp: calcXp,
         streak: {
-<<<<<<< Updated upstream
-          current: Math.max(found.streak.current, 1),
-          longest: Math.max(found.streak.longest, 1),
-          lastActiveDate: today,
-=======
           current: streakCurrent,
           longest: streakLongest,
           lastActiveDate: remoteProfile?.last_active_date ?? today,
->>>>>>> Stashed changes
         },
         bisindo: merged.bisindo,
         braille: merged.braille,
         auth: {
           mode: "authenticated",
           user: {
-<<<<<<< Updated upstream
-            id: found.id,
-            email: found.email,
-            displayName: found.displayName,
-          },
-          source: "local",
-=======
             id: session.user.id,
             email: session.user.email,
             displayName: remoteProfile?.display_name || session.user.displayName,
           },
           source: "supabase",
->>>>>>> Stashed changes
           syncing: false,
         },
       });
 
-<<<<<<< Updated upstream
-=======
       void syncToSupabaseIfActive(current()).then(() => this.refreshLeaderboard());
->>>>>>> Stashed changes
       return { ok: true };
     },
 
@@ -819,13 +501,10 @@ export const progressRepository = {
       email: string,
       password: string
     ): Promise<{ ok: boolean; error?: string }> {
-<<<<<<< Updated upstream
-=======
       if (!isSupabaseConfigured()) {
         return { ok: false, error: MISSING_ENV_MSG };
       }
 
->>>>>>> Stashed changes
       const cleanName = displayName.trim();
       const cleanEmail = email.trim().toLowerCase();
 
@@ -842,79 +521,6 @@ export const progressRepository = {
       const p = current();
       const today = day(new Date());
 
-<<<<<<< Updated upstream
-      if (isSupabaseConfigured()) {
-        const { session, error } = await supabaseSignUp(
-          cleanName,
-          cleanEmail,
-          password
-        );
-        if (session) {
-          activeAccessToken = session.accessToken;
-          if (typeof window !== "undefined") {
-            try {
-              window.localStorage.setItem(SESSION_KEY, session.accessToken);
-            } catch {
-              // Abaikan jika penyimpanan lokal penuh
-            }
-          }
-
-          const merged = mergeProgressSets(p.bisindo, p.braille);
-          const calcXp = minimumXpFromProgress(merged.bisindo, merged.braille);
-
-          commit({
-            ...p,
-            xp: calcXp,
-            streak: { current: 1, longest: 1, lastActiveDate: today },
-            bisindo: merged.bisindo,
-            braille: merged.braille,
-            auth: {
-              mode: "authenticated",
-              user: {
-                id: session.user.id,
-                email: session.user.email,
-                displayName: cleanName,
-              },
-              source: "supabase",
-              syncing: false,
-            },
-          });
-
-          void syncToSupabaseIfActive(current()).then(() => this.refreshLeaderboard());
-          return { ok: true };
-        }
-        if (error) {
-          return { ok: false, error };
-        }
-      }
-
-      const accounts = loadLocalAccounts();
-      const userId = `local-${cleanEmail.replace(/[^a-z0-9]/g, "-")}`;
-      const existing = accounts[cleanEmail];
-      const merged = mergeProgressSets(
-        p.bisindo,
-        p.braille,
-        existing?.bisindo,
-        existing?.braille
-      );
-      const calcXp = Math.max(
-        existing?.xp ?? 0,
-        minimumXpFromProgress(merged.bisindo, merged.braille)
-      );
-
-      accounts[cleanEmail] = {
-        id: userId,
-        email: cleanEmail,
-        passwordHash: password,
-        displayName: cleanName,
-        xp: calcXp,
-        streak: { current: 1, longest: 1, lastActiveDate: today },
-        bisindo: merged.bisindo,
-        braille: merged.braille,
-        badges: [],
-      };
-      saveLocalAccounts(accounts);
-=======
       const { session, error } = await supabaseSignUp(
         cleanName,
         cleanEmail,
@@ -938,7 +544,6 @@ export const progressRepository = {
 
       const merged = mergeProgressSets(p.bisindo, p.braille);
       const calcXp = minimumXpFromProgress(merged.bisindo, merged.braille);
->>>>>>> Stashed changes
 
       commit({
         ...p,
@@ -949,29 +554,15 @@ export const progressRepository = {
         auth: {
           mode: "authenticated",
           user: {
-<<<<<<< Updated upstream
-            id: userId,
-            email: cleanEmail,
-            displayName: cleanName,
-          },
-          source: isSupabaseConfigured() ? "supabase" : "local",
-=======
             id: session.user.id,
             email: session.user.email,
             displayName: cleanName,
           },
           source: "supabase",
->>>>>>> Stashed changes
           syncing: false,
         },
       });
 
-<<<<<<< Updated upstream
-      return { ok: true };
-    },
-
-    async loginAsJudgeDemo(): Promise<{ ok: boolean }> {
-=======
       void syncToSupabaseIfActive(current()).then(() => this.refreshLeaderboard());
       return { ok: true };
     },
@@ -981,7 +572,6 @@ export const progressRepository = {
         return { ok: false, error: MISSING_ENV_MSG };
       }
 
->>>>>>> Stashed changes
       const p = current();
       const demoEmail =
         process.env.NEXT_PUBLIC_DEMO_JUDGE_EMAIL?.trim() || "juri.demo@signify.id";
@@ -1009,47 +599,6 @@ export const progressRepository = {
       const demoXp = Math.max(315, minimumXpFromProgress(merged.bisindo, merged.braille));
       const today = day(new Date());
 
-<<<<<<< Updated upstream
-      if (isSupabaseConfigured()) {
-        const signInRes = await supabaseSignIn(demoEmail, demoPassword);
-        const session =
-          signInRes.session ??
-          (await supabaseSignUp(demoName, demoEmail, demoPassword)).session;
-
-        if (session) {
-          activeAccessToken = session.accessToken;
-          if (typeof window !== "undefined") {
-            try {
-              window.localStorage.setItem(SESSION_KEY, session.accessToken);
-            } catch {
-              // Abaikan jika penyimpanan lokal penuh
-            }
-          }
-
-          commit({
-            ...p,
-            xp: demoXp,
-            streak: { current: 4, longest: 4, lastActiveDate: today },
-            bisindo: merged.bisindo,
-            braille: merged.braille,
-            auth: {
-              mode: "authenticated",
-              user: {
-                id: session.user.id,
-                email: demoEmail,
-                displayName: demoName,
-                isDemo: true,
-              },
-              source: "supabase",
-              syncing: false,
-            },
-          });
-
-          void syncToSupabaseIfActive(current()).then(() => this.refreshLeaderboard());
-          return { ok: true };
-        }
-      }
-=======
       const signInRes = await supabaseSignIn(demoEmail, demoPassword);
       const session =
         signInRes.session ??
@@ -1057,7 +606,6 @@ export const progressRepository = {
 
       const userId = session?.user.id || "demo-judge-itrush";
       activeAccessToken = session?.accessToken ?? "";
->>>>>>> Stashed changes
 
       commit({
         ...p,
@@ -1068,20 +616,12 @@ export const progressRepository = {
         auth: {
           mode: "authenticated",
           user: {
-<<<<<<< Updated upstream
-            id: "demo-judge-itrush",
-=======
             id: userId,
->>>>>>> Stashed changes
             email: demoEmail,
             displayName: demoName,
             isDemo: true,
           },
-<<<<<<< Updated upstream
-          source: isSupabaseConfigured() ? "supabase" : "local",
-=======
           source: "supabase",
->>>>>>> Stashed changes
           syncing: false,
         },
       });

@@ -509,45 +509,6 @@ export default function ProgressPage() {
               </tr>
             </thead>
             <tbody className="divide-y-2 divide-ink/15 text-sm">
-<<<<<<< Updated upstream
-              {data.leaderboard.map((row, idx) => {
-                const rank = idx + 1;
-                const isMe = Boolean(row.isCurrentUser && isAuthenticated);
-                return (
-                  <tr
-                    key={row.id}
-                    className={
-                      isMe
-                        ? "bg-sun/60 font-bold text-ink"
-                        : "hover:bg-paper"
-                    }
-                  >
-                    <td className="py-3.5 pl-3 pr-2 font-display text-lg font-bold">
-                      #{rank}
-                    </td>
-                    <td className="px-3 py-3.5">
-                      <div className="flex flex-wrap items-center gap-2">
-                        <span className="font-bold">{row.displayName}</span>
-                        {isMe && (
-                          <span className="rounded-full border-2 border-ink bg-mint px-2.5 py-0.5 text-xs font-bold text-ink">
-                            Akunmu
-                          </span>
-                        )}
-                      </div>
-                    </td>
-                    <td className="px-3 py-3.5 font-semibold">
-                      {row.streakCurrent} hari
-                    </td>
-                    <td className="px-3 py-3.5 font-semibold">
-                      {row.badgeCount} lencana
-                    </td>
-                    <td className="py-3.5 pl-3 pr-3 text-right font-display text-lg font-bold">
-                      {row.xp} XP
-                    </td>
-                  </tr>
-                );
-              })}
-=======
               {data.leaderboard.length === 0 ? (
                 <tr>
                   <td colSpan={5} className="px-4 py-8 text-center font-semibold text-ink/75">
@@ -593,7 +554,6 @@ export default function ProgressPage() {
                   );
                 })
               )}
->>>>>>> Stashed changes
             </tbody>
           </table>
         </div>
