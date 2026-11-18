@@ -17,3 +17,4 @@ public/models/mediapipe/
 *.egg-info/
 build/
 dist/
+.env.local

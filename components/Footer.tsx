@@ -6,6 +6,7 @@ const FOOTER_LINKS = [
   { href: "/bisindo", label: "Belajar BISINDO" },
   { href: "/braille", label: "Belajar Braille" },
   { href: "/progress", label: "Progres Saya" },
+  { href: "/login", label: "Masuk / Akun Demo" },
 ];
 
 export default function FooterSection() {
@@ -92,7 +93,7 @@ export default function FooterSection() {
             </div>
 
             <div className="flex flex-wrap gap-2 md:justify-end">
-              {["Next.js", "TensorFlow.js", "MediaPipe", "WebAssembly"].map(
+              {["Next.js", "TensorFlow.js", "MediaPipe", "WebAssembly", "Supabase"].map(
                 (tech) => (
                   <span
                     key={tech}
