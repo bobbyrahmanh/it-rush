@@ -33,7 +33,10 @@ export interface LeaderboardEntry {
   streakCurrent: number;
   badgeCount: number;
   isCurrentUser?: boolean;
+<<<<<<< Updated upstream
   isDemoSeed?: boolean;
+=======
+>>>>>>> Stashed changes
 }
 
 export interface ProgressData {
@@ -51,6 +54,7 @@ export interface ProgressData {
   badges: string[];
   auth: AuthState;
   leaderboard: LeaderboardEntry[];
+<<<<<<< Updated upstream
 }
 
 interface StoredLocalAccount {
@@ -63,11 +67,14 @@ interface StoredLocalAccount {
   bisindo: ProgressData["bisindo"];
   braille: ProgressData["braille"];
   badges: string[];
+=======
+>>>>>>> Stashed changes
 }
 
 const KEY = "signify_progress_v1";
 const GUEST_KEY = "signify_guest_progress_v1";
 const SESSION_KEY = "signify_auth_session_v1";
+<<<<<<< Updated upstream
 const ACCOUNTS_KEY = "signify_local_accounts_v1";
 
 const day = (d: Date) => d.toLocaleDateString("sv-SE");
@@ -108,6 +115,13 @@ const TEAM_SEED_LEADERBOARD: LeaderboardEntry[] = [
   },
 ];
 
+=======
+const MISSING_ENV_MSG =
+  "Konfigurasi Supabase (.env.local) belum terpasang di perangkat ini. Silakan pasang .env.local untuk menggunakan fitur Akun, atau lanjut belajar sebagai Tamu.";
+
+const day = (d: Date) => d.toLocaleDateString("sv-SE");
+
+>>>>>>> Stashed changes
 export const DEFAULT_PROGRESS: ProgressData = {
   schemaVersion: 1,
   xp: 0,
@@ -127,12 +141,20 @@ export const DEFAULT_PROGRESS: ProgressData = {
     source: "local",
     syncing: false,
   },
+<<<<<<< Updated upstream
   leaderboard: TEAM_SEED_LEADERBOARD,
+=======
+  leaderboard: [],
+>>>>>>> Stashed changes
 };
 
 let cache: ProgressData | null = null;
 let activeAccessToken: string | undefined = undefined;
+<<<<<<< Updated upstream
 let remoteLeaderboardCache: LeaderboardEntry[] | null = null;
+=======
+let remoteLeaderboardCache: LeaderboardEntry[] = [];
+>>>>>>> Stashed changes
 const listeners = new Set<() => void>();
 
 function uniqueStrings(items: string[]): string[] {
@@ -151,6 +173,7 @@ function minimumXpFromProgress(
   return bisindoLettersXp + bisindoWordsXp + guessXp + brailleLettersXp + brailleQuizXp;
 }
 
+<<<<<<< Updated upstream
 function loadLocalAccounts(): Record<string, StoredLocalAccount> {
   if (typeof window === "undefined") return {};
   try {
@@ -269,6 +292,96 @@ function sanitizeProgress(raw: Partial<ProgressData> | null | undefined): Progre
 function load(): ProgressData {
   if (typeof window === "undefined") return DEFAULT_PROGRESS;
   try {
+=======
+function buildLeaderboard(state: ProgressData): LeaderboardEntry[] {
+  const entries = new Map<string, LeaderboardEntry>();
+
+  for (const row of remoteLeaderboardCache) {
+    entries.set(row.id, {
+      ...row,
+      isCurrentUser: state.auth.user?.id === row.id,
+    });
+  }
+
+  if (state.auth.mode === "authenticated" && state.auth.user) {
+    entries.set(state.auth.user.id, {
+      id: state.auth.user.id,
+      displayName: state.auth.user.displayName,
+      xp: state.xp,
+      streakCurrent: state.streak.current,
+      badgeCount: state.badges.length,
+      isCurrentUser: true,
+    });
+  }
+
+  return Array.from(entries.values())
+    .sort((a, b) => b.xp - a.xp || b.streakCurrent - a.streakCurrent)
+    .slice(0, 10);
+}
+
+function sanitizeProgress(raw: Partial<ProgressData> | null | undefined): ProgressData {
+  if (!raw || raw.schemaVersion !== 1) return DEFAULT_PROGRESS;
+
+  const isValidSupabaseAuth =
+    isSupabaseConfigured() &&
+    raw.auth?.mode === "authenticated" &&
+    raw.auth?.source === "supabase" &&
+    Boolean(raw.auth?.user);
+
+  const authMode = isValidSupabaseAuth ? "authenticated" : "guest";
+
+  const bisindo: ProgressData["bisindo"] = {
+    learnedLetters: uniqueStrings(raw.bisindo?.learnedLetters ?? []),
+    learnedWords: uniqueStrings(raw.bisindo?.learnedWords ?? []),
+    practiceSessionsCompleted: Number(raw.bisindo?.practiceSessionsCompleted ?? 0),
+    guessTheSignBestScore: Number(raw.bisindo?.guessTheSignBestScore ?? 0),
+  };
+  const braille: ProgressData["braille"] = {
+    learnedLetters: uniqueStrings(raw.braille?.learnedLetters ?? []),
+    quizSessionsCompleted: Number(raw.braille?.quizSessionsCompleted ?? 0),
+  };
+  const streak =
+    authMode === "authenticated"
+      ? {
+          current: Number(raw.streak?.current ?? 0),
+          longest: Number(raw.streak?.longest ?? 0),
+          lastActiveDate: raw.streak?.lastActiveDate ?? null,
+        }
+      : { current: 0, longest: 0, lastActiveDate: null };
+
+  const xp =
+    authMode === "authenticated"
+      ? Math.max(Number(raw.xp ?? 0), minimumXpFromProgress(bisindo, braille))
+      : 0;
+
+  const base: ProgressData = {
+    schemaVersion: 1,
+    xp,
+    streak,
+    settings: {
+      audioEnabled: raw.settings?.audioEnabled ?? true,
+      showLandmarks: raw.settings?.showLandmarks ?? true,
+    },
+    bisindo,
+    braille,
+    badges: authMode === "authenticated" ? evaluateBadges({ xp, streak, bisindo, braille }) : [],
+    auth: {
+      mode: authMode,
+      user: authMode === "authenticated" ? raw.auth?.user ?? null : null,
+      source: authMode === "authenticated" ? "supabase" : "local",
+      syncing: false,
+    },
+    leaderboard: [],
+  };
+
+  base.leaderboard = buildLeaderboard(base);
+  return base;
+}
+
+function load(): ProgressData {
+  if (typeof window === "undefined") return DEFAULT_PROGRESS;
+  try {
+>>>>>>> Stashed changes
     const savedToken = window.localStorage.getItem(SESSION_KEY);
     if (savedToken) activeAccessToken = savedToken;
     const raw = window.localStorage.getItem(KEY);
@@ -279,6 +392,7 @@ function load(): ProgressData {
   }
 }
 
+<<<<<<< Updated upstream
 function persistLocalAccountIfAuthenticated(state: ProgressData) {
   if (state.auth.mode !== "authenticated" || !state.auth.user) return;
   const accounts = loadLocalAccounts();
@@ -297,6 +411,8 @@ function persistLocalAccountIfAuthenticated(state: ProgressData) {
   saveLocalAccounts(accounts);
 }
 
+=======
+>>>>>>> Stashed changes
 async function syncToSupabaseIfActive(state: ProgressData) {
   if (
     state.auth.mode !== "authenticated" ||
@@ -356,7 +472,10 @@ function commit(next: ProgressData, triggerRemoteSync = true) {
     }
   }
 
+<<<<<<< Updated upstream
   persistLocalAccountIfAuthenticated(withMeta);
+=======
+>>>>>>> Stashed changes
   if (triggerRemoteSync) {
     void syncToSupabaseIfActive(withMeta);
   }
@@ -522,12 +641,20 @@ export const progressRepository = {
       email: string,
       password: string
     ): Promise<{ ok: boolean; error?: string }> {
+<<<<<<< Updated upstream
+=======
+      if (!isSupabaseConfigured()) {
+        return { ok: false, error: MISSING_ENV_MSG };
+      }
+
+>>>>>>> Stashed changes
       const cleanEmail = email.trim().toLowerCase();
       if (!cleanEmail || !password) {
         return { ok: false, error: "Email dan kata sandi wajib diisi." };
       }
 
       const p = current();
+<<<<<<< Updated upstream
 
       if (isSupabaseConfigured()) {
         const { session, error } = await supabaseSignIn(cleanEmail, password);
@@ -607,29 +734,83 @@ export const progressRepository = {
       const merged = mergeProgressSets(p.bisindo, p.braille, found.bisindo, found.braille);
       const calcXp = Math.max(found.xp, minimumXpFromProgress(merged.bisindo, merged.braille));
       const today = day(new Date());
+=======
+      const { session, error } = await supabaseSignIn(cleanEmail, password);
+      if (!session) {
+        return {
+          ok: false,
+          error: error ?? "Email atau kata sandi tidak sesuai, atau akun belum terdaftar di Supabase.",
+        };
+      }
+
+      activeAccessToken = session.accessToken;
+      if (typeof window !== "undefined") {
+        try {
+          window.localStorage.setItem(SESSION_KEY, session.accessToken);
+        } catch {
+          // Abaikan jika localStorage penuh
+        }
+      }
+
+      const remoteProfile = await fetchSupabaseProfile(
+        session.user.id,
+        session.accessToken
+      );
+      const merged = mergeProgressSets(
+        p.bisindo,
+        p.braille,
+        remoteProfile?.progress_data?.bisindo,
+        remoteProfile?.progress_data?.braille
+      );
+      const calcXp = Math.max(
+        remoteProfile?.xp ?? 0,
+        minimumXpFromProgress(merged.bisindo, merged.braille)
+      );
+      const today = day(new Date());
+      const streakCurrent = Math.max(remoteProfile?.streak_current ?? 1, 1);
+      const streakLongest = Math.max(remoteProfile?.streak_longest ?? 1, streakCurrent);
+>>>>>>> Stashed changes
 
       commit({
         ...p,
         xp: calcXp,
         streak: {
+<<<<<<< Updated upstream
           current: Math.max(found.streak.current, 1),
           longest: Math.max(found.streak.longest, 1),
           lastActiveDate: today,
+=======
+          current: streakCurrent,
+          longest: streakLongest,
+          lastActiveDate: remoteProfile?.last_active_date ?? today,
+>>>>>>> Stashed changes
         },
         bisindo: merged.bisindo,
         braille: merged.braille,
         auth: {
           mode: "authenticated",
           user: {
+<<<<<<< Updated upstream
             id: found.id,
             email: found.email,
             displayName: found.displayName,
           },
           source: "local",
+=======
+            id: session.user.id,
+            email: session.user.email,
+            displayName: remoteProfile?.display_name || session.user.displayName,
+          },
+          source: "supabase",
+>>>>>>> Stashed changes
           syncing: false,
         },
       });
 
+<<<<<<< Updated upstream
+=======
+      void syncToSupabaseIfActive(current()).then(() => this.refreshLeaderboard());
+>>>>>>> Stashed changes
       return { ok: true };
     },
 
@@ -638,6 +819,13 @@ export const progressRepository = {
       email: string,
       password: string
     ): Promise<{ ok: boolean; error?: string }> {
+<<<<<<< Updated upstream
+=======
+      if (!isSupabaseConfigured()) {
+        return { ok: false, error: MISSING_ENV_MSG };
+      }
+
+>>>>>>> Stashed changes
       const cleanName = displayName.trim();
       const cleanEmail = email.trim().toLowerCase();
 
@@ -654,6 +842,7 @@ export const progressRepository = {
       const p = current();
       const today = day(new Date());
 
+<<<<<<< Updated upstream
       if (isSupabaseConfigured()) {
         const { session, error } = await supabaseSignUp(
           cleanName,
@@ -725,6 +914,31 @@ export const progressRepository = {
         badges: [],
       };
       saveLocalAccounts(accounts);
+=======
+      const { session, error } = await supabaseSignUp(
+        cleanName,
+        cleanEmail,
+        password
+      );
+      if (!session) {
+        return {
+          ok: false,
+          error: error ?? "Gagal mendaftarkan akun ke database Supabase.",
+        };
+      }
+
+      activeAccessToken = session.accessToken;
+      if (typeof window !== "undefined") {
+        try {
+          window.localStorage.setItem(SESSION_KEY, session.accessToken);
+        } catch {
+          // Abaikan jika penyimpanan lokal penuh
+        }
+      }
+
+      const merged = mergeProgressSets(p.bisindo, p.braille);
+      const calcXp = minimumXpFromProgress(merged.bisindo, merged.braille);
+>>>>>>> Stashed changes
 
       commit({
         ...p,
@@ -735,19 +949,39 @@ export const progressRepository = {
         auth: {
           mode: "authenticated",
           user: {
+<<<<<<< Updated upstream
             id: userId,
             email: cleanEmail,
             displayName: cleanName,
           },
           source: isSupabaseConfigured() ? "supabase" : "local",
+=======
+            id: session.user.id,
+            email: session.user.email,
+            displayName: cleanName,
+          },
+          source: "supabase",
+>>>>>>> Stashed changes
           syncing: false,
         },
       });
 
+<<<<<<< Updated upstream
       return { ok: true };
     },
 
     async loginAsJudgeDemo(): Promise<{ ok: boolean }> {
+=======
+      void syncToSupabaseIfActive(current()).then(() => this.refreshLeaderboard());
+      return { ok: true };
+    },
+
+    async loginAsJudgeDemo(): Promise<{ ok: boolean; error?: string }> {
+      if (!isSupabaseConfigured()) {
+        return { ok: false, error: MISSING_ENV_MSG };
+      }
+
+>>>>>>> Stashed changes
       const p = current();
       const demoEmail =
         process.env.NEXT_PUBLIC_DEMO_JUDGE_EMAIL?.trim() || "juri.demo@signify.id";
@@ -775,6 +1009,7 @@ export const progressRepository = {
       const demoXp = Math.max(315, minimumXpFromProgress(merged.bisindo, merged.braille));
       const today = day(new Date());
 
+<<<<<<< Updated upstream
       if (isSupabaseConfigured()) {
         const signInRes = await supabaseSignIn(demoEmail, demoPassword);
         const session =
@@ -814,6 +1049,15 @@ export const progressRepository = {
           return { ok: true };
         }
       }
+=======
+      const signInRes = await supabaseSignIn(demoEmail, demoPassword);
+      const session =
+        signInRes.session ??
+        (await supabaseSignUp(demoName, demoEmail, demoPassword)).session;
+
+      const userId = session?.user.id || "demo-judge-itrush";
+      activeAccessToken = session?.accessToken ?? "";
+>>>>>>> Stashed changes
 
       commit({
         ...p,
@@ -824,12 +1068,20 @@ export const progressRepository = {
         auth: {
           mode: "authenticated",
           user: {
+<<<<<<< Updated upstream
             id: "demo-judge-itrush",
+=======
+            id: userId,
+>>>>>>> Stashed changes
             email: demoEmail,
             displayName: demoName,
             isDemo: true,
           },
+<<<<<<< Updated upstream
           source: isSupabaseConfigured() ? "supabase" : "local",
+=======
+          source: "supabase",
+>>>>>>> Stashed changes
           syncing: false,
         },
       });
