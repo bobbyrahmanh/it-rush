@@ -15,8 +15,8 @@ import { Volume2, Camera, BookOpen, CheckCircle, Check, Globe, Shield, HelpCircl
 type Mode = "learn" | "view" | "guess";
 
 const modes: { id: Mode; icon: Icon; label: string; desc: string }[] = [
-  { id: "learn", icon: BookOpen, label: "Belajar", desc: "Kenali alfabet & kosakata" },
   { id: "view", icon: Eye, label: "Lihat Isyarat", desc: "Lihat & pelajari alfabet" },
+  { id: "learn", icon: BookOpen, label: "Belajar", desc: "Kenali alfabet & kosakata" },
   { id: "guess", icon: HelpCircle, label: "Guess the Sign", desc: "Tebak huruf dari isyarat" },
 ];
 
