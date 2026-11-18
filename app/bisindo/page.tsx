@@ -5,15 +5,17 @@ import { useState } from "react";
 import CameraSlot from "@/components/CameraSlot";
 import WordCameraSlot from "@/components/WordCameraSlot";
 import GuessTheSign from "@/components/GuessTheSign";
+import SignGallery from "@/components/SignGallery";
 import Reveal from "@/components/Reveal";
 import { UNITS, WORD_ITEMS, handsOf } from "@/lib/bisindo";
 import { speak } from "@/lib/audio";
 import { useProgress } from "@/lib/storage/useProgress";
-import { Volume2, Camera, BookOpen, CheckCircle, Check, Globe, Shield, HelpCircle, type Icon } from "react-feather";
+import { Volume2, Camera, BookOpen, CheckCircle, Check, Globe, Shield, HelpCircle, Eye, type Icon } from "react-feather";
 
-type Mode = "learn" | "guess";
+type Mode = "learn" | "view" | "guess";
 
 const modes: { id: Mode; icon: Icon; label: string; desc: string }[] = [
+  { id: "view", icon: Eye, label: "Lihat Isyarat", desc: "Lihat & pelajari alfabet" },
   { id: "learn", icon: BookOpen, label: "Belajar", desc: "Kenali alfabet & kosakata" },
   { id: "guess", icon: HelpCircle, label: "Guess the Sign", desc: "Tebak huruf dari isyarat" },
 ];
@@ -309,7 +311,7 @@ export default function BisindoPage() {
         </div>
 
         <div
-          className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2"
+          className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-3"
           role="tablist"
           aria-label="Mode BISINDO"
         >
@@ -337,6 +339,13 @@ export default function BisindoPage() {
           ))}
         </div>
       </section>
+
+      {/* LIHAT ISYARAT */}
+      {mode === "view" && (
+        <section aria-label="Lihat Isyarat" className="mb-10">
+          <SignGallery />
+        </section>
+      )}
 
       {/* GUESS THE SIGN */}
       {mode === "guess" && (
