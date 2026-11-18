@@ -68,6 +68,15 @@ export const progressRepository = {
       if (learnedWords.includes(word)) return;
       commit(withStreak({ ...p, xp: p.xp + xp, bisindo: { ...p.bisindo, learnedWords: [...learnedWords, word] } }));
     },
+    completeGuessTheSign(score: number, total: number, xp = 20) {
+      const p = current();
+      const percent = total > 0 ? Math.round((score / total) * 100) : 0;
+      commit(withStreak({
+        ...p,
+        xp: p.xp + xp,
+        bisindo: { ...p.bisindo, guessTheSignBestScore: Math.max(p.bisindo.guessTheSignBestScore ?? 0, percent) },
+      }));
+    },
     completeBrailleQuiz(xp = 15) {
       const p = current();
       commit(withStreak({ ...p, xp: p.xp + xp, braille: { ...p.braille, quizSessionsCompleted: p.braille.quizSessionsCompleted + 1 } }));

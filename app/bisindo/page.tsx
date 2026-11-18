@@ -4,11 +4,19 @@
 import { useState } from "react";
 import CameraSlot from "@/components/CameraSlot";
 import WordCameraSlot from "@/components/WordCameraSlot";
+import GuessTheSign from "@/components/GuessTheSign";
 import Reveal from "@/components/Reveal";
 import { UNITS, WORD_ITEMS, handsOf } from "@/lib/bisindo";
 import { speak } from "@/lib/audio";
 import { useProgress } from "@/lib/storage/useProgress";
-import { Volume2, Camera, BookOpen, CheckCircle, Check, Globe, Shield } from "react-feather";
+import { Volume2, Camera, BookOpen, CheckCircle, Check, Globe, Shield, HelpCircle, type Icon } from "react-feather";
+
+type Mode = "learn" | "guess";
+
+const modes: { id: Mode; icon: Icon; label: string; desc: string }[] = [
+  { id: "learn", icon: BookOpen, label: "Belajar", desc: "Kenali alfabet & kosakata" },
+  { id: "guess", icon: HelpCircle, label: "Guess the Sign", desc: "Tebak huruf dari isyarat" },
+];
 
 function NatureIllustration() {
   return (
@@ -155,6 +163,7 @@ function EnvironmentContext() {
 }
 
 export default function BisindoPage() {
+  const [mode, setMode] = useState<Mode>("learn");
   const [selState, setSelState] = useState<
     { kind: "letter"; value: string } | { kind: "word"; value: string }
   >({ kind: "letter", value: "A" });
@@ -289,7 +298,55 @@ export default function BisindoPage() {
       {/* ENVIRONMENTAL CONTEXT */}
       <EnvironmentContext />
 
+      {/* MODE SELECTOR */}
+      <section className="mb-8">
+        <div className="flex flex-wrap items-end justify-between gap-3">
+          <div>
+            <p className="text-xs font-bold uppercase tracking-wider">Ruang belajar</p>
+            <h2 className="font-display text-3xl font-bold">Pilih aktivitasmu!</h2>
+          </div>
+          <span className="text-sm text-ink/70">Learning by doing</span>
+        </div>
+
+        <div
+          className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2"
+          role="tablist"
+          aria-label="Mode BISINDO"
+        >
+          {modes.map((item) => (
+            <button
+              key={item.id}
+              type="button"
+              role="tab"
+              aria-selected={mode === item.id}
+              onClick={() => setMode(item.id)}
+              className={`btn min-h-20 text-left transition duration-200 hover:-translate-y-1 ${
+                mode === item.id ? "bg-sun shadow-popsm" : "bg-white"
+              }`}
+            >
+              <div className="flex items-center gap-5">
+                <span className="text-2xl">
+                  <item.icon className="h-8 w-8" />
+                </span>
+                <div className="flex flex-col">
+                  <span className="block text-lg font-bold">{item.label}</span>
+                  <span className="block text-xs font-medium">{item.desc}</span>
+                </div>
+              </div>
+            </button>
+          ))}
+        </div>
+      </section>
+
+      {/* GUESS THE SIGN */}
+      {mode === "guess" && (
+        <section aria-label="Guess the Sign" className="mb-10">
+          <GuessTheSign />
+        </section>
+      )}
+
       {/* LEARNING AREA */}
+      {mode === "learn" && (
       <div className="grid gap-8 lg:grid-cols-[1fr_1fr]">
         {/* LEFT COLUMN */}
         <div className="space-y-5">
@@ -620,6 +677,7 @@ export default function BisindoPage() {
           </div>
         </div>
       </div>
+      )}
 
       {/* LEARNING PROGRESS */}
       <Reveal>
