@@ -2,15 +2,15 @@
 
 # SIGNIFY
 
-**Membangun Jembatan Komunikasi Dua Arah yang Inklusif, Interaktif, dan Berwawasan Lingkungan**
+### AI Teknologi untuk Penguatan Masyarakat serta Keberlanjutan Pesisir dan Hutan Tropis
 
-<p>
-SIGNIFY adalah platform edukasi interaktif berbasis web untuk mempelajari Bahasa Isyarat Indonesia (BISINDO) dan sistem tulisan Braille 6-titik secara mandiri. Ditenagai kecerdasan buatan on-device (MediaPipe & TensorFlow.js), SIGNIFY memproses deteksi gestur tangan secara real-time langsung di browser pengguna tanpa mengirimkan rekaman video ke server, menjamin privasi penuh dan efisiensi komputasi hijau.
-</p>
+**Belajar komunikasi inklusif. Memperluas akses informasi. Menguatkan kepedulian terhadap lingkungan.**
+
+SIGNIFY adalah platform pembelajaran berbasis web yang mengajak masyarakat mengenal komunikasi inklusif melalui Bahasa Isyarat Indonesia (BISINDO) dan Braille. Platform ini mengintegrasikan pengenalan gestur alfabet BISINDO berbasis AI, simulator Braille 6-titik, kuis interaktif, sistem progres belajar, serta materi literasi lingkungan tentang pesisir dan hutan tropis.
+
+Melalui pendekatan tersebut, SIGNIFY mendorong masyarakat untuk memahami cara berkomunikasi yang lebih inklusif sekaligus meningkatkan kesadaran bahwa upaya menjaga lingkungan perlu melibatkan semua orang.
 
 [![Vercel](https://img.shields.io/badge/Vercel-Visit%20Live%20Site-A5B4FC?style=for-the-badge&logo=vercel&logoColor=white)](https://it-rush.vercel.app/)
-
-<br>
 
 <p align="center">
   <img src="https://img.shields.io/badge/Next.js-14.2.15-000000?style=for-the-badge&logo=nextdotjs&logoColor=white" alt="Next.js" />
@@ -19,173 +19,196 @@ SIGNIFY adalah platform edukasi interaktif berbasis web untuk mempelajari Bahasa
   <img src="https://img.shields.io/badge/Tailwind_CSS-3.4.13-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white" alt="Tailwind CSS" />
   <img src="https://img.shields.io/badge/MediaPipe-Vision_WASM-0078D4?style=for-the-badge&logo=google&logoColor=white" alt="MediaPipe" />
   <img src="https://img.shields.io/badge/TensorFlow.js-Client_Side_AI-FF6F00?style=for-the-badge&logo=tensorflow&logoColor=white" alt="TensorFlow.js" />
-  <img src="https://img.shields.io/badge/Supabase-Auth_%26_DB-3ECF8E?style=for-the-badge&logo=supabase&logoColor=white" alt="Supabase" />
 </p>
 
 > **Karya Inovasi Web Development — IT RUSH 2026**  
-> **Subtema 5:** *Pendidikan, Tata Kelola, dan Teknologi Inklusif*
+> **Tema:** AI Teknologi untuk Penguatan Masyarakat serta Keberlanjutan Pesisir dan Hutan Tropis  
+> **Subtema:** Pendidikan, Tata Kelola, dan Teknologi Inklusif
 
 </div>
 
 ---
 
-## 🚀 Akses Evaluasi Juri
+## 🚀 Akses Aplikasi
 
-Aplikasi web **SIGNIFY** telah di-deploy dan dapat diakses publik secara *live* melalui protokol HTTPS aman:
-
-| Layanan | Tautan / Kredensial | Keterangan |
+| Layanan | Tautan | Keterangan |
 | :--- | :--- | :--- |
-| **🌐 Live Web Deployment** | **[https://it-rush.vercel.app](https://it-rush.vercel.app)** *(Tautan Produksi Vercel)* | *Dapat diakses langsung dari peramban desktop maupun seluler.* |
-| **📦 GitHub Repository** | **[https://github.com/bobbyrahmanh/it-rush](https://github.com/bobbyrahmanh/it-rush)** | *Repositori utama source code dan dokumentasi proyek.* |
-| **⚡ Status Server & HTTPS** | `Active / 100% Up` | *Memenuhi syarat aksesibilitas kamera `navigator.mediaDevices`.* |
-| **🔑 Akun Demo Juri (1-Klik)** | **Email:** `juri.demo@signify.id`<br>**Sandi:** `SignifyItRush2026!` | *Tersedia tombol **"Masuk Sebagai Akun Demo Juri (1-Klik)"** di menu Masuk.* |
-| **📹 Mode Evaluasi Tanpa Webcam** | **Fitur "Mode Simulasi Video"** di halaman BISINDO | *Juri tetap dapat menguji kapabilitas inferensi AI secara penuh tanpa webcam fisik.* |
+| **Live Website** | [https://it-rush.vercel.app](https://it-rush.vercel.app/) | Aplikasi SIGNIFY yang dapat diakses melalui browser desktop maupun seluler. |
+| **GitHub Repository** | [https://github.com/bobbyrahmanh/it-rush](https://github.com/bobbyrahmanh/it-rush) | Repositori source code dan dokumentasi proyek. |
 
-> [!NOTE]  
-> Jika peramban atau perangkat penilai tidak memiliki periferal webcam, aktifkan tombol **"Gunakan Video Simulasi (Tanpa Webcam)"** di halaman `/bisindo`. Video rekaman tangan asli akan diproses langsung oleh pipeline MediaPipe dan TensorFlow.js di browser secara *live*.
+> **Catatan pengujian BISINDO:** Jika perangkat tidak memiliki webcam atau izin kamera tidak tersedia, gunakan opsi **Mode Simulasi Video** pada halaman BISINDO apabila tersedia. Video contoh tetap diproses melalui pipeline pengenalan di browser.
 
 ---
 
-## 👥 Tim Pengembang (Team Members)
+## 👥 Tim Pengembang
 
-Proyek **SIGNIFY** dirancang, dikembangkan, dan diuji secara kolaboratif untuk kompetisi **IT RUSH 2026**. Berdasarkan riwayat komit Git, kontribusi masing-masing anggota adalah:
+SIGNIFY dikembangkan secara kolaboratif oleh tim IT RUSH 2026.
 
-| No | Nama Anggota & GitHub | Peran Utama | Fokus Kontribusi |
+| No. | Nama & GitHub | Peran | Fokus Kontribusi |
 | :-: | :--- | :--- | :--- |
-| 1 | **Bobby Rahman Hartanto**<br>([@bobbyrahmanh](https://github.com/bobbyrahmanh)) | **Ketua Tim**<br>*(Frontend & Interactive Features)* | Setup awal repositori, pengembangan mini-game *Guess the Sign*, komponen *Sign Gallery*, serta optimasi UI/UX dan responsivitas halaman BISINDO. |
-| 2 | **Diayu Nur Aini**<br>([@diayuunr](https://github.com/diayuunr)) | **Anggota Tim**<br>*(Lead Frontend & UI/UX Specialist)* | Arsitektur antarmuka Neobrutalisme Next.js, perancangan modul simulator Braille 6-titik & konversi kata, seksi edukasi lingkungan, Maskot, serta *copywriting*. |
-| 3 | **Hammam Muhammad Yazid**<br>([@crispyrinux](https://github.com/crispyrinux)) | **Anggota Tim**<br>*(Backend, Auth & Gamification)* | Integrasi Supabase Auth & DB (RLS), akun demo juri 1-klik, modul gamifikasi (level, XP, streak, badges, leaderboard), serta pengelolaan rilis Git PR. |
-| 4 | **Mahardika Ramadhana**<br>([@mdikaramadhana](https://github.com/mdikaramadhana)) | **Anggota Tim**<br>*(Lead AI & Computer Vision)* | Arsitektur AI MediaPipe & TF.js (alfabet 27-kelas & kata dinamis 8-kelas), normalisasi Boháček 86-dim, pipeline training L2-SP, serta *Judge Testing Mode*. |
+| 1 | **Bobby Rahman Hartanto**<br>[@bobbyrahmanh](https://github.com/bobbyrahmanh) | Ketua Tim — Frontend & Interactive Features | Setup repositori, mini-game Guess the Sign, Sign Gallery, serta optimasi UI/UX dan responsivitas halaman BISINDO. |
+| 2 | **Diayu Nur Aini**<br>[@diayuunr](https://github.com/diayuunr) | Frontend & UI/UX Specialist | Arsitektur antarmuka, simulator Braille 6-titik, konversi kata, materi edukasi lingkungan, maskot, dan copywriting. |
+| 3 | **Hammam Muhammad Yazid**<br>[@crispyrinux](https://github.com/crispyrinux) | Backend & Gamification | Pengelolaan progres belajar dan modul gamifikasi, termasuk level, XP, streak, badges, serta integrasi penyimpanan sesuai implementasi aplikasi. |
+| 4 | **Mahardika Ramadhana**<br>[@mdikaramadhana](https://github.com/mdikaramadhana) | AI & Computer Vision | Pengembangan pipeline MediaPipe dan TensorFlow.js, pengolahan landmark tangan, pelatihan model alfabet, serta pengujian inferensi. |
 
 ---
 
-## 🎯 Tentang SIGNIFY & Filosofi Desain
+## 🎯 Tentang SIGNIFY
 
-### 💡 Latar Belakang & Filosofi "Komunikasi Dua Arah"
-Banyak platform pembelajaran bahasa isyarat atau tulisan disabilitas dibangun semata-mata sebagai alat bantu satu arah. **SIGNIFY** hadir dengan sudut pandang yang berbeda: **inklusivitas sejati terwujud ketika masyarakat umum (teman, keluarga, relawan, guru, rekan kerja) memiliki kemauan dan sarana yang ramah untuk memahami cara berkomunikasi teman Tuli dan teman Tunanetra.**
+### Latar Belakang
 
-SIGNIFY menggabungkan dua pilar utama dalam satu platform web yang kohesif:
-1. **Bahasa Isyarat Indonesia (BISINDO):** Mengakomodasi kekayaan isyarat alami Indonesia yang menggunakan kombinasi **1 tangan** (10 alfabet) dan **2 tangan** (16 alfabet), serta pengenalan kata dinamis.
-2. **Sistem Tulisan Braille 6-Titik:** Mengajarkan logika matriks $2 \times 3$ sel Braille melalui simulasi sentuh, pengetikan mesin tik standar *Perkins Brailler* (`F-D-S` / `J-K-L`), kuis tebak pola, hingga konversi kata.
+Keberlanjutan pesisir dan hutan tropis membutuhkan keterlibatan masyarakat yang luas. Namun, partisipasi masyarakat tidak akan optimal apabila akses terhadap informasi dan ruang komunikasi belum terbuka secara setara. Teman Tuli dan Tunanetra juga perlu memperoleh kesempatan untuk memahami informasi, berinteraksi, dan terlibat dalam kehidupan sosial maupun kegiatan pelestarian lingkungan.
 
-### 🌿 Edukasi Berwawasan Lingkungan (*Environmental Awareness*)
-SIGNIFY memadukan konteks edukasi keberlanjutan bumi: tema komunikasi inklusif dihubungkan dengan materi pelestarian alam (*hutan tropis, pesisir, ekosistem mangrove*). Kami meyakini bahwa informasi penyelamatan bumi harus dapat diakses dan dikomunikasikan oleh seluruh kelompok masyarakat tanpa terkecuali.
+SIGNIFY hadir sebagai media pembelajaran yang mempertemukan dua kebutuhan tersebut. Platform ini membantu masyarakat umum mempelajari dasar komunikasi dengan teman Tuli melalui BISINDO dan memahami sistem tulisan Braille melalui simulasi interaktif. Materi literasi lingkungan mengenai ekosistem pesisir, mangrove, kebersihan laut, dan keanekaragaman hayati hutan tropis menjadi konteks pembelajaran untuk menumbuhkan kesadaran bahwa informasi dan aksi keberlanjutan perlu bersifat inklusif.
 
-### 🛡️ Komputasi Hijau & Privasi Data Penuh (*Zero-Cloud GPU & Privacy-First*)
-- **100% On-Device Client Inference:** Seluruh proses inferensi AI (MediaPipe Hand/Pose Landmarker & TensorFlow.js) dieksekusi di peramban pengguna memanfaatkan WebAssembly (WASM) dan akselerasi grafis WebGL lokal.
-- **Nol Aliran Video ke Server:** Citra kamera pengguna **tidak pernah** dikirimkan, disimpan, atau diolah di server backend, menjamin privasi absolut dan meniadakan beban komputasi server cloud yang boros energi.
+### Tujuan
 
----
+1. Memperluas pengetahuan masyarakat mengenai dasar komunikasi inklusif melalui pembelajaran BISINDO dan Braille.
+2. Memanfaatkan AI untuk membantu pengguna mengenali bentuk alfabet BISINDO secara interaktif.
+3. Menyediakan pengalaman belajar Braille melalui simulasi pola sel 6-titik.
+4. Meningkatkan keterlibatan pengguna melalui kuis dan pencatatan progres belajar.
+5. Menghubungkan literasi komunikasi inklusif dengan peningkatan kesadaran terhadap keberlanjutan pesisir dan hutan tropis.
 
-## ✨ Fitur-Fitur Unggulan
+### Pendekatan SIGNIFY
 
-### 🤟 1. Modul Pembelajaran BISINDO (AI-Powered)
-- **Deteksi 2-Tangan Real-Time (A-Z):** Mempelajari 26 huruf alfabet BISINDO dengan kecerdasan buatan yang mampu mengenali isyarat 1 tangan maupun koordinasi 2 tangan secara simultan.
-- **Pengenalan Kata Dinamis (WL-BISINDO):** Pengenalan 8 kata dinamis berbasis rangkaian waktu (temporal 30 frame) memanfaatkan integrasi Hand + Pose Landmarker:
-  - *Daftar Kata:* `air`, `belajar`, `hari`, `maaf`, `makan`, `saya`, `terima_kasih`, `tuli`.
-- **4 Unit Kurikulum Terstruktur:**
-  - *Unit 1:* Huruf Vokal (`A, E, I, O, U`)
-  - *Unit 2:* Isyarat 1 Tangan (`C, J, L, R, V, Z`)
-  - *Unit 3:* Isyarat 2 Tangan Dasar (`B, D, F, H, K, T, W, X`)
-  - *Unit 4:* Isyarat 2 Tangan Lanjutan (`G, M, N, P, Q, S, Y`)
-- **Mode Uji Juri / Simulasi Video (*Judge Testing Mode*):** Mengalihkan input kamera ke video peraga tangan asli manusia beresolusi tinggi, di mana AI tetap melakukan inferensi *real-time* di layar.
-- **Validator Pose Berbasis Waktu Nyata (*Time-Based Hold Pose*):** Evaluasi kestabilan pose menggunakan acuan milidetik (`performance.now()`) alih-alih jumlah frame, memastikan pengalaman belajar konsisten di perangkat lambat maupun cepat.
-- **Lihat Isyarat (*Sign Gallery*):** Katalog referensi visual alfabet lengkap dengan panduan bentuk tangan dan indikator jumlah tangan.
-- **Tebak Isyarat (*Guess the Sign*):** Mini-game edukasi interaktif untuk menguji daya ingat visual bentuk isyarat dengan penghitungan skor dan perolehan XP.
+SIGNIFY menghubungkan tiga aspek utama:
 
-### ⠃⠗ 2. Modul Simulasi & Pembelajaran Braille 6-Titik
-- **Simulasi Sel 6-Titik Interaktif:** Matriks sentuh/klik $2 \times 3$ yang memvisualisasikan kondisi aktif/nonaktif titik Braille secara responsif.
-- **Input Papan Ketik Perkins Brailler (`F-D-S` / `J-K-L`):**
-  - Mengadaptasi tata letak mesin ketik fisik Braille standar internasional:
-    - Tangan Kiri: `F` (Titik 1), `D` (Titik 2), `S` (Titik 3)
-    - Tangan Kanan: `J` (Titik 4), `K` (Titik 5), `L` (Titik 6)
-  - **Sistem *Toggle + Confirmation*:** Menghilangkan kendala *hardware key ghosting* pada keyboard laptop murah dan memberi kenyamanan bagi pengguna pemula.
-- **4 Mode Aktivitas Braille:**
-  - *Belajar:* Eksplorasi alfabet A-Z dengan pembacaan audio otomatis.
-  - *Baca:* Kuis menebak huruf latin dari visual pola 6-titik.
-  - *Tulis Huruf:* Menyusun pola titik berdasarkan huruf target yang diberikan.
-  - *Tulis Kata:* Fitur konversi kata bahasa Indonesia ke rangkaian sel Braille dinamis secara otomatis.
-- **Sintesis Suara Pelafalan (Web Speech API):** Memberikan umpan balik auditori seketika saat huruf berhasil dibentuk.
+- **Teknologi AI:** pengenalan gestur alfabet BISINDO melalui kamera atau video simulasi yang diproses di browser.
+- **Pendidikan inklusif:** pembelajaran BISINDO dan pengenalan pola Braille melalui aktivitas interaktif.
+- **Literasi keberlanjutan:** materi pengantar mengenai ekosistem pesisir, mangrove, kebersihan laut, dan hutan tropis sebagai konteks edukasi.
 
-### 🏆 3. Sistem Progres, Gamifikasi & Hybrid Auth
-- **Mode Tamu Tanpa Rintangan (*Zero-Barrier Guest Mode*):** Pengguna dapat langsung belajar dan menyimpan progres, streak, serta XP di penyimpanan lokal peramban (`localStorage`) tanpa keharusan mendaftar.
-- **Arsitektur Satu Pintu (`ProgressRepository`):** Memisahkan penyimpanan data dari komponen antarmuka, memungkinkan transisi mulus antara akun lokal dan akun cloud.
-- **Sinkronisasi Cloud & Akun Supabase:** Dukungan pendaftaran akun pengguna untuk mencadangkan progres lintas perangkat dan bersaing di papan peringkat publik.
-- **Akun Demo Juri 1-Klik:** Fasilitas verifikasi instan bagi dewan juri tanpa perlu melakukan registrasi manual.
-- **Level & Experience Points (XP):** Perhitungan XP dari latihan webcam, mini-game, dan kuis Braille.
-- **Daily Streak Tracker:** Pencatatan konsistensi belajar harian.
-- **8 Lencana Prestasi (*Achievement Badges*):** Penghargaan pencapaian belajar (*Langkah Pertama, Master Vokal, Dua Tangan Tangguh, Penjelajah Kata, Penulis Braille, Juara Tebak Isyarat, Streak Sejati, Sang Penakluk Inklusi*).
-- **Papan Peringkat Global (*Leaderboard*):** Menampilkan peringkat pembelajar paling aktif berdasarkan akumulasi XP dan lencana.
+Materi lingkungan pada SIGNIFY berfungsi sebagai konten literasi dan pengayaan pembelajaran. Platform ini tidak mengklaim menerjemahkan seluruh materi lingkungan secara otomatis ke dalam BISINDO atau Braille.
 
 ---
 
-## 🏛️ Arsitektur Sistem & Alur Kerja
+## ✨ Fitur Utama
 
-SIGNIFY mengintegrasikan arsitektur *Hybrid Edge-Cloud* yang membagi proses menjadi pipeline persiapan offline dan runtime klien di browser:
+### 1. 🤟 Pembelajaran dan Pengenalan Alfabet BISINDO
+
+Modul ini membantu pengguna mempelajari alfabet BISINDO melalui panduan visual dan praktik langsung.
+
+- **Pengenalan alfabet A–Z:** mempelajari 26 huruf alfabet BISINDO.
+- **AI Gesture Recognition:** MediaPipe mendeteksi landmark tangan, kemudian model TensorFlow.js melakukan klasifikasi gestur di browser.
+- **Dukungan isyarat satu dan dua tangan:** mengikuti bentuk isyarat pada masing-masing huruf.
+- **Kurikulum bertahap:** materi alfabet dikelompokkan ke dalam unit belajar agar lebih mudah dipelajari.
+- **Sign Gallery:** katalog visual sebagai referensi bentuk isyarat.
+- **Mode Simulasi Video:** alternatif pengujian ketika webcam tidak tersedia atau tidak dapat digunakan.
+
+> Pengenalan AI pada modul ini berfokus pada alfabet BISINDO yang didukung model. Fitur ini bukan penerjemah percakapan BISINDO secara menyeluruh.
+
+### 2. ⠿ Simulator dan Pembelajaran Braille 6-Titik
+
+Modul Braille memperkenalkan prinsip pembentukan huruf menggunakan sel Braille yang terdiri atas enam titik dalam susunan 2 × 3.
+
+- **Simulasi sel interaktif:** pengguna dapat mengaktifkan atau menonaktifkan titik untuk membentuk pola.
+- **Input papan ketik bergaya Perkins Brailler:** menggunakan tombol `F-D-S` untuk titik 1–3 dan `J-K-L` untuk titik 4–6.
+- **Mode Belajar:** mengenali pola Braille untuk alfabet A–Z.
+- **Mode Baca:** mengidentifikasi huruf berdasarkan pola titik.
+- **Mode Tulis Huruf:** menyusun pola titik sesuai huruf yang diminta.
+- **Mode Tulis Kata:** menyusun rangkaian sel Braille dari kata yang dimasukkan.
+- **Umpan balik audio:** memanfaatkan Web Speech API untuk membantu proses latihan.
+
+> Simulator ini merupakan media pembelajaran visual dan audio. Simulator pada layar tidak menggantikan media Braille taktil atau perangkat fisik yang dapat diraba.
+
+### 3. 🎮 Guess the Sign
+
+Mini-game untuk memperkuat ingatan pengguna terhadap bentuk alfabet BISINDO.
+
+- Pengguna mengamati referensi visual isyarat.
+- Pengguna memilih atau menebak huruf yang sesuai.
+- Sistem memberikan umpan balik terhadap jawaban.
+- Aktivitas latihan dapat berkontribusi pada perolehan poin sesuai mekanisme progres aplikasi.
+
+### 4. 🏆 Learning Progress dan Gamifikasi
+
+Fitur progres membantu pengguna memantau aktivitas dan menjaga konsistensi belajar.
+
+- **Experience Points (XP):** poin yang diperoleh dari aktivitas belajar.
+- **Level:** perkembangan pengguna berdasarkan akumulasi poin.
+- **Daily Streak:** pencatatan konsistensi aktivitas belajar harian.
+- **Achievement Badges:** lencana sebagai apresiasi atas pencapaian belajar.
+- **Learning Progress:** ringkasan aktivitas dan perkembangan pembelajaran.
+
+Data progres pada versi MVP dikelola melalui mekanisme penyimpanan aplikasi di browser. Ketersediaan sinkronisasi lintas perangkat bergantung pada implementasi yang aktif pada deployment.
+
+### 5. 🌱 Inclusive Eco-Learning
+
+Bagian ini menghubungkan pembelajaran komunikasi inklusif dengan pengetahuan dasar mengenai keberlanjutan lingkungan.
+
+- **Ekosistem pesisir dan mangrove:** mengenal peran ekosistem pesisir dan pentingnya menjaga kawasan mangrove.
+- **Kebersihan laut:** memahami dampak sampah dan pentingnya menjaga lingkungan perairan.
+- **Hutan tropis:** mengenal keanekaragaman hayati serta pentingnya pelestarian hutan.
+- **Keterkaitan dengan pembelajaran BISINDO:** pengguna dapat mengenali istilah atau kata terkait lingkungan dan mempelajari huruf-huruf penyusunnya melalui modul alfabet.
+
+Fitur ini menempatkan literasi lingkungan sebagai konteks pembelajaran. Tujuannya adalah mendorong pemahaman bahwa informasi mengenai keberlanjutan perlu disampaikan dan dipelajari dengan pendekatan yang lebih inklusif.
+
+---
+
+## 🏛️ Arsitektur Sistem dan Alur Kerja
+
+SIGNIFY menggunakan pendekatan pemrosesan AI di sisi klien (*client-side inference*). Model disiapkan melalui pipeline pengolahan dan pelatihan, kemudian digunakan oleh aplikasi web untuk memproses input kamera atau video simulasi di browser.
 
 ```mermaid
 flowchart TD
-    subgraph Offline["1. Pipeline Offline (Python / Model Training)"]
-        D1["Dataset Citra BISINDO\n(Agung Ma'ruf & Achmad Noer)"] --> P1["Ekstraksi MediaPipe Hands\n(2 Tangan 2D = 86 Fitur)"]
-        D2["Dataset Video WL-BISINDO\n(8 Kosakata Dinamis)"] --> P2["Ekstraksi Hand + Pose\n(30 Frame x 300 Fitur)"]
-        P1 --> T1["Training Model Alfabet\n(Dense + Dropout)"]
-        P2 --> T2["Training Model Kata\n(Temporal Sequence Network)"]
-        T1 --> E1["Ekspor TF.js & TFLite\n(model.json + shard.bin)"]
-        T2 --> E2["Ekspor TFLite & Config\n(bisindo_wl_model.tflite)"]
-    end
+    A["Input kamera atau video simulasi"] --> B["MediaPipe Hand Landmarker"]
+    B --> C["Ekstraksi landmark tangan"]
+    C --> D["Normalisasi fitur"]
+    D --> E["Model klasifikasi TensorFlow.js"]
+    E --> F["Prediksi alfabet BISINDO"]
+    F --> G["Umpan balik visual dan aktivitas belajar"]
+    G --> H["Pembaruan progres dan XP"]
 
-    subgraph Runtime["2. Runtime Klien Browser (Next.js 14 + Edge AI)"]
-        IN1["Webcam Pengguna Langsung"] --> Provider["Abstraksi Video Provider"]
-        IN2["Video Simulasi Rekaman Asli"] --> Provider
-        Provider --> MP["@mediapipe/tasks-vision\n(WASM Hand & Pose Landmarker)"]
-        MP --> Norm["Normalisasi Bohacek 2D (86-Dim) /\nNormalisasi Temporal Sequence"]
-        Norm --> TF["TensorFlow.js WebGL Engine"]
-        E1 -. Disediakan via CDN/Static .-> TF
-        TF --> Eval["Evaluasi Kestabilan Pose\n(Hold-Time Validator >= 75%)"]
-        Eval --> Feedback["Feedback Visual, XP & Web Speech Audio"]
-    end
+    I["Pengguna"] --> J["Modul Simulator Braille"]
+    J --> K["Pola sel 6-titik"]
+    K --> L["Umpan balik visual dan audio"]
+    L --> H
 
-    subgraph Storage["3. Lapisan Manajemen Status & Data"]
-        Feedback --> Repo["ProgressRepository Abstraction Layer"]
-        Repo <--> Local["LocalStorage\n(Mode Tamu)"]
-        Repo <--> Supa["Supabase Cloud\n(Auth, Profile, Leaderboard)"]
-    end
+    I --> M["Guess the Sign"]
+    M --> H
+
+    I --> N["Inclusive Eco-Learning"]
+    N --> O["Materi literasi pesisir dan hutan tropis"]
 ```
 
----
+### Alur Pemrosesan AI BISINDO
 
-## 🤖 Spesifikasi Teknis AI & Computer Vision
+1. Browser memperoleh input dari webcam atau video simulasi.
+2. MediaPipe Hand Landmarker mendeteksi titik-titik landmark tangan.
+3. Landmark diproses dan dinormalisasi menjadi fitur masukan model.
+4. TensorFlow.js menjalankan inferensi model klasifikasi alfabet.
+5. Hasil prediksi ditampilkan sebagai umpan balik untuk aktivitas belajar.
 
-### 1. Model Klasifikasi Alfabet BISINDO
-- **Target Kelas:** 27 Kelas (`A` s.d. `Z` + kelas `NOTHING`)
-- **Dimensi Input:** Vektor `float32` berukuran `[1, 86]`
-  - `0 .. 41`: Koordinat $(x, y)$ 21 landmark tangan kiri di layar (`mean_x` terkecil), dinormalisasi menggunakan **Boháček Bounding-Box Normalization** ke rentang $[0, 1]$.
-  - `42 .. 83`: Koordinat $(x, y)$ 21 landmark tangan kanan di layar (diisi `0.0` jika hanya 1 tangan terdeteksi).
-  - `84`: Jarak horizontal relatif kedua tangan `dx = mean_x(kanan) - mean_x(kiri)` ($\ge 0$ untuk 2 tangan, $0.0$ untuk 1 tangan).
-  - `85`: Jarak vertikal relatif kedua tangan `dy = mean_y(kanan) - mean_y(kiri)` ($0.0$ untuk 1 tangan).
-- **Lokasi Model Web:** `public/models/bisindo/model.json` dan `group1-shard1of1.bin`
-- **Toleransi & Validasi:** Ambang batas keyakinan $\ge 75\%$ dengan durasi tahanan stabil $1.500\text{ ms}$ pada mode belajar.
-
-### 2. Model Klasifikasi Kata Dinamis (WL-BISINDO)
-- **Target Kelas:** 8 Kosakata umum (`air`, `belajar`, `hari`, `maaf`, `makan`, `saya`, `terima_kasih`, `tuli`)
-- **Struktur Input:** Matriks berukuran `[1, 30, 300]` yang merekam runtutan temporal 30 frame dari titik sendi tangan dan kerangka tubuh atas (*upper body pose*), berpusat pada koordinat hidung.
-- **Lokasi Model:** `public/models/bisindo/bisindo_wl_model.tflite` dan `bisindo_wl_labels.json`
+Pemrosesan inferensi dilakukan di browser sehingga aplikasi tidak memerlukan server GPU untuk menjalankan pengenalan gestur. Rekaman kamera untuk inferensi tidak perlu dikirim ke server aplikasi.
 
 ---
 
-## 🛠️ Tech Stack Lengkap
+## 🤖 Spesifikasi Teknis AI dan Computer Vision
 
-| Komponen | Teknologi | Alasan Pemilihan |
+### Model Klasifikasi Alfabet BISINDO
+
+- **Target pengenalan:** alfabet BISINDO A–Z sesuai kelas yang didukung model.
+- **Ekstraksi landmark:** menggunakan MediaPipe Hand Landmarker.
+- **Representasi fitur:** koordinat landmark tangan yang diproses melalui tahap normalisasi.
+- **Inferensi:** TensorFlow.js pada browser pengguna.
+- **Output:** prediksi kelas alfabet untuk membantu pengguna mengevaluasi bentuk isyarat yang dipraktikkan.
+
+Detail dimensi input, konfigurasi model, ambang keyakinan, dan parameter validasi mengikuti implementasi model yang terdapat di repositori.
+
+---
+
+## 🛠️ Tech Stack
+
+| Komponen | Teknologi | Kegunaan |
 | :--- | :--- | :--- |
-| **Frontend Framework** | [Next.js 14](https://nextjs.org/) (App Router) | Arsitektur modern, optimasi build statis, fast refresh, dan performa tinggi. |
-| **Bahasa Pemrograman** | [TypeScript 5](https://www.typescriptlang.org/) | Type safety tinggi pada kalkulasi landmark tensor dan abstraksi data. |
-| **Styling & Desain** | [Tailwind CSS 3](https://tailwindcss.com/) | Desain sistem Neobrutalisme kustom (`card`, `btn`, `shadow-pop`) yang ceria dan ramah pengguna. |
-| **Client-Side AI Engine** | [@mediapipe/tasks-vision](https://developers.google.com/mediapipe) & [@tensorflow/tfjs](https://www.tensorflow.org/js) | Ekstraksi sendi tangan/pose berlatensi rendah secara langsung di browser tanpa server GPU. |
-| **Database & Autentikasi** | [Supabase](https://supabase.com/) (PostgreSQL & Auth) | Layanan hybrid auth, Row Level Security (RLS), dan sinkronisasi leaderboard realtime. |
-| **Ikonografi & Visual** | [React Feather](https://feathericons.com/) & SVG Interaktif | Ikon bersih, ringan, dan ramah aksesibilitas. |
-| **Pelafalan Suara** | [Web Speech Synthesis API](https://developer.mozilla.org/en-US/docs/Web/API/SpeechSynthesis) | Output audio natif bebas dependensi eksternal. |
-| **Offline AI Pipeline** | Python 3, TensorFlow/Keras, OpenCV, Pytest | Pengolahan dataset citra, pelatihan neural network, dan verifikasi unit test. |
-| **Hosting & Deployment** | [Vercel](https://vercel.com/) | Edge deployment global berkecepatan tinggi dengan HTTPS aktif untuk izin webcam. |
+| **Frontend Framework** | [Next.js 14](https://nextjs.org/) | Kerangka aplikasi web dan pengelolaan halaman. |
+| **UI Library** | [React 18](https://react.dev/) | Pembangunan antarmuka berbasis komponen. |
+| **Bahasa Pemrograman** | [TypeScript](https://www.typescriptlang.org/) | Menjaga konsistensi tipe data pada aplikasi. |
+| **Styling** | [Tailwind CSS](https://tailwindcss.com/) | Pengembangan tampilan responsif dan sistem desain. |
+| **Computer Vision** | [MediaPipe Tasks Vision](https://developers.google.com/mediapipe) | Deteksi landmark tangan di browser. |
+| **AI Runtime** | [TensorFlow.js](https://www.tensorflow.org/js) | Menjalankan model klasifikasi gestur pada sisi klien. |
+| **Audio** | [Web Speech API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Speech_API) | Umpan balik pelafalan pada aktivitas pembelajaran. |
+| **AI Development Pipeline** | Python, TensorFlow/Keras, OpenCV | Persiapan dataset, pelatihan, dan pengujian model. |
+| **Hosting** | [Vercel](https://vercel.com/) | Deployment aplikasi web melalui HTTPS. |
 
 ---
 
@@ -193,104 +216,75 @@ flowchart TD
 
 ```text
 it-rush/
-├── app/                              # Next.js 14 App Router
-│   ├── api/health/route.ts           # Endpoint health-check aplikasi
-│   ├── bisindo/page.tsx              # Halaman Pembelajaran & Praktik BISINDO
-│   ├── braille/page.tsx              # Halaman Simulator & Kuis Braille
-│   ├── login/page.tsx                # Halaman Autentikasi & Akun Demo Juri
-│   ├── progress/page.tsx             # Halaman Dasbor Progres, Badges & Leaderboard
-│   ├── globals.css                   # Gaya CSS Neobrutalisme & utilitas kustom
-│   ├── layout.tsx                    # Tata letak dasar (Navbar, Loader, Metadata)
-│   └── page.tsx                      # Beranda Utama (Hero, Showcase, Fitur, Edukasi)
-├── components/                       # Komponen Antarmuka Reusable
-│   ├── landing/                      # Komponen Landing Page (Hero, Features, Eco, Privacy)
-│   ├── BrailleCell.tsx               # Komponen matriks visual 6-titik Braille
-│   ├── BrailleWorks.tsx              # Panduan visual dan cara kerja Perkins Brailler
-│   ├── CameraSlot.tsx                # Slot kamera AI alfabet BISINDO + Video Simulation
-│   ├── Footer.tsx                    # Footer aplikasi
-│   ├── GuessTheSign.tsx              # Mini-game "Tebak Isyarat"
-│   ├── Mascot.tsx                    # Maskot interaktif pemandu belajar
-│   ├── Navbar.tsx                    # Navigasi responsif neobrutal
-│   ├── SignGallery.tsx               # Galeri referensi visual isyarat A-Z
-│   └── WordCameraSlot.tsx            # Slot kamera AI kata dinamis (WL-BISINDO)
-├── lib/                              # Logika Inti, CV & Penyimpanan
-│   ├── cv/                           # Pipeline Computer Vision di Browser
-│   │   ├── alphabetClassifier.ts     # Inferensi model alfabet TF.js
-│   │   ├── handLandmarkerClient.ts   # Klien MediaPipe Hand Landmarker (WASM)
-│   │   ├── normalizeLandmarks.ts     # Normalisasi Boháček 86-dim & HoldPoseValidator
-│   │   ├── poseLandmarkerClient.ts   # Klien MediaPipe Pose Landmarker
-│   │   └── wordClassifier.ts         # Inferensi model kata dinamis TFLite/TF.js
-│   ├── storage/                      # Lapisan Abstraksi Data (ProgressRepository)
-│   │   ├── progressRepository.ts     # Handler hybrid localStorage & Supabase
-│   │   └── useProgress.ts            # React Hook untuk konsumsi data progres
-│   ├── supabase/                     # Konfigurasi & Klien Supabase
-│   ├── audio.ts                      # Utilitas sintesis suara (Web Speech API)
-│   ├── badges.ts                     # Definisi 8 lencana pencapaian & logikanya
-│   ├── bisindo.ts                    # Metadata alfabet, unit belajar & kata BISINDO
-│   └── braille.ts                    # Kamus matriks titik dan pemetaan tombol Perkins
-├── public/                           # Aset Statis Publik
-│   ├── images/                       # Ilustrasi visual bentuk isyarat tangan
-│   ├── models/bisindo/               # Berkas model AI web (model.json, shards, tflite)
-│   └── samples/                      # Berkas video simulasi untuk pengujian tanpa kamera
-├── scripts/                          # Skrip Python Pipeline Dataset & Training
-│   ├── collect_webcam.py             # Perekaman dataset tambahan melalui webcam
-│   ├── convert_kawanisyarat_to_tfjs.py# Konversi model Keras/TFLite ke TensorFlow.js
-│   ├── finetune_model.py             # Fine-tuning model alfabet dengan regularisasi L2-SP
-│   ├── finetune_word_model.py        # Fine-tuning kepala model kata dinamis
-│   ├── infer_webcam.py               # Pengujian lokal inferensi webcam alfabet
-│   ├── infer_word_webcam.py          # Pengujian lokal inferensi kata dinamis
-│   ├── prepare_dataset.py            # Ekstraksi landmark dari folder citra/video
-│   └── train_model.py                # Pelatihan neural network dari nol
-├── src/bisindo/                      # Modul Python Core CV (fitur, model, dataset)
-├── supabase/schema.sql               # Skema tabel PostgreSQL, RLS, trigger profil pengguna
-├── tests/                            # Unit test Python (pytest) untuk pipeline AI
-├── .env.example                      # Contoh template konfigurasi environment
-├── package.json                      # Dependensi Node.js & skrip build
-└── tsconfig.json                     # Konfigurasi TypeScript
+├── app/                         # Halaman dan routing Next.js
+│   ├── bisindo/                 # Halaman pembelajaran BISINDO
+│   ├── braille/                 # Halaman simulator Braille
+│   ├── progress/                # Halaman progres belajar
+│   ├── globals.css              # Gaya global aplikasi
+│   ├── layout.tsx               # Layout utama
+│   └── page.tsx                 # Landing page
+├── components/                  # Komponen antarmuka
+│   ├── landing/                 # Komponen landing page
+│   ├── BrailleCell.tsx          # Komponen sel Braille
+│   ├── BrailleWorks.tsx         # Panduan Braille
+│   ├── CameraSlot.tsx           # Input kamera dan simulasi BISINDO
+│   ├── GuessTheSign.tsx         # Mini-game tebak isyarat
+│   ├── SignGallery.tsx          # Galeri referensi BISINDO
+│   └── ...
+├── lib/                         # Logika inti aplikasi
+│   ├── cv/                      # Pipeline computer vision
+│   ├── storage/                 # Pengelolaan progres belajar
+│   ├── audio.ts                 # Utilitas audio
+│   ├── bisindo.ts               # Data alfabet dan materi BISINDO
+│   └── braille.ts               # Pemetaan pola Braille
+├── public/
+│   ├── images/                  # Aset visual
+│   ├── models/                  # Model AI BISINDO
+│   └── samples/                 # Video simulasi
+├── scripts/                     # Skrip persiapan dan pelatihan model
+├── src/bisindo/                 # Modul Python terkait BISINDO
+├── tests/                       # Pengujian
+├── .env.example                 # Contoh konfigurasi environment
+├── package.json                 # Dependensi dan scripts
+└── tsconfig.json                # Konfigurasi TypeScript
 ```
+
+*Catatan: struktur di atas merupakan gambaran direktori utama. Nama atau isi berkas dapat berubah mengikuti versi repositori.*
 
 ---
 
-## ⚡ Panduan Menjalankan Secara Lokal (Quick Start)
+## ⚡ Menjalankan Proyek Secara Lokal
 
-### 1. Prasyarat Sistem
-- **Node.js:** Versi `18.17.0` atau lebih baru (direkomendasikan LTS Node 20)
-- **Package Manager:** `npm` atau `pnpm`
-- **Peramban Web:** Google Chrome, Microsoft Edge, Mozilla Firefox, atau Safari versi terbaru dengan dukungan WebAssembly & WebGL.
+### 1. Prasyarat
 
-### 2. Kloning Repositori & Instalasi Dependensi
+- Node.js versi 18.17.0 atau lebih baru.
+- npm atau pnpm.
+- Browser modern yang mendukung WebAssembly dan WebGL.
+- Webcam untuk mencoba pengenalan gestur secara langsung. Mode video simulasi dapat digunakan jika tersedia pada aplikasi.
+
+### 2. Clone Repositori
+
 ```bash
-# Kloning repositori
 git clone https://github.com/bobbyrahmanh/it-rush.git
 cd it-rush
+```
 
-# Instal dependensi proyek
+### 3. Instal Dependensi
+
+```bash
 npm install
 ```
 
-### 3. Konfigurasi Environment Variables
-Salin berkas `.env.example` menjadi `.env.local`:
-```bash
-cp .env.example .env.local
-```
+### 4. Jalankan Development Server
 
-Buka `.env.local` dan lengkapi konfigurasi Supabase (opsional jika hanya menjalankan dalam Mode Tamu):
-```env
-NEXT_PUBLIC_SUPABASE_URL=https://your-project-id.supabase.co
-NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-public-key
-
-# Kredensial Akun Demo Juri
-NEXT_PUBLIC_DEMO_JUDGE_EMAIL=juri.demo@signify.id
-NEXT_PUBLIC_DEMO_JUDGE_PASSWORD=SignifyItRush2026!
-```
-
-### 4. Menjalankan Server Pengembangan
 ```bash
 npm run dev
 ```
-Buka peramban pada alamat [http://localhost:3000](http://localhost:3000).
+
+Buka [http://localhost:3000](http://localhost:3000) pada browser.
 
 ### 5. Build untuk Produksi
+
 ```bash
 npm run build
 npm run start
@@ -298,87 +292,70 @@ npm run start
 
 ---
 
-## 🧪 Pipeline Python & Pengujian AI (Opsional)
+## 🧪 Pipeline Python dan Pengujian AI (Opsional)
 
-Jika ingin melatih ulang atau menguji model Computer Vision secara lokal di lingkungan Python:
+Jika ingin menjalankan skrip pengolahan data atau pengujian model secara lokal, siapkan lingkungan Python sesuai dependensi proyek.
 
 ```bash
-# 1. Buat dan aktifkan virtual environment
+# Membuat virtual environment
 python -m venv .venv
 
-# Windows (PowerShell):
+# Windows PowerShell
 .venv\Scripts\Activate.ps1
-# Linux / macOS:
+
+# Linux / macOS
 source .venv/bin/activate
-
-# 2. Instal paket dependensi pengembang
-pip install -e ".[dev]"
-
-# 3. Jalankan unit test model & pipeline
-pytest --cov=bisindo --cov-report=term-missing
-
-# 4. Uji inferensi webcam langsung di desktop
-python scripts/infer_webcam.py
 ```
 
----
+Instal dependensi sesuai konfigurasi yang tersedia di repositori, kemudian jalankan pengujian:
 
-## 🚀 Panduan Deployment (Vercel & Supabase)
+```bash
+pip install -r requirements.txt
+pytest
+```
 
-### 1. Deployment Frontend ke Vercel
-1. Hubungkan repositori GitHub `bobbyrahmanh/it-rush` ke dasbor **Vercel**.
-2. Masukkan *Environment Variables* sesuai berkas `.env.example` pada menu **Project Settings > Environment Variables**:
-   - `NEXT_PUBLIC_SUPABASE_URL`
-   - `NEXT_PUBLIC_SUPABASE_ANON_KEY`
-   - `NEXT_PUBLIC_DEMO_JUDGE_EMAIL`
-   - `NEXT_PUBLIC_DEMO_JUDGE_PASSWORD`
-3. Klik **Deploy**. Vercel akan otomatis menyajikan aplikasi melalui protokol HTTPS aman.
-
-### 2. Setup Basis Data Supabase
-1. Buat proyek baru di [Supabase Console](https://supabase.com/).
-2. Buka menu **SQL Editor**, salin seluruh isi berkas [supabase/schema.sql](supabase/schema.sql), lalu jalankan kueri (*Run*).
-3. Skema tersebut akan otomatis menyiapkan:
-   - Tabel `profiles` untuk menyimpan XP, streak, dan progres belajar.
-   - Aturan keamanan *Row Level Security* (RLS) terisolasi.
-   - Trigger otomatis pembuatan profil saat registrasi akun baru.
+Skrip pelatihan dan inferensi dapat dijalankan sesuai petunjuk pada masing-masing berkas di direktori `scripts/`.
 
 ---
 
-## 🔒 Standar Keamanan, Kualitas & Aksesibilitas
+## 🔒 Privasi, Keamanan, dan Batasan Penggunaan
 
-- **Security by Design:**
-  - Tidak ada *secret key* atau kredensial rahasia yang di-hardcode ke dalam repositori git.
-  - Pengamanan basis data menggunakan *Row Level Security* (RLS) PostgreSQL pada Supabase.
-  - Seluruh input teks disanitasi dan divalidasi guna mencegah serangan injeksi (OWASP Top 10).
-- **Aksesibilitas Web (WCAG 2.1 Level AA):**
-  - Rasio kontras tinggi dengan palet Neobrutalisme yang jelas (`#1B1B3A`, `#FFDE59`, `#00C2A8`, `#FF6B6B`).
-  - Navigasi ramah keyboard, tombol *skip to content* (`#utama`), serta label ARIA eksplisit pada seluruh kontrol interaktif.
-- **Etika & Transparansi AI:**
-  - Pemanfaatan AI dijalankan 100% transparan, didukung mode simulasi rekaman asli untuk memvalidasi kejujuran inferensi model.
+- **Pemrosesan di sisi klien:** inferensi pengenalan gestur BISINDO dijalankan di browser menggunakan MediaPipe dan TensorFlow.js.
+- **Privasi kamera:** input kamera untuk proses inferensi tidak perlu dikirim ke server aplikasi.
+- **Penggunaan kamera:** akses kamera memerlukan izin pengguna dan umumnya berjalan pada konteks HTTPS atau localhost.
+- **Batasan pengenalan:** model ditujukan untuk mengenali alfabet BISINDO yang didukung. Hasil prediksi dapat dipengaruhi pencahayaan, posisi tangan, kualitas kamera, dan variasi gerakan.
+- **Batasan simulator Braille:** simulator layar merupakan sarana pengenalan pola visual dan audio, bukan pengganti tulisan Braille taktil.
+- **Ruang lingkup literasi lingkungan:** konten pesisir dan hutan tropis merupakan materi edukasi pendukung, bukan sistem pemantauan kondisi lingkungan atau penerjemah otomatis ke bahasa isyarat.
 
 ---
 
-## 🙏 Atribusi Sumber Terbuka & Referensi
+## 🙏 Atribusi dan Referensi
 
-Platform **SIGNIFY** dibangun dengan menghormati dan mengatribusikan karya-karya komunitas sumber terbuka:
-1. **Model Dasar & Landmark Normalization:** Mengadaptasi konsep normalisasi bounding-box Boháček dan arsitektur model awal dari proyek sumber terbuka [KawanIsyarat](https://github.com/haipradana/KawanIsyarat) oleh **haipradana**, yang kemudian diekstensi, dilatih ulang, dan dikonversi ke format TensorFlow.js Layers untuk kebutuhan web SIGNIFY.
-2. **Dataset Publik BISINDO:**
-   - *Indonesian Sign Language - BISINDO* oleh Agung Ma'ruf (`agungmrf`, Kaggle).
-   - *Alfabet BISINDO* oleh Achmad Noer (`achmadnoer`, Kaggle).
-3. **Pustaka Visi Komputer:** Google MediaPipe Hand & Pose Landmarker tim Google AI.
+SIGNIFY memanfaatkan teknologi dan sumber terbuka untuk mendukung pengembangan aplikasi.
+
+1. **MediaPipe:** pustaka visi komputer dari Google untuk deteksi landmark tangan.
+2. **TensorFlow.js:** pustaka untuk menjalankan model machine learning pada browser.
+3. **KawanIsyarat:** [https://github.com/haipradana/KawanIsyarat](https://github.com/haipradana/KawanIsyarat), sebagai salah satu referensi pengembangan model dan pengolahan landmark apabila digunakan dalam pipeline proyek.
+4. **Dataset BISINDO:** dataset publik yang digunakan dalam proses pengembangan model dan aset referensi, dengan atribusi kepada pembuat dataset sesuai sumber aslinya.
+
+Penggunaan dataset, pustaka, dan referensi pihak ketiga perlu tetap mengikuti lisensi serta ketentuan atribusi masing-masing sumber.
 
 ---
 
 ## 📄 Informasi Kompetisi
 
-- **Kompetisi:** **IT RUSH 2026 — Web Development Competition**
-- **Penyelenggara:** Himpunan Mahasiswa Teknik Informatika (HIMATIF) Universitas Bengkulu
-- **Tahun Pelaksanaan:** 2026
-- **Status Proyek:** *Production Ready / Final Submission*
+- **Kompetisi:** IT RUSH 2026 — Web Development Competition
+- **Penyelenggara:** Himpunan Mahasiswa Teknik Informatika (HIMATIF), Universitas Bengkulu
+- **Tahun:** 2026
+- **Tema:** AI Teknologi untuk Penguatan Masyarakat serta Keberlanjutan Pesisir dan Hutan Tropis
+- **Subtema:** Pendidikan, Tata Kelola, dan Teknologi Inklusif
 
 ---
 
-<p align="center">
-  <b>SIGNIFY — Learn, understand, and connect.</b><br>
-  <i>Dikembangkan dengan semangat inklusivitas, inovasi teknologi, dan kepedulian sosial.</i>
-</p>
+<div align="center">
+
+**SIGNIFY — Learn, understand, and connect.**
+
+*Teknologi untuk komunikasi yang inklusif dan masyarakat yang peduli keberlanjutan.*
+
+</div>
