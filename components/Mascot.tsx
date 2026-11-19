@@ -8,9 +8,41 @@ type MascotProps = {
 
 export default function Mascot({ className = "" }: MascotProps) {
   const svgRef = useRef<SVGSVGElement | null>(null);
-  const [gaze, setGaze] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
+  const leftEyeRef = useRef<SVGGElement | null>(null);
+  const rightEyeRef = useRef<SVGGElement | null>(null);
 
   useEffect(() => {
+    let animId: number;
+    let targetX = 0;
+    let targetY = 0;
+    let currentX = 0;
+    let currentY = 0;
+    let isRunning = false;
+
+    const tick = () => {
+      const dx = targetX - currentX;
+      const dy = targetY - currentY;
+      currentX += dx * 0.28;
+      currentY += dy * 0.28;
+
+      const transformStr = `translate3d(${currentX.toFixed(2)}px, ${currentY.toFixed(2)}px, 0)`;
+      if (leftEyeRef.current) leftEyeRef.current.style.transform = transformStr;
+      if (rightEyeRef.current) rightEyeRef.current.style.transform = transformStr;
+
+      if (Math.abs(dx) > 0.02 || Math.abs(dy) > 0.02) {
+        animId = requestAnimationFrame(tick);
+      } else {
+        isRunning = false;
+      }
+    };
+
+    const startAnim = () => {
+      if (!isRunning) {
+        isRunning = true;
+        animId = requestAnimationFrame(tick);
+      }
+    };
+
     const updatePointer = (clientX: number, clientY: number) => {
       const svg = svgRef.current;
       if (!svg) return;
@@ -24,16 +56,15 @@ export default function Mascot({ className = "" }: MascotProps) {
       const dy = clientY - eyeCenterY;
       const dist = Math.hypot(dx, dy);
       if (dist < 1) {
-        setGaze({ x: 0, y: 0 });
-        return;
+        targetX = 0;
+        targetY = 0;
+      } else {
+        const maxOffset = 8.5;
+        const factor = Math.min(dist / 220, 1) * maxOffset;
+        targetX = (dx / dist) * factor;
+        targetY = (dy / dist) * factor;
       }
-
-      const maxOffset = 8.5;
-      const factor = Math.min(dist / 320, 1) * maxOffset;
-      setGaze({
-        x: Number(((dx / dist) * factor).toFixed(2)),
-        y: Number(((dy / dist) * factor).toFixed(2)),
-      });
+      startAnim();
     };
 
     const handleMouseMove = (e: MouseEvent) => {
@@ -50,6 +81,7 @@ export default function Mascot({ className = "" }: MascotProps) {
     window.addEventListener("touchmove", handleTouchMove, { passive: true });
 
     return () => {
+      cancelAnimationFrame(animId);
       window.removeEventListener("mousemove", handleMouseMove);
       window.removeEventListener("touchmove", handleTouchMove);
     };
@@ -211,23 +243,13 @@ export default function Mascot({ className = "" }: MascotProps) {
           strokeWidth="5"
         />
 
-        {/* Eyes (mengikuti arah kursor & sentuhan) */}
-        <g
-          style={{
-            transform: `translate(${gaze.x}px, ${gaze.y}px)`,
-            transition: "transform 0.09s ease-out",
-          }}
-        >
+        {/* Eyes (mengikuti arah kursor & sentuhan secara mulus) */}
+        <g ref={leftEyeRef} style={{ willChange: "transform" }}>
           <circle cx="99" cy="112" r="18" fill="#1B1B3A" />
           <circle cx="105" cy="105" r="7.5" fill="white" />
           <circle cx="92" cy="121" r="3.8" fill="#B9A9F5" />
         </g>
-        <g
-          style={{
-            transform: `translate(${gaze.x}px, ${gaze.y}px)`,
-            transition: "transform 0.09s ease-out",
-          }}
-        >
+        <g ref={rightEyeRef} style={{ willChange: "transform" }}>
           <circle cx="177" cy="112" r="18" fill="#1B1B3A" />
           <circle cx="183" cy="105" r="7.5" fill="white" />
           <circle cx="170" cy="121" r="3.8" fill="#B9A9F5" />
@@ -666,10 +688,69 @@ export function AuthMascot({
   className = "",
 }: AuthMascotProps) {
   const svgRef = useRef<SVGSVGElement | null>(null);
-  const [gaze, setGaze] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
+  const headRef = useRef<SVGGElement | null>(null);
+  const leftEyeRef = useRef<SVGGElement | null>(null);
+  const rightEyeRef = useRef<SVGGElement | null>(null);
 
   const isCovering = pose === "covering";
   const isPeeking = pose === "peeking";
+
+  const isCoveringRef = useRef(isCovering);
+  const isPeekingRef = useRef(isPeeking);
+  isCoveringRef.current = isCovering;
+  isPeekingRef.current = isPeeking;
+
+  const targetRef = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
+  const currentRef = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
+  const isRunningRef = useRef<boolean>(false);
+  const animIdRef = useRef<number>(0);
+
+  const startAnim = () => {
+    if (isRunningRef.current) return;
+    isRunningRef.current = true;
+
+    const tick = () => {
+      const dx = targetRef.current.x - currentRef.current.x;
+      const dy = targetRef.current.y - currentRef.current.y;
+      currentRef.current.x += dx * 0.28;
+      currentRef.current.y += dy * 0.28;
+
+      const curX = currentRef.current.x;
+      const curY = currentRef.current.y;
+
+      const covering = isCoveringRef.current;
+      const peeking = isPeekingRef.current;
+
+      const pupilX = covering ? 0 : peeking ? curX * 0.65 - 2 : curX;
+      const pupilY = covering ? 0 : peeking ? Math.max(3.5, curY * 0.7) : curY;
+
+      const transformStr = `translate3d(${pupilX.toFixed(2)}px, ${pupilY.toFixed(2)}px, 0)`;
+      if (leftEyeRef.current) leftEyeRef.current.style.transform = transformStr;
+      if (rightEyeRef.current) rightEyeRef.current.style.transform = transformStr;
+
+      if (headRef.current) {
+        const headRot = covering ? 0 : pupilX * 0.35;
+        headRef.current.style.transform = `rotate(${headRot.toFixed(2)}deg)`;
+      }
+
+      if (Math.abs(dx) > 0.02 || Math.abs(dy) > 0.02) {
+        animIdRef.current = requestAnimationFrame(tick);
+      } else {
+        isRunningRef.current = false;
+      }
+    };
+
+    animIdRef.current = requestAnimationFrame(tick);
+  };
+
+  // Saat pose berubah
+  useEffect(() => {
+    if (isCovering) {
+      targetRef.current = { x: 0, y: 0 };
+    }
+    isRunningRef.current = false;
+    startAnim();
+  }, [isCovering, isPeeking]);
 
   // Saat mengetik huruf di input, arahkan bola mata mengikuti posisi huruf terakhir yang diketik
   useEffect(() => {
@@ -682,13 +763,15 @@ export function AuthMascot({
         : typingTarget.field === "email"
           ? 7
           : 8.5;
-    setGaze({ x: targetX, y: targetY });
+    targetRef.current = { x: targetX, y: targetY };
+    isRunningRef.current = false;
+    startAnim();
   }, [typingTarget, isCovering]);
 
-  // Saat kursor mouse atau sentuhan jari digerakkan
+  // Saat kursor mouse atau sentuhan jari digerakkan (terpasang satu kali)
   useEffect(() => {
     const updatePointer = (clientX: number, clientY: number) => {
-      if (isCovering) return;
+      if (isCoveringRef.current) return;
       const svg = svgRef.current;
       if (!svg) return;
       const rect = svg.getBoundingClientRect();
@@ -701,16 +784,16 @@ export function AuthMascot({
       const dy = clientY - eyeCenterY;
       const dist = Math.hypot(dx, dy);
       if (dist < 1) {
-        setGaze({ x: 0, y: 0 });
-        return;
+        targetRef.current = { x: 0, y: 0 };
+      } else {
+        const maxOffset = 9;
+        const factor = Math.min(dist / 220, 1) * maxOffset;
+        targetRef.current = {
+          x: (dx / dist) * factor,
+          y: (dy / dist) * factor,
+        };
       }
-
-      const maxOffset = 9;
-      const factor = Math.min(dist / 180, 1) * maxOffset;
-      setGaze({
-        x: Number(((dx / dist) * factor).toFixed(2)),
-        y: Number(((dy / dist) * factor).toFixed(2)),
-      });
+      startAnim();
     };
 
     const handleMouseMove = (e: MouseEvent) => {
@@ -727,13 +810,12 @@ export function AuthMascot({
     window.addEventListener("touchmove", handleTouchMove, { passive: true });
 
     return () => {
+      cancelAnimationFrame(animIdRef.current);
+      isRunningRef.current = false;
       window.removeEventListener("mousemove", handleMouseMove);
       window.removeEventListener("touchmove", handleTouchMove);
     };
-  }, [isCovering]);
-
-  const pupilX = isCovering ? 0 : isPeeking ? gaze.x * 0.65 - 2 : gaze.x;
-  const pupilY = isCovering ? 0 : isPeeking ? Math.max(3.5, gaze.y * 0.7) : gaze.y;
+  }, []);
 
   const statusText = isCovering
     ? "Tenang, aku tutup mata saat kamu mengetik kata sandi!"
@@ -781,13 +863,11 @@ export function AuthMascot({
 
         {/* Grup Kepala yang sedikit miring halus mengikuti pandangan */}
         <g
+          ref={headRef}
           style={{
             transformBox: "view-box",
             transformOrigin: "138px 135px",
-            transform: isCovering
-              ? "rotate(0deg)"
-              : `rotate(${(pupilX * 0.35).toFixed(2)}deg)`,
-            transition: "transform 0.12s ease-out",
+            willChange: "transform",
           }}
         >
           {/* Kepala */}
@@ -845,12 +925,7 @@ export function AuthMascot({
 
           {/* Bola mata kiri */}
           <g>
-            <g
-              style={{
-                transform: `translate(${pupilX}px, ${pupilY}px)`,
-                transition: "transform 0.09s ease-out",
-              }}
-            >
+            <g ref={leftEyeRef} style={{ willChange: "transform" }}>
               <circle cx="99" cy="112" r="18" fill="#1B1B3A" />
               <circle cx="105" cy="105" r="7.5" fill="white" />
               <circle cx="92" cy="121" r="3.8" fill="#B9A9F5" />
@@ -878,12 +953,7 @@ export function AuthMascot({
 
           {/* Bola mata kanan (mengikuti kursor/ketikan, dan bisa mengintip saat isPeeking) */}
           <g>
-            <g
-              style={{
-                transform: `translate(${pupilX}px, ${pupilY}px)`,
-                transition: "transform 0.09s ease-out",
-              }}
-            >
+            <g ref={rightEyeRef} style={{ willChange: "transform" }}>
               <circle cx="177" cy="112" r="18" fill="#1B1B3A" />
               <circle cx="183" cy="105" r="7.5" fill="white" />
               <circle cx="170" cy="121" r="3.8" fill="#B9A9F5" />
