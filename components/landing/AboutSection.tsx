@@ -66,39 +66,39 @@ export default function AboutSection() {
   };
 
   return (
-    <section className="overflow-hidden border-y-4 border-ink bg-grape py-20 text-white">
+    <section className="overflow-hidden border-y-4 border-ink bg-grape py-12 sm:py-16 md:py-20 text-white">
       <Reveal className="mx-auto max-w-6xl px-4">
-        <div className="grid gap-14 md:grid-cols-[1.1fr_0.9fr] md:items-center">
+        <div className="grid gap-10 md:gap-14 md:grid-cols-[1.1fr_0.9fr] md:items-center">
 
           {/* ABOUT CONTENT */}
           <div>
-            <span className="inline-block rounded-full border-2 border-white/70 px-4 py-2 text-sm font-bold">
+            <span className="inline-block rounded-full border-2 border-white/70 px-4 py-2 text-xs sm:text-sm font-bold">
               ABOUT SIGNIFY
             </span>
 
-            <h2 className="mt-6 max-w-3xl text-4xl font-bold leading-tight sm:text-5xl">
+            <h2 className="mt-5 max-w-3xl text-3xl font-bold leading-tight sm:text-5xl">
               Setiap orang punya cara belajar dan berkomunikasi.
             </h2>
 
-            <p className="mt-6 max-w-2xl text-lg leading-snug text-white/90">
+            <p className="mt-5 max-w-2xl text-base leading-relaxed sm:text-lg text-white/90">
               Perbedaan cara berkomunikasi seharusnya tidak menjadi
               penghalang untuk saling memahami. Membangun masyarakat
               yang inklusif dimulai dari kesediaan untuk mengenal dan
               memahami keberagaman tersebut.
             </p>
 
-            <p className="mt-4 max-w-2xl text-lg leading-snug text-white/90">
+            <p className="mt-3.5 max-w-2xl text-base leading-relaxed sm:text-lg text-white/90">
               SIGNIFY hadir sebagai platform pembelajaran interaktif
               yang mengajak masyarakat mengenal alfabet BISINDO dan
               pola Braille melalui teknologi. Sebuah langkah sederhana
               untuk menumbuhkan pemahaman tentang komunikasi inklusif.
             </p>
 
-            <div className="mt-8 flex flex-wrap gap-3">
+            <div className="mt-7 flex flex-wrap gap-2.5 sm:gap-3">
               {["Learn", "Understand", "Include"].map((item) => (
                 <span
                   key={item}
-                  className="rounded-full border-2 border-white/60 px-5 py-2 text-sm font-bold"
+                  className="rounded-full border-2 border-white/60 px-4 py-1.5 sm:px-5 sm:py-2 text-xs sm:text-sm font-bold"
                 >
                   {item}
                 </span>
@@ -108,20 +108,20 @@ export default function AboutSection() {
 
           {/* INTERACTIVE FLIP CARD DECK */}
           <div className="flex flex-col items-center">
-            <div className="mb-8 text-center">
-              <span className="text-sm font-bold uppercase tracking-[0.2em] text-white/70">
+            <div className="mb-6 sm:mb-8 text-center">
+              <span className="text-xs sm:text-sm font-bold uppercase tracking-[0.2em] text-white/70">
                 Explore SIGNIFY
               </span>
-              <h3 className="mt-2 text-2xl font-bold">
+              <h3 className="mt-2 text-xl sm:text-2xl font-bold">
                 Discover what's inside!
               </h3>
-              <p className="mt-2 text-sm text-white/75">
+              <p className="mt-1.5 text-xs sm:text-sm text-white/75">
                 Klik kartu untuk membalik dan membaca ceritanya.
               </p>
             </div>
 
             {/* CARD STACK */}
-            <div className="relative h-[370px] w-full max-w-[310px] [perspective:1200px]">
+            <div className="relative h-[360px] sm:h-[370px] w-full max-w-[285px] xs:max-w-[300px] sm:max-w-[310px] [perspective:1200px]">
               {CARDS.map((card, index) => {
                 const position =
                   (index - activeIndex + CARDS.length) % CARDS.length;

@@ -2,7 +2,8 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
-import { LogIn, LogOut, Menu, User, Volume2, VolumeX, X, Zap } from "react-feather";
+import { LogIn, LogOut, Menu, Volume2, VolumeX, X, Zap } from "react-feather";
+import UserAvatar from "@/components/UserAvatar";
 import { useProgress } from "@/lib/storage/useProgress";
 
 const LINKS = [
@@ -76,9 +77,13 @@ export default function Navbar() {
             <div className="hidden items-center gap-2 sm:flex">
               <Link
                 href="/progress"
-                className="inline-flex min-h-[44px] items-center gap-2 rounded-full border-2 border-ink bg-mint px-3.5 py-1.5 text-sm font-bold text-ink transition hover:-translate-y-0.5"
+                className="inline-flex min-h-[44px] items-center gap-2 rounded-full border-2 border-ink bg-mint px-2.5 py-1 text-sm font-bold text-ink transition hover:-translate-y-0.5"
               >
-                <User className="h-4 w-4" aria-hidden="true" />
+                <UserAvatar
+                  avatarId={data.auth.user?.avatarId || data.settings.avatarId}
+                  size="xs"
+                  className="!border-0 !shadow-none"
+                />
                 <span>{shortName}</span>
                 <span className="inline-flex items-center gap-1 rounded-full border border-ink bg-sun px-2 py-0.5 text-xs">
                   <Zap className="h-3 w-3" aria-hidden="true" />
@@ -152,24 +157,30 @@ export default function Navbar() {
 
           <div className="rounded-2xl border-2 border-ink bg-paper p-3">
             {isAuthenticated && data.auth.user ? (
-              <div className="flex flex-wrap items-center justify-between gap-2">
-                <div>
-                  <p className="text-xs font-semibold text-ink/75">Masuk sebagai</p>
-                  <p className="font-display text-base font-bold text-ink">
-                    {data.auth.user.displayName}
-                  </p>
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div className="flex items-center gap-3">
+                  <UserAvatar
+                    avatarId={data.auth.user.avatarId || data.settings.avatarId}
+                    size="sm"
+                  />
+                  <div>
+                    <p className="text-xs font-semibold text-ink/75">Masuk sebagai</p>
+                    <p className="font-display text-base font-bold text-ink">
+                      {data.auth.user.displayName}
+                    </p>
+                  </div>
                 </div>
                 <button
                   type="button"
                   onClick={() => void logout()}
-                  className="btn !min-h-[44px] bg-white !px-4 text-sm text-ink"
+                  className="btn !min-h-[44px] w-full sm:w-auto justify-center bg-white !px-4 text-sm text-ink"
                 >
                   <LogOut className="h-4 w-4" aria-hidden="true" />
                   Keluar
                 </button>
               </div>
             ) : (
-              <div className="flex flex-wrap items-center justify-between gap-2">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                 <div>
                   <p className="text-xs font-bold uppercase text-ink/75">Status Saat Ini</p>
                   <p className="font-display text-base font-bold text-ink">
@@ -178,7 +189,7 @@ export default function Navbar() {
                 </div>
                 <Link
                   href="/login"
-                  className="btn !min-h-[44px] bg-sun !px-4 text-sm text-ink"
+                  className="btn !min-h-[44px] w-full sm:w-auto justify-center bg-sun !px-4 text-sm text-ink"
                 >
                   <LogIn className="h-4 w-4" aria-hidden="true" />
                   Masuk / Daftar

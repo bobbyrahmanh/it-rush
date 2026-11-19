@@ -28,6 +28,7 @@ export interface RemoteProfileRow {
       learnedLetters?: string[];
       quizSessionsCompleted?: number;
     };
+    avatarId?: string;
   } | null;
   updated_at?: string;
 }
@@ -38,6 +39,9 @@ export interface LeaderboardRow {
   xp: number;
   streak_current: number;
   badges: string[];
+  progress_data?: {
+    avatarId?: string;
+  } | null;
 }
 
 function getEnvConfig(): { url: string; anonKey: string } | null {
@@ -325,7 +329,7 @@ export async function fetchSupabaseLeaderboard(
 
   try {
     const res = await fetch(
-      `${cfg.url}/rest/v1/profiles?select=id,display_name,xp,streak_current,badges&order=xp.desc,streak_current.desc&limit=${limit}`,
+      `${cfg.url}/rest/v1/profiles?select=id,display_name,xp,streak_current,badges,progress_data&order=xp.desc,streak_current.desc&limit=${limit}`,
       {
         method: "GET",
         headers: buildHeaders(cfg.anonKey, accessToken),

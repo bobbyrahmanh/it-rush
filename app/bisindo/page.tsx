@@ -337,13 +337,13 @@ export default function BisindoPage() {
                 mode === item.id ? "bg-sun shadow-popsm" : "bg-white"
               }`}
             >
-              <div className="flex items-center gap-5">
-                <span className="text-2xl">
-                  <item.icon className="h-8 w-8" />
+              <div className="flex items-center gap-3.5 sm:gap-5">
+                <span className="text-2xl shrink-0">
+                  <item.icon className="h-7 w-7 sm:h-8 sm:w-8" />
                 </span>
-                <div className="flex flex-col">
-                  <span className="block text-lg font-bold">{item.label}</span>
-                  <span className="block text-xs font-medium">{item.desc}</span>
+                <div className="flex flex-col min-w-0">
+                  <span className="block text-base sm:text-lg font-bold">{item.label}</span>
+                  <span className="block text-xs font-medium text-ink/75">{item.desc}</span>
                 </div>
               </div>
             </button>
@@ -369,7 +369,7 @@ export default function BisindoPage() {
       {mode === "learn" && (
       <div className="grid gap-8 lg:grid-cols-[1fr_1fr]">
         {/* LEFT COLUMN */}
-        <div className="space-y-5">
+        <div className="order-2 lg:order-1 space-y-5">
           <div className="mb-2">
             <div className="flex items-center gap-2">
               <BookOpen className="h-5 w-5" />
@@ -528,7 +528,7 @@ export default function BisindoPage() {
         </div>
 
         {/* RIGHT COLUMN: REFERENCE AND CAMERA (kompak agar Step 1 & 2 terlihat tanpa scroll) */}
-        <div className="space-y-3 lg:sticky lg:top-20 lg:self-start">
+        <div className="order-1 lg:order-2 space-y-3 lg:sticky lg:top-20 lg:self-start">
           {selectedWord ? (
             <>
               <StepHeader step="01" title="Kenali Kosakata" />

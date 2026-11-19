@@ -15,11 +15,15 @@ import {
   LogOut,
   MessageCircle,
   RefreshCw,
+  Smile,
   UserCheck,
   Users,
   Zap,
 } from "react-feather";
+import AvatarPickerModal from "@/components/AvatarPickerModal";
 import Mascot from "@/components/Mascot";
+import UserAvatar from "@/components/UserAvatar";
+import { getAvatarById } from "@/lib/avatars";
 import { BADGE_DEFINITIONS, type BadgeDefinition } from "@/lib/badges";
 import { WORD_ITEMS } from "@/lib/bisindo";
 import { LETTERS } from "@/lib/braille";
@@ -54,16 +58,16 @@ function BadgeIcon({
 
 function MasteryGrid({ title, learned }: { title: string; learned: string[] }) {
   return (
-    <section className="card bg-white p-6">
+    <section className="card bg-white p-4 sm:p-6">
       <div className="flex flex-wrap items-center justify-between gap-2">
-        <h2 className="text-2xl font-bold">{title}</h2>
-        <span className="rounded-full border-2 border-ink bg-mint px-3 py-1 text-xs font-bold text-ink">
+        <h2 className="text-xl sm:text-2xl font-bold">{title}</h2>
+        <span className="rounded-full border-2 border-ink bg-mint px-2.5 py-0.5 sm:px-3 sm:py-1 text-xs font-bold text-ink">
           {learned.length}/26 dikuasai
         </span>
       </div>
       <ul
-        className="mt-4 grid grid-cols-7 gap-2 sm:grid-cols-9 lg:grid-cols-13"
-        style={{ gridTemplateColumns: "repeat(auto-fill, minmax(44px, 1fr))" }}
+        className="mt-4 grid gap-1.5 sm:gap-2"
+        style={{ gridTemplateColumns: "repeat(auto-fill, minmax(38px, 1fr))" }}
       >
         {LETTERS.map((l) => {
           const isDone = learned.includes(l);
@@ -71,7 +75,7 @@ function MasteryGrid({ title, learned }: { title: string; learned: string[] }) {
             <li
               key={l}
               aria-label={`Huruf ${l}: ${isDone ? "sudah dipelajari" : "belum dipelajari"}`}
-              className={`flex h-11 items-center justify-center rounded-xl border-2 border-ink font-display font-bold ${
+              className={`flex h-10 sm:h-11 items-center justify-center rounded-xl border-2 border-ink font-display text-sm sm:text-base font-bold ${
                 isDone ? "bg-mint text-ink" : "bg-paper text-ink/70"
               }`}
             >
@@ -88,6 +92,7 @@ export default function ProgressPage() {
   const {
     data,
     reset,
+    setAvatar,
     loginAsJudgeDemo,
     logout,
     refreshLeaderboard,
@@ -96,6 +101,7 @@ export default function ProgressPage() {
   const [confirmReset, setConfirmReset] = useState(false);
   const [activatingDemo, setActivatingDemo] = useState(false);
   const [refreshingBoard, setRefreshingBoard] = useState(false);
+  const [isAvatarPickerOpen, setIsAvatarPickerOpen] = useState(false);
 
   const isAuthenticated =
     data.auth.mode === "authenticated" && Boolean(data.auth.user);
@@ -111,12 +117,8 @@ export default function ProgressPage() {
     (data.bisindo.learnedWords ?? []).length +
     data.braille.learnedLetters.length;
 
-  const initials = (data.auth.user?.displayName ?? "Tamu")
-    .split(" ")
-    .filter(Boolean)
-    .slice(0, 2)
-    .map((part) => part[0]?.toUpperCase() ?? "")
-    .join("");
+  const currentAvatarId = data.auth.user?.avatarId || data.settings.avatarId || "owli";
+  const currentAvatar = getAvatarById(currentAvatarId);
 
   async function handleQuickJudgeDemo() {
     setActivatingDemo(true);
@@ -143,17 +145,35 @@ export default function ProgressPage() {
         <section className="card bg-grape p-6 text-white sm:p-8">
           <div className="flex flex-col justify-between gap-6 md:flex-row md:items-center">
             <div className="flex items-start gap-4 sm:items-center">
-              <div
-                aria-hidden="true"
-                className="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl border-4 border-ink bg-sun font-display text-2xl font-bold text-ink shadow-popsm"
-              >
-                {initials || "SG"}
+              <div className="relative group shrink-0">
+                <UserAvatar
+                  avatarId={currentAvatarId}
+                  size="lg"
+                  className="shadow-popsm transition group-hover:scale-105"
+                />
+                <button
+                  type="button"
+                  onClick={() => setIsAvatarPickerOpen(true)}
+                  aria-label="Pilih avatar karakter"
+                  title="Ganti Avatar"
+                  className="absolute -bottom-2 -right-2 inline-flex h-8 w-8 items-center justify-center rounded-xl border-2 border-ink bg-sun text-ink shadow-popsm transition hover:bg-white hover:scale-110"
+                >
+                  <Smile className="h-4 w-4" aria-hidden="true" />
+                </button>
               </div>
               <div>
                 <div className="flex flex-wrap items-center gap-2">
                   <span className="rounded-full border-2 border-ink bg-mint px-3 py-0.5 text-xs font-bold text-ink">
                     {data.auth.user.isDemo ? "Akun Demo Juri" : "Akun Personal Aktif"}
                   </span>
+                  <button
+                    type="button"
+                    onClick={() => setIsAvatarPickerOpen(true)}
+                    className="inline-flex items-center gap-1.5 rounded-full border border-white/40 bg-white/15 px-3 py-0.5 text-xs font-semibold text-white transition hover:bg-white/30"
+                  >
+                    <Smile className="h-3 w-3" aria-hidden="true" />
+                    <span>Avatar: {currentAvatar.name.split(" ")[0]}</span>
+                  </button>
                   <span className="rounded-full border border-white/40 bg-white/15 px-3 py-0.5 text-xs font-semibold text-white">
                     {data.auth.source === "supabase"
                       ? "Sinkron Cloud Supabase"
@@ -167,14 +187,14 @@ export default function ProgressPage() {
               </div>
             </div>
 
-            <div className="flex flex-wrap gap-3">
-              <Link href="/bisindo" className="btn bg-sun text-sm text-ink">
+            <div className="flex flex-col sm:flex-row gap-2.5 sm:gap-3 w-full sm:w-auto">
+              <Link href="/bisindo" className="btn w-full sm:w-auto text-center justify-center bg-sun text-sm text-ink">
                 Lanjut Praktik
               </Link>
               <button
                 type="button"
                 onClick={() => void logout()}
-                className="btn bg-white text-sm text-ink"
+                className="btn w-full sm:w-auto text-center justify-center bg-white text-sm text-ink"
               >
                 <LogOut className="h-4 w-4" aria-hidden="true" />
                 Keluar ke Mode Tamu
@@ -183,17 +203,17 @@ export default function ProgressPage() {
           </div>
         </section>
       ) : (
-        <section className="card bg-sun p-6 text-ink sm:p-8">
+        <section className="card bg-sun p-5 sm:p-8 text-ink">
           <div className="grid items-center gap-6 lg:grid-cols-[1.2fr_0.8fr]">
             <div>
               <span className="inline-flex items-center gap-1.5 rounded-full border-2 border-ink bg-white px-3 py-1 text-xs font-bold">
                 <Lock className="h-3.5 w-3.5" aria-hidden="true" />
                 STATUS SAAT INI: MODE TAMU (GUEST)
               </span>
-              <h1 className="mt-3 font-display text-3xl font-bold leading-tight sm:text-4xl">
+              <h1 className="mt-3 font-display text-2xl font-bold leading-tight sm:text-4xl">
                 Buka Fitur Streak, Badge Pencapaian, dan Papan Peringkat
               </h1>
-              <p className="mt-2 text-sm leading-relaxed text-ink/90 sm:text-base">
+              <p className="mt-2 text-xs leading-relaxed text-ink/90 sm:text-base">
                 Sebagai Tamu, kamu tetap bebas memainkan seluruh materi kamera AI
                 BISINDO, kosakata dinamis, serta simulator dan kuis Braille.
                 Masuk ke akun untuk mengaktifkan perhitungan Streak harian,
@@ -205,8 +225,8 @@ export default function ProgressPage() {
                   Tamu ini. Progres tersebut otomatis digabungkan saat kamu masuk.
                 </p>
               )}
-              <div className="mt-5 flex flex-wrap gap-3">
-                <Link href="/login" className="btn bg-ink text-white hover:bg-grape">
+              <div className="mt-5 flex flex-col sm:flex-row flex-wrap gap-2.5 sm:gap-3">
+                <Link href="/login" className="btn w-full sm:w-auto text-center justify-center bg-ink text-white hover:bg-grape text-sm">
                   <LogIn className="h-4 w-4" aria-hidden="true" />
                   Masuk / Daftar Akun
                 </Link>
@@ -214,12 +234,20 @@ export default function ProgressPage() {
                   type="button"
                   onClick={handleQuickJudgeDemo}
                   disabled={activatingDemo}
-                  className="btn bg-white text-ink disabled:opacity-60"
+                  className="btn w-full sm:w-auto text-center justify-center bg-white text-ink disabled:opacity-60 text-sm"
                 >
                   <UserCheck className="h-4 w-4" aria-hidden="true" />
                   {activatingDemo
                     ? "Mengaktifkan Demo..."
                     : "Coba Akun Demo Juri (1-Klik)"}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setIsAvatarPickerOpen(true)}
+                  className="btn w-full sm:w-auto text-center justify-center bg-paper text-ink text-sm"
+                >
+                  <Smile className="h-4 w-4" aria-hidden="true" />
+                  Pilih Avatar ({currentAvatar.name.split(" ")[0]})
                 </button>
               </div>
             </div>
@@ -326,7 +354,7 @@ export default function ProgressPage() {
       </section>
 
       {/* Koleksi 8 Badge Pencapaian (Achievements) */}
-      <section className="card bg-white p-6" aria-labelledby="heading-badges">
+      <section className="card bg-white p-4 sm:p-6" aria-labelledby="heading-badges">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div>
             <p className="text-xs font-bold uppercase tracking-wider text-grape">
@@ -441,7 +469,7 @@ export default function ProgressPage() {
       </section>
 
       {/* Papan Peringkat Pembelajar (Leaderboard) */}
-      <section className="card bg-white p-6" aria-labelledby="heading-leaderboard">
+      <section className="card bg-white p-4 sm:p-6" aria-labelledby="heading-leaderboard">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div>
             <p className="text-xs font-bold uppercase tracking-wider text-grape">
@@ -532,7 +560,12 @@ export default function ProgressPage() {
                         #{rank}
                       </td>
                       <td className="px-3 py-3.5">
-                        <div className="flex flex-wrap items-center gap-2">
+                        <div className="flex items-center gap-2.5">
+                          <UserAvatar
+                            avatarId={row.avatarId}
+                            size="xs"
+                            className="!border shrink-0"
+                          />
                           <span className="font-bold">{row.displayName}</span>
                           {isMe && (
                             <span className="rounded-full border-2 border-ink bg-mint px-2.5 py-0.5 text-xs font-bold text-ink">
@@ -557,6 +590,9 @@ export default function ProgressPage() {
             </tbody>
           </table>
         </div>
+        <p className="mt-2 text-center text-xs font-semibold text-ink/60 sm:hidden">
+          ← Geser tabel ke samping untuk melihat rincian peringkat →
+        </p>
       </section>
 
       {/* Detail Penguasaan Materi (Tampil untuk Tamu maupun Akun) */}
@@ -565,7 +601,7 @@ export default function ProgressPage() {
         learned={data.bisindo.learnedLetters}
       />
 
-      <section className="card space-y-4 bg-white p-6">
+      <section className="card space-y-4 bg-white p-4 sm:p-6">
         <div className="flex flex-wrap items-center justify-between gap-2">
           <h2 className="font-display text-2xl font-bold">
             Kosakata Dasar BISINDO
@@ -644,6 +680,14 @@ export default function ProgressPage() {
           </button>
         )}
       </section>
+
+      {/* Modal Pemilih Avatar */}
+      <AvatarPickerModal
+        isOpen={isAvatarPickerOpen}
+        currentAvatarId={currentAvatarId}
+        onClose={() => setIsAvatarPickerOpen(false)}
+        onSelect={(newAvatarId) => setAvatar(newAvatarId)}
+      />
     </div>
   );
 }

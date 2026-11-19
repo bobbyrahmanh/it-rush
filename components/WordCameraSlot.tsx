@@ -405,18 +405,18 @@ export default function WordCameraSlot({ word }: WordCameraSlotProps) {
           </p>
         </div>
 
-        <div className="flex flex-wrap items-center justify-center gap-3">
+        <div className="flex flex-col sm:flex-row flex-wrap items-stretch sm:items-center justify-center gap-3 w-full sm:w-auto">
           <button
             type="button"
             onClick={() => switchMode("webcam")}
-            className="btn min-h-[44px] bg-sun text-ink"
+            className="btn min-h-[44px] w-full sm:w-auto justify-center bg-sun text-ink"
           >
             Gunakan Kamera
           </button>
           <button
             type="button"
             onClick={() => switchMode("simulation")}
-            className="btn min-h-[44px] bg-white text-ink"
+            className="btn min-h-[44px] w-full sm:w-auto justify-center bg-white text-ink"
           >
             Gunakan Video Simulasi
           </button>
@@ -430,7 +430,7 @@ export default function WordCameraSlot({ word }: WordCameraSlotProps) {
   }
 
   return (
-    <div className="card space-y-4 bg-white p-5">
+    <div className="card space-y-4 bg-white p-4 sm:p-5">
       <div className="flex flex-wrap items-center justify-between gap-2">
         <div className="flex flex-wrap items-center gap-2">
           <span className="rounded-lg border-2 border-ink bg-sun px-2.5 py-1 text-xs font-bold text-ink">

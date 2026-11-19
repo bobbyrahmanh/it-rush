@@ -16,6 +16,7 @@ export interface AuthUser {
   id: string;
   email: string;
   displayName: string;
+  avatarId?: string;
   isDemo?: boolean;
 }
 
@@ -29,6 +30,7 @@ export interface AuthState {
 export interface LeaderboardEntry {
   id: string;
   displayName: string;
+  avatarId?: string;
   xp: number;
   streakCurrent: number;
   badgeCount: number;
@@ -39,7 +41,11 @@ export interface ProgressData {
   schemaVersion: 1;
   xp: number;
   streak: { current: number; longest: number; lastActiveDate: string | null };
-  settings: { audioEnabled: boolean; showLandmarks: boolean };
+  settings: {
+    audioEnabled: boolean;
+    showLandmarks: boolean;
+    avatarId: string;
+  };
   bisindo: {
     learnedLetters: string[];
     learnedWords: string[];
@@ -64,7 +70,7 @@ export const DEFAULT_PROGRESS: ProgressData = {
   schemaVersion: 1,
   xp: 0,
   streak: { current: 0, longest: 0, lastActiveDate: null },
-  settings: { audioEnabled: true, showLandmarks: true },
+  settings: { audioEnabled: true, showLandmarks: true, avatarId: "owli" },
   bisindo: {
     learnedLetters: [],
     learnedWords: [],
@@ -117,6 +123,7 @@ function buildLeaderboard(state: ProgressData): LeaderboardEntry[] {
     entries.set(state.auth.user.id, {
       id: state.auth.user.id,
       displayName: state.auth.user.displayName,
+      avatarId: state.auth.user.avatarId || state.settings.avatarId || "owli",
       xp: state.xp,
       streakCurrent: state.streak.current,
       badgeCount: state.badges.length,
@@ -139,6 +146,13 @@ function sanitizeProgress(raw: Partial<ProgressData> | null | undefined): Progre
     Boolean(raw.auth?.user);
 
   const authMode = isValidSupabaseAuth ? "authenticated" : "guest";
+
+  const avatarId =
+    typeof raw.settings?.avatarId === "string" && raw.settings.avatarId
+      ? raw.settings.avatarId
+      : typeof raw.auth?.user?.avatarId === "string" && raw.auth.user.avatarId
+        ? raw.auth.user.avatarId
+        : "owli";
 
   const bisindo: ProgressData["bisindo"] = {
     learnedLetters: uniqueStrings(raw.bisindo?.learnedLetters ?? []),
@@ -164,6 +178,11 @@ function sanitizeProgress(raw: Partial<ProgressData> | null | undefined): Progre
       ? Math.max(Number(raw.xp ?? 0), minimumXpFromProgress(bisindo, braille))
       : 0;
 
+  const user =
+    authMode === "authenticated" && raw.auth?.user
+      ? { ...raw.auth.user, avatarId: raw.auth.user.avatarId || avatarId }
+      : null;
+
   const base: ProgressData = {
     schemaVersion: 1,
     xp,
@@ -171,13 +190,14 @@ function sanitizeProgress(raw: Partial<ProgressData> | null | undefined): Progre
     settings: {
       audioEnabled: raw.settings?.audioEnabled ?? true,
       showLandmarks: raw.settings?.showLandmarks ?? true,
+      avatarId,
     },
     bisindo,
     braille,
     badges: authMode === "authenticated" ? evaluateBadges({ xp, streak, bisindo, braille }) : [],
     auth: {
       mode: authMode,
-      user: authMode === "authenticated" ? raw.auth?.user ?? null : null,
+      user,
       source: authMode === "authenticated" ? "supabase" : "local",
       syncing: false,
     },
@@ -222,6 +242,7 @@ async function syncToSupabaseIfActive(state: ProgressData) {
     progress_data: {
       bisindo: state.bisindo,
       braille: state.braille,
+      avatarId: state.auth.user.avatarId || state.settings.avatarId || "owli",
     },
   };
 
@@ -470,6 +491,9 @@ export const progressRepository = {
       const streakCurrent = Math.max(remoteProfile?.streak_current ?? 1, 1);
       const streakLongest = Math.max(remoteProfile?.streak_longest ?? 1, streakCurrent);
 
+      const userAvatarId =
+        remoteProfile?.progress_data?.avatarId || p.settings.avatarId || "owli";
+
       commit({
         ...p,
         xp: calcXp,
@@ -477,6 +501,10 @@ export const progressRepository = {
           current: streakCurrent,
           longest: streakLongest,
           lastActiveDate: remoteProfile?.last_active_date ?? today,
+        },
+        settings: {
+          ...p.settings,
+          avatarId: userAvatarId,
         },
         bisindo: merged.bisindo,
         braille: merged.braille,
@@ -486,6 +514,7 @@ export const progressRepository = {
             id: session.user.id,
             email: session.user.email,
             displayName: remoteProfile?.display_name || session.user.displayName,
+            avatarId: userAvatarId,
           },
           source: "supabase",
           syncing: false,
@@ -544,6 +573,7 @@ export const progressRepository = {
 
       const merged = mergeProgressSets(p.bisindo, p.braille);
       const calcXp = minimumXpFromProgress(merged.bisindo, merged.braille);
+      const userAvatarId = p.settings.avatarId || "owli";
 
       commit({
         ...p,
@@ -557,6 +587,7 @@ export const progressRepository = {
             id: session.user.id,
             email: session.user.email,
             displayName: cleanName,
+            avatarId: userAvatarId,
           },
           source: "supabase",
           syncing: false,
@@ -611,6 +642,10 @@ export const progressRepository = {
         ...p,
         xp: demoXp,
         streak: { current: 4, longest: 4, lastActiveDate: today },
+        settings: {
+          ...p.settings,
+          avatarId: "owli",
+        },
         bisindo: merged.bisindo,
         braille: merged.braille,
         auth: {
@@ -619,6 +654,7 @@ export const progressRepository = {
             id: userId,
             email: demoEmail,
             displayName: demoName,
+            avatarId: "owli",
             isDemo: true,
           },
           source: "supabase",
@@ -628,6 +664,16 @@ export const progressRepository = {
 
       void syncToSupabaseIfActive(current()).then(() => this.refreshLeaderboard());
       return { ok: true };
+    },
+
+    setAvatar(avatarId: string) {
+      const p = current();
+      const updatedUser = p.auth.user ? { ...p.auth.user, avatarId } : null;
+      commit({
+        ...p,
+        settings: { ...p.settings, avatarId },
+        auth: { ...p.auth, user: updatedUser },
+      });
     },
 
     async logout() {
@@ -678,6 +724,7 @@ export const progressRepository = {
       remoteLeaderboardCache = rows.map((r) => ({
         id: r.id,
         displayName: r.display_name,
+        avatarId: r.progress_data?.avatarId || "owli",
         xp: r.xp,
         streakCurrent: r.streak_current,
         badgeCount: Array.isArray(r.badges) ? r.badges.length : 0,

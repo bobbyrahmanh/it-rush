@@ -397,11 +397,11 @@ export default function CameraSlot({ letter }: { letter: string }) {
               </div>
             )}
 
-            <div className="flex flex-wrap justify-center gap-3">
-              <button type="button" onClick={startWebcam} className="btn bg-sun text-ink">
+            <div className="flex flex-col sm:flex-row flex-wrap justify-center gap-3 w-full sm:w-auto">
+              <button type="button" onClick={startWebcam} className="btn w-full sm:w-auto justify-center bg-sun text-ink">
                 Gunakan Kamera
               </button>
-              <button type="button" onClick={startSimulation} className="btn bg-white text-ink">
+              <button type="button" onClick={startSimulation} className="btn w-full sm:w-auto justify-center bg-white text-ink">
                 Gunakan Video Simulasi
               </button>
             </div>
@@ -503,15 +503,15 @@ export default function CameraSlot({ letter }: { letter: string }) {
             </div>
           )}
 
-          <div className="flex h-[52px] items-center gap-2 rounded-2xl border-2 border-white/20 bg-white/10 px-3">
-            <p className="w-12 shrink-0 text-[10px] font-semibold uppercase leading-tight tracking-wider text-white/75">
+          <div className="flex h-[52px] items-center gap-1.5 sm:gap-2 rounded-2xl border-2 border-white/20 bg-white/10 px-2.5 sm:px-3">
+            <p className="w-10 sm:w-12 shrink-0 text-[9px] sm:text-[10px] font-semibold uppercase leading-tight tracking-wider text-white/75">
               Prediksi AI
             </p>
-            <div className="flex flex-1 justify-end gap-2" aria-live="off">
+            <div className="flex flex-1 justify-end gap-1 sm:gap-2" aria-live="off">
               {Array.from({ length: 3 }).map((_, i) => {
                 const cand = holdState.topCandidates[i];
                 const base =
-                  "flex h-8 w-[4.75rem] shrink-0 items-center justify-center gap-1.5 rounded-lg border-2 tabular-nums";
+                  "flex h-8 w-[4.1rem] sm:w-[4.75rem] shrink-0 items-center justify-center gap-1 sm:gap-1.5 rounded-lg border-2 tabular-nums";
                 if (!cand) {
                   return (
                     <div

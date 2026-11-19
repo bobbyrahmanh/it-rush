@@ -29,15 +29,15 @@ function ChatBubble({
 
 export default function EnvironmentalSection() {
   return (
-    <section className="border-y-4 border-ink bg-sun py-16 sm:py-20 mb-10">
+    <section className="border-y-4 border-ink bg-sun py-12 sm:py-20 mb-8 sm:mb-10">
       <Reveal className="mx-auto max-w-6xl px-4">
         {/* SECTION INTRO */}
-        <div className="mb-10">
-          <span className="inline-block rounded-full border-2 border-ink bg-white px-4 py-2 text-sm font-bold">
+        <div className="mb-8 sm:mb-10">
+          <span className="inline-block rounded-full border-2 border-ink bg-white px-3.5 py-1.5 sm:px-4 sm:py-2 text-xs sm:text-sm font-bold">
             INCLUSIVE COMMUNICATION
           </span>
 
-          <h2 className="mt-5 text-4xl font-bold leading-tight sm:text-5xl">
+          <h2 className="mt-5 text-3xl font-bold leading-tight sm:text-5xl">
             Informasi penting harus bisa dipahami{" "}
             <span className="relative inline-block">
               semua orang.
@@ -45,7 +45,7 @@ export default function EnvironmentalSection() {
             </span>
           </h2>
 
-          <p className="mt-4 text-base leading-snug sm:text-lg">
+          <p className="mt-4 text-base leading-relaxed sm:text-lg">
             Kepedulian terhadap masyarakat dan lingkungan juga dimulai dari
             akses informasi yang setara. Namun, apakah setiap orang sudah
             memiliki kesempatan yang sama untuk memahami informasi?
@@ -58,18 +58,18 @@ export default function EnvironmentalSection() {
           <div className="relative mx-auto w-full max-w-md">
             <div
               aria-hidden="true"
-              className="absolute -left-4 -top-4 h-16 w-16 rounded-full border-4 border-ink bg-coral"
+              className="hidden sm:block absolute -left-4 -top-4 h-16 w-16 rounded-full border-4 border-ink bg-coral"
             />
 
             <div className="relative overflow-hidden rounded-3xl border-4 border-ink bg-[#E8EDE7] shadow-pop">
               {/* CHAT HEADER */}
-              <div className="flex items-center gap-3 border-b-4 border-ink bg-grape px-5 py-4 text-white">
-                <div className="flex h-11 w-11 items-center justify-center rounded-full border-2 border-white bg-mint text-ink">
-                  <Users size={21} />
+              <div className="flex items-center gap-3 border-b-4 border-ink bg-grape px-4 sm:px-5 py-3.5 sm:py-4 text-white">
+                <div className="flex h-10 w-10 sm:h-11 sm:w-11 items-center justify-center rounded-full border-2 border-white bg-mint text-ink">
+                  <Users size={20} />
                 </div>
 
                 <div className="flex-1">
-                  <p className="font-bold">Komunitas Warga</p>
+                  <p className="font-bold text-sm sm:text-base">Komunitas Warga</p>
                   <p className="text-xs text-white/75">
                     3 anggota sedang aktif
                   </p>
@@ -79,7 +79,7 @@ export default function EnvironmentalSection() {
               </div>
 
               {/* CHAT BODY */}
-              <div className="flex min-h-[330px] flex-col gap-4 p-4 sm:p-5">
+              <div className="flex min-h-[300px] sm:min-h-[330px] flex-col gap-3.5 sm:gap-4 p-3.5 sm:p-5">
                 <div className="mx-auto rounded-full bg-white/80 px-4 py-1 text-[10px] font-bold text-ink/50">
                   HARI INI
                 </div>
@@ -113,10 +113,10 @@ export default function EnvironmentalSection() {
                   </div>
                 </div>
 
-                <div className="mt-auto flex items-center gap-2 rounded-full border-2 border-ink/10 bg-white px-4 py-3 text-xs text-ink/40">
+                <div className="mt-auto flex items-center gap-2 rounded-full border-2 border-ink/10 bg-white px-4 py-2.5 sm:py-3 text-xs text-ink/40">
                   <span className="flex-1">Pesan simulasi...</span>
-                  <span className="flex h-8 w-8 items-center justify-center rounded-full bg-mint text-ink">
-                    <Send size={15} />
+                  <span className="flex h-7 w-7 sm:h-8 sm:w-8 items-center justify-center rounded-full bg-mint text-ink">
+                    <Send size={14} />
                   </span>
                 </div>
               </div>
@@ -128,7 +128,7 @@ export default function EnvironmentalSection() {
 
             <div
               aria-hidden="true"
-              className="absolute -bottom-10 right-70 rotate-6 rounded-2xl border-4 border-ink bg-coral px-4 py-2 font-bold shadow-popsm"
+              className="absolute -bottom-4 right-2 sm:-bottom-5 sm:right-6 rotate-6 rounded-2xl border-4 border-ink bg-coral px-3 py-1.5 sm:px-4 sm:py-2 text-xs sm:text-sm font-bold shadow-popsm"
             >
               Everyone matters!
             </div>

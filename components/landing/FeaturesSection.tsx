@@ -406,18 +406,18 @@ export default function FeaturesSection() {
   const selected = FEATURES.find((feature) => feature.id === active)!;
 
   return (
-    <section className="mx-auto max-w-6xl px-4 py-20">
+    <section className="mx-auto max-w-6xl px-4 py-12 sm:py-16 md:py-20">
       <Reveal>
-        <div className="mb-12">
-          <span className="inline-block rounded-full border-2 border-ink bg-mint px-4 py-2 text-sm font-bold">
+        <div className="mb-8 sm:mb-12">
+          <span className="inline-block rounded-full border-2 border-ink bg-mint px-3.5 py-1.5 sm:px-4 sm:py-2 text-xs sm:text-sm font-bold">
             EXPLORE SIGNIFY
           </span>
 
-          <h2 className="mt-5 text-4xl font-bold leading-tight sm:text-5xl">
+          <h2 className="mt-5 text-3xl font-bold leading-tight sm:text-5xl">
             Satu platform, <br/> lebih banyak cara untuk belajar dan memahami.
           </h2>
 
-          <p className="mt-4 text-lg leading-snug">
+          <p className="mt-4 text-base leading-relaxed sm:text-lg">
             Kenali fitur pembelajaran BISINDO dan Braille yang dirancang
             untuk memperkenalkan komunikasi inklusif. Melalui akses belajar
             yang lebih terbuka, SIGNIFY turut mengangkat pentingnya
@@ -452,10 +452,10 @@ export default function FeaturesSection() {
                     onFocus={() => setActive(feature.id)}
                     onClick={() => setActive(feature.id)}
                     aria-expanded={isActive}
-                    className="flex w-full items-center gap-4 p-5 text-left"
+                    className="flex w-full items-center gap-3.5 sm:gap-4 p-4 sm:p-5 text-left"
                   >
                     <span
-                      className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border-2 border-ink font-display text-lg font-bold transition-colors ${
+                      className={`flex h-10 w-10 sm:h-12 sm:w-12 shrink-0 items-center justify-center rounded-xl border-2 border-ink font-display text-base sm:text-lg font-bold transition-colors ${
                         isActive ? "bg-white" : "bg-mint"
                       }`}
                     >
@@ -463,13 +463,13 @@ export default function FeaturesSection() {
                     </span>
 
                     <span className="min-w-0 flex-1">
-                      <span className="block text-lg font-bold">
+                      <span className="block text-base sm:text-lg font-bold">
                         {feature.title}
                       </span>
                     </span>
 
                     <span
-                      className={`text-2xl transition-transform duration-300 ${
+                      className={`text-xl sm:text-2xl transition-transform duration-300 ${
                         isActive ? "rotate-90" : ""
                       }`}
                       aria-hidden="true"
@@ -488,8 +488,8 @@ export default function FeaturesSection() {
                     aria-hidden={!isActive}
                   >
                     <div className="overflow-hidden">
-                      <div className="px-5 pb-5 pl-[76px]">
-                        <p className="text-sm leading-snug">
+                      <div className="px-4 pb-4 sm:px-5 sm:pb-5 sm:pl-[76px]">
+                        <p className="text-xs sm:text-sm leading-snug">
                           {feature.tagline}
                         </p>
                       </div>
@@ -501,7 +501,7 @@ export default function FeaturesSection() {
           </div>
 
           {/* ANIMATED DEMONSTRATION PANEL */}
-          <div className="relative flex min-h-[440px] overflow-hidden rounded-3xl border-4 border-ink bg-grape p-6 text-white shadow-popsm sm:p-8">
+          <div className="relative flex min-h-[400px] sm:min-h-[440px] overflow-hidden rounded-3xl border-4 border-ink bg-grape p-4 sm:p-8 text-white shadow-popsm">
             <div
               key={selected.id}
               className={`${styles.detailContent} flex w-full flex-col`}

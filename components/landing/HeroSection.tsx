@@ -18,7 +18,7 @@ const CHIPS = [
 export default function HeroSection() {
   return (
     <section className="relative flex min-h-[100svh] items-center overflow-hidden">
-      <div className="relative mx-auto grid w-full max-w-6xl items-center gap-10 px-4 py-16 md:grid-cols-2 md:py-20">
+      <div className="relative mx-auto grid w-full max-w-6xl items-center gap-10 px-4 py-12 sm:py-16 md:grid-cols-2 md:py-20">
         {CHIPS.map((chip) => (
           <span
             key={chip.t + chip.p}
@@ -35,12 +35,12 @@ export default function HeroSection() {
         ))}
 
         <div className="relative z-10">
-          <span className="inline-flex items-center gap-2 rounded-full border-2 border-ink bg-mint px-4 py-2 text-sm font-bold shadow-popsm">
+          <span className="inline-flex items-center gap-2 rounded-full border-2 border-ink bg-mint px-3.5 py-1.5 text-xs font-bold shadow-popsm sm:px-4 sm:py-2 sm:text-sm">
             <span className="h-2.5 w-2.5 rounded-full bg-ink" />
             Inclusive Learning for Sustainable Communities
           </span>
 
-          <h1 className="mt-6 text-5xl font-bold leading-[1.05] sm:text-6xl lg:text-7xl">
+          <h1 className="mt-5 text-4xl font-bold leading-[1.08] sm:text-6xl lg:text-7xl">
             Pengetahuan{" "}
             <span className="relative inline-block">
               untuk semua.
@@ -51,7 +51,7 @@ export default function HeroSection() {
             </span>
           </h1>
 
-          <p className="mt-6 max-w-xl text-lg leading-snug">
+          <p className="mt-5 max-w-xl text-base leading-relaxed sm:text-lg">
             SIGNIFY menghadirkan pembelajaran komunikasi inklusif melalui
             pengenalan alfabet BISINDO berbasis AI dan simulator Braille
             interaktif. Kami percaya bahwa akses terhadap pendidikan dan
@@ -59,17 +59,17 @@ export default function HeroSection() {
             perlu terbuka bagi semua orang.
           </p>
 
-          <div className="mt-8 flex flex-wrap gap-4">
-            <Link href="/bisindo" className="btn bg-sun">
+          <div className="mt-7 flex flex-col sm:flex-row gap-3 sm:gap-4">
+            <Link href="/bisindo" className="btn w-full sm:w-auto text-center justify-center bg-sun">
               Mulai praktik BISINDO
             </Link>
 
-            <Link href="/braille" className="btn bg-white">
+            <Link href="/braille" className="btn w-full sm:w-auto text-center justify-center bg-white">
               Coba simulator Braille
             </Link>
           </div>
 
-          <div className="mt-10 flex flex-wrap items-center gap-x-6 gap-y-3 text-sm font-semibold">
+          <div className="mt-8 sm:mt-10 flex flex-wrap items-center gap-x-5 gap-y-2.5 text-xs sm:text-sm font-semibold">
             <span className="flex items-center gap-2">
               <span className="h-3 w-3 rounded-full border-2 border-ink bg-mint" />
               Interaktif
@@ -85,10 +85,10 @@ export default function HeroSection() {
           </div>
         </div>
 
-        <div className="relative z-10 mx-auto w-full max-w-md">
+        <div className="relative z-10 mx-auto w-full max-w-[280px] sm:max-w-md">
           <div
             aria-hidden="true"
-            className="absolute inset-8 rotate-6 rounded-[3rem] border-4 border-ink bg-sun"
+            className="absolute inset-5 sm:inset-8 rotate-6 rounded-[2.5rem] sm:rounded-[3rem] border-4 border-ink bg-sun"
           />
           <div className="relative">
             <Mascot className="w-full" />

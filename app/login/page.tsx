@@ -127,52 +127,52 @@ export default function LoginPage() {
     <div className="mx-auto max-w-6xl px-4 py-8 sm:py-12">
       <div className="grid items-start gap-8 lg:grid-cols-[1.05fr_0.95fr]">
         {/* Kolom Kiri: Penjelasan Hybrid Auth & Panel Akun Demo Juri */}
-        <section className="space-y-6">
-          <div className="card bg-grape p-6 text-white sm:p-8">
-            <h1 className="font-display text-3xl font-bold leading-tight sm:text-4xl">
+        <section className="order-2 lg:order-1 space-y-6">
+          <div className="card bg-grape p-5 sm:p-8 text-white">
+            <h1 className="font-display text-2xl font-bold leading-tight sm:text-4xl">
               Simpan Perjalanan Belajarmu dan Buka Fitur Personalisasi
             </h1>
-            <p className="mt-3 text-base leading-relaxed text-white/90">
+            <p className="mt-3 text-sm leading-relaxed text-white/90 sm:text-base">
               Seluruh materi BISINDO dan simulator Braille di SIGNIFY dapat
               dimainkan langsung sebagai Tamu. Dengan masuk ke akun, kamu
               membuka fitur personalisasi penuh yang tersimpan di akunmu.
             </p>
 
             <ul className="mt-6 grid gap-3 sm:grid-cols-2">
-              <li className="flex items-start gap-3 rounded-2xl border-2 border-white/30 bg-white/10 p-3.5">
+              <li className="flex items-start gap-3 rounded-2xl border-2 border-white/30 bg-white/10 p-3 sm:p-3.5">
                 <Zap className="mt-0.5 h-5 w-5 shrink-0 text-sun" aria-hidden="true" />
                 <div>
-                  <p className="font-bold">Streak Belajar Harian</p>
+                  <p className="font-bold text-sm sm:text-base">Streak Belajar Harian</p>
                   <p className="mt-0.5 text-xs leading-relaxed text-white/85">
                     Catat konsistensi latihan harianmu setiap menyelesaikan
                     huruf atau kuis.
                   </p>
                 </div>
               </li>
-              <li className="flex items-start gap-3 rounded-2xl border-2 border-white/30 bg-white/10 p-3.5">
+              <li className="flex items-start gap-3 rounded-2xl border-2 border-white/30 bg-white/10 p-3 sm:p-3.5">
                 <Award className="mt-0.5 h-5 w-5 shrink-0 text-mint" aria-hidden="true" />
                 <div>
-                  <p className="font-bold">8 Badge Pencapaian</p>
+                  <p className="font-bold text-sm sm:text-base">8 Badge Pencapaian</p>
                   <p className="mt-0.5 text-xs leading-relaxed text-white/85">
                     Kumpulkan lencana mulai dari Langkah Pertama hingga Duta
                     Inklusif.
                   </p>
                 </div>
               </li>
-              <li className="flex items-start gap-3 rounded-2xl border-2 border-white/30 bg-white/10 p-3.5">
+              <li className="flex items-start gap-3 rounded-2xl border-2 border-white/30 bg-white/10 p-3 sm:p-3.5">
                 <Users className="mt-0.5 h-5 w-5 shrink-0 text-sun" aria-hidden="true" />
                 <div>
-                  <p className="font-bold">Papan Peringkat</p>
+                  <p className="font-bold text-sm sm:text-base">Papan Peringkat</p>
                   <p className="mt-0.5 text-xs leading-relaxed text-white/85">
                     Lihat posisimu di antara pembelajar lain berdasarkan XP dan
                     Streak.
                   </p>
                 </div>
               </li>
-              <li className="flex items-start gap-3 rounded-2xl border-2 border-white/30 bg-white/10 p-3.5">
+              <li className="flex items-start gap-3 rounded-2xl border-2 border-white/30 bg-white/10 p-3 sm:p-3.5">
                 <Shield className="mt-0.5 h-5 w-5 shrink-0 text-mint" aria-hidden="true" />
                 <div>
-                  <p className="font-bold">Gabung Progres Tamu</p>
+                  <p className="font-bold text-sm sm:text-base">Gabung Progres Tamu</p>
                   <p className="mt-0.5 text-xs leading-relaxed text-white/85">
                     Huruf yang sudah kamu pelajari sebagai Tamu otomatis
                     digabungkan saat masuk.
@@ -183,20 +183,20 @@ export default function LoginPage() {
           </div>
 
           {/* Kartu Akun Demo Juri IT RUSH 2026 */}
-          <div className="card bg-sun p-6 text-ink">
+          <div className="card bg-sun p-5 sm:p-6 text-ink">
             <div className="flex items-start justify-between gap-3">
               <div>
                 <p className="text-xs font-bold uppercase tracking-wider text-ink/80">
                   Akses Penilaian Cepat (IT RUSH 2026)
                 </p>
-                <h2 className="mt-1 font-display text-2xl font-bold">
+                <h2 className="mt-1 font-display text-xl font-bold sm:text-2xl">
                   Masuk Instan dengan Akun Demo Juri
                 </h2>
               </div>
-              <UserCheck className="h-7 w-7 shrink-0 text-ink" aria-hidden="true" />
+              <UserCheck className="h-6 w-6 sm:h-7 sm:w-7 shrink-0 text-ink" aria-hidden="true" />
             </div>
 
-            <p className="mt-2 text-sm leading-relaxed text-ink/90">
+            <p className="mt-2 text-xs leading-relaxed text-ink/90 sm:text-sm">
               Untuk memudahkan pengujian fitur personalisasi tanpa perlu mengetik
               formulir pendaftaran, gunakan tombol di bawah ini. Sistem akan
               langsung mengaktifkan akun demo yang sudah memiliki contoh
@@ -206,7 +206,7 @@ export default function LoginPage() {
 
             <div className="mt-4 rounded-2xl border-2 border-ink bg-white/85 p-3 text-xs">
               <p className="font-bold">Kredensial Demo (Jika Masuk Manual):</p>
-              <p className="mt-1">
+              <p className="mt-1 break-words">
                 Email: <code className="font-bold">juri.demo@signify.id</code> |
                 Sandi: <code className="font-bold">SignifyItRush2026!</code>
               </p>
@@ -216,7 +216,7 @@ export default function LoginPage() {
               type="button"
               onClick={handleJudgeDemo}
               disabled={submitting}
-              className="btn mt-4 w-full bg-ink text-white hover:bg-grape disabled:opacity-60"
+              className="btn mt-4 w-full bg-ink text-white hover:bg-grape disabled:opacity-60 text-sm sm:text-base"
             >
               <UserCheck className="h-5 w-5" aria-hidden="true" />
               {submitting ? "Mengaktifkan Akun Demo..." : "Masuk Instan: Akun Demo Juri (1-Klik)"}
@@ -225,7 +225,7 @@ export default function LoginPage() {
         </section>
 
         {/* Kolom Kanan: Maskot Interaktif Owli & Form Login / Register */}
-        <section className="card bg-white p-6 sm:p-8">
+        <section className="order-1 lg:order-2 card bg-white p-4 sm:p-8">
           {isAuthenticated && data.auth.user ? (
             <div className="py-8 text-center" role="status" aria-live="polite">
               <CheckCircle className="mx-auto h-12 w-12 text-ink" aria-hidden="true" />
@@ -239,11 +239,12 @@ export default function LoginPage() {
           ) : (
             <>
               {/* Maskot Owli yang merespons kursor, ketikan huruf, dan kata sandi */}
-              <div className="mb-4 rounded-2xl border-2 border-ink bg-paper pt-3 pb-1">
+              <div className="mb-4 flex justify-center rounded-2xl border-2 border-ink bg-paper pt-3 pb-1">
                 <AuthMascot
                   pose={mascotPose}
                   mode={tab}
                   typingTarget={typingTarget}
+                  className="max-w-[240px] sm:max-w-none"
                 />
               </div>
 

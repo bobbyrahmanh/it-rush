@@ -217,13 +217,13 @@ export default function BraillePage() {
     {/* MASCOT */}
     <div className="relative mx-auto w-full max-w-[230px] md:max-w-[260px]">
       {/* Glow circle */}
-      <div className="absolute left-1/2 top-1/2 aspect-square w-full -translate-x-[67%] -translate-y-[40%] rounded-full bg-grape/20 blur-2xl" />
+      <div className="absolute left-1/2 top-1/2 aspect-square w-full -translate-x-1/2 -translate-y-1/2 md:-translate-x-[67%] md:-translate-y-[40%] rounded-full bg-grape/20 blur-2xl" />
 
       {/* Decorative circle */}
-      <div className="absolute left-1/2 top-1/2 aspect-square w-full -translate-x-[67%] -translate-y-[40%] rounded-full border-2 border-sun/50 bg-sun/50 animate-pulse" />
+      <div className="absolute left-1/2 top-1/2 aspect-square w-full -translate-x-1/2 -translate-y-1/2 md:-translate-x-[67%] md:-translate-y-[40%] rounded-full border-2 border-sun/50 bg-sun/50 animate-pulse" />
 
       {/* Mascot */}
-      <div className="relative z-10 -translate-x-10">
+      <div className="relative z-10 translate-x-0 md:-translate-x-10">
         <BrailleMascot activity="writing" className="animate-floaty w-full" />
       </div>
     </div>
@@ -263,7 +263,7 @@ export default function BraillePage() {
           <span className="text-sm text-ink/70">Learning by doing</span>
         </div>
 
-        <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4" role="tablist" aria-label="Mode Braille">
+        <div className="mt-4 grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-4 gap-3" role="tablist" aria-label="Mode Braille">
           {modes.map((item) => (
             <button
               key={item.id}
@@ -276,11 +276,11 @@ export default function BraillePage() {
                 mode === item.id ? "bg-sun shadow-popsm" : "bg-white"
               }`}
             >
-              <div className="flex items-center gap-5">
-                <span className="text-2xl"><item.icon className="w-8 h-8" /></span>
-                <div className="flex flex-col">
-                  <span className="block text-lg font-bold">{item.label}</span>
-                  <span className="block text-xs font-medium">{item.desc}</span>
+              <div className="flex items-center gap-3 sm:gap-4">
+                <span className="text-xl sm:text-2xl shrink-0"><item.icon className="w-7 h-7 sm:w-8 sm:h-8" /></span>
+                <div className="flex flex-col min-w-0">
+                  <span className="block text-base sm:text-lg font-bold">{item.label}</span>
+                  <span className="block text-xs font-medium leading-snug text-ink/75">{item.desc}</span>
                 </div>
               </div>
             </button>
@@ -362,14 +362,14 @@ export default function BraillePage() {
                 )}
               </div>
 
-              <div className="card bg-white p-5">
+              <div className="card bg-white p-4 sm:p-5">
                 <div className="flex items-center justify-between gap-2">
-                  <h3 className="font-bold">Alfabet Braille A–Z</h3>
-                  <span className="rounded-full bg-mint px-3 py-1 text-xs font-bold">
+                  <h3 className="font-bold text-base sm:text-lg">Alfabet Braille A–Z</h3>
+                  <span className="rounded-full bg-mint px-2.5 py-0.5 sm:px-3 sm:py-1 text-xs font-bold">
                     {learned.length}/26 dipelajari
                   </span>
                 </div>
-                <div className="mt-4 grid grid-cols-6 gap-2 sm:grid-cols-9">
+                <div className="mt-4 grid grid-cols-6 gap-1.5 sm:grid-cols-9 sm:gap-2">
                   {LETTERS.map((l) => (
                     <button
                       key={l}
@@ -378,7 +378,7 @@ export default function BraillePage() {
                         speak(l, audio);
                       }}
                       aria-label={`Pilih huruf ${l}`}
-                      className={`h-11 rounded-xl border-2 border-ink font-display text-lg font-bold transition hover:-translate-y-1 ${
+                      className={`h-10 sm:h-11 rounded-xl border-2 border-ink font-display text-base sm:text-lg font-bold transition hover:-translate-y-1 ${
                         letter === l ? "bg-ink text-white" :
                           learned.includes(l) ? "bg-mint" : "bg-white"
                       }`}
