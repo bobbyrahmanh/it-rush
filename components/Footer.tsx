@@ -56,7 +56,7 @@ export default function FooterSection() {
           </div>
 
           {/* ABOUT THE PROJECT */}
-          <div className="md: -ml-10">
+          <div className="md:-ml-10">
             <h3 className="font-display text-base sm:text-lg font-bold text-paper">
               Tentang Proyek
             </h3>

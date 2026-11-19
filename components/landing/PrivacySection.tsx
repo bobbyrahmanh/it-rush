@@ -25,7 +25,7 @@ export default function PrivacySection() {
 
           <div
             aria-hidden="true"
-            className="mr-10 mx-auto flex h-24 w-24 sm:h-36 sm:w-36 items-center justify-center rounded-full border-2 sm:border-4 border-ink bg-white shadow-popsm"
+            className="hidden md:mr-10 mx-auto md:flex h-24 w-24 sm:h-36 sm:w-36 items-center justify-center rounded-full border-2 sm:border-4 border-ink bg-white shadow-popsm"
           >
             <div className="relative flex h-14 w-14 sm:h-20 sm:w-20 items-center justify-center rounded-xl sm:rounded-2xl border-2 sm:border-4 border-ink bg-mint">
               <span className="text-2xl sm:text-5xl"><Lock className="w-10 h-10"/></span>

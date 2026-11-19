@@ -31,9 +31,24 @@ export default function Navbar() {
   const on = data.settings.audioEnabled;
   const isAuthenticated = data.auth.mode === "authenticated" && Boolean(data.auth.user);
   const shortName = data.auth.user?.displayName.split(" ")[0] ?? "Akun";
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => {
+      setScrolled(window.scrollY > 80);
+    };
+
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   return (
-    <header className="sticky top-0 z-40 border-b-4 border-ink bg-paper/95 backdrop-blur">
+    <header className={`fixed top-0 left-1/2 z-40 -translate-x-1/2 border-b-4 border-ink bg-paper/95 backdrop-blur transition-all duration-300 ease-in-out
+      ${scrolled
+        ? "w-full md:w-[75%] md:rounded-2xl md:top-3"
+        : "w-full md:rounded-2xl" }`}>
       <nav
         aria-label="Navigasi utama"
         className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-3"

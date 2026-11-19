@@ -21,7 +21,7 @@ import {
   Zap,
 } from "react-feather";
 import AvatarPickerModal from "@/components/AvatarPickerModal";
-import Mascot from "@/components/Mascot";
+import { BrailleMascot } from "@/components/Mascot";
 import UserAvatar from "@/components/UserAvatar";
 import { getAvatarById } from "@/lib/avatars";
 import { BADGE_DEFINITIONS, type BadgeDefinition } from "@/lib/badges";
@@ -203,60 +203,67 @@ export default function ProgressPage() {
           </div>
         </section>
       ) : (
-        <section className="card bg-sun p-5 sm:p-8 text-ink">
-          <div className="grid items-center gap-6 lg:grid-cols-[1.2fr_0.8fr]">
+        <section className="card bg-sun p-4 text-ink sm:p-6 lg:p-7">
+          <div className="grid items-center gap-5 lg:grid-cols-[1.2fr_0.8fr] lg:gap-6">
             <div>
-              <span className="inline-flex items-center gap-1.5 rounded-full border-2 border-ink bg-white px-3 py-1 text-xs font-bold">
+              <span className="inline-flex items-center gap-1.5 rounded-full border-2 border-ink bg-white px-2.5 py-1 text-[11px] font-bold">
                 <Lock className="h-3.5 w-3.5" aria-hidden="true" />
-                STATUS SAAT INI: MODE TAMU (GUEST)
+                MODE TAMU (GUEST)
               </span>
-              <h1 className="mt-3 font-display text-2xl font-bold leading-tight sm:text-4xl">
-                Buka Fitur Streak, Badge Pencapaian, dan Papan Peringkat
+
+              <h1 className="mt-3 font-display text-2xl font-bold leading-tight sm:text-3xl">
+                Streak, Badge, dan Peringkat
               </h1>
-              <p className="mt-3 text-xs leading-tight text-ink/90 sm:text-base">
+
+              <p className="mt-2 max-w-xl text-xs leading-relaxed text-ink/85 sm:text-sm">
                 Sebagai Tamu, kamu bisa mengakses seluruh fitur pembelajaran BISINDO dan Braille. Masuk akun untuk mencatat Streak, meraih Badge, dan bergabung di Papan Peringkat.
               </p>
+
               {totalMaterialsLearned > 0 && (
-                <p className="mt-3 rounded-xl border-2 border-ink bg-white/90 px-3.5 py-2 text-xs font-bold">
-                  Kamu sudah menyelesaikan {totalMaterialsLearned} materi di sesi
-                  Tamu ini. Progres tersebut otomatis digabungkan saat kamu masuk.
+                <p className="mt-3 w-fit rounded-xl border-2 border-ink bg-white/90 px-3 py-2 text-xs font-bold leading-relaxed">
+                  Kamu telah menyelesaikan {totalMaterialsLearned} materi dalam sesi tamu. Progres akan digabungkan saat masuk akun.
                 </p>
               )}
-              <div className="mt-5 flex flex-col sm:flex-row flex-wrap gap-2.5 sm:gap-3">
-                <Link href="/login" className="btn w-full sm:w-auto text-center justify-center bg-ink text-white hover:bg-grape text-sm">
+
+              <div className="mt-4 flex flex-col gap-2 sm:flex-row sm:flex-wrap">
+                <Link
+                  href="/login"
+                  className="btn justify-center bg-ink text-sm text-white hover:bg-grape"
+                >
                   <LogIn className="h-4 w-4" aria-hidden="true" />
-                  Masuk / Daftar Akun
+                  Masuk / Daftar
                 </Link>
+
                 <button
                   type="button"
                   onClick={handleQuickJudgeDemo}
                   disabled={activatingDemo}
-                  className="btn w-full sm:w-auto text-center justify-center bg-white text-ink disabled:opacity-60 text-sm"
+                  className="btn justify-center bg-white text-sm text-ink disabled:opacity-60"
                 >
                   <UserCheck className="h-4 w-4" aria-hidden="true" />
-                  {activatingDemo
-                    ? "Mengaktifkan Demo..."
-                    : "Coba Akun Demo Juri (1-Klik)"}
+                  {activatingDemo ? "Mengaktifkan Demo..." : "Coba Demo Juri (1-Klik)"}
                 </button>
+
                 <button
                   type="button"
                   onClick={() => setIsAvatarPickerOpen(true)}
-                  className="btn w-full sm:w-auto text-center justify-center bg-paper text-ink text-sm"
+                  className="btn justify-center bg-paper text-sm text-ink"
                 >
                   <Smile className="h-4 w-4" aria-hidden="true" />
-                  Pilih Avatar ({currentAvatar.name.split(" ")[0]})
+                  Pilih Avatar: {currentAvatar.name.split(" ")[0]}
                 </button>
               </div>
             </div>
 
-            <div className="flex flex-col items-center justify-center rounded-2xl border-4 border-ink bg-paper p-5 text-center">
-              <Mascot className="h-28 w-28" />
-              <p className="mt-2 font-display text-lg font-bold">
-                Belajar Tanpa Hambatan, Simpan Kapan Saja
+            <div className="flex flex-col items-center rounded-2xl border-4 border-ink bg-paper p-4 text-center sm:p-5">
+              <BrailleMascot activity="celebrating" className="h-36 w-36 sm:h-40 sm:w-40" />
+
+              <p className="mt-2 font-display text-base font-bold sm:text-lg">
+                Belajar Tanpa Hambatan
               </p>
-              <p className="mt-1 text-xs leading-tight text-ink/75">
-                Coba dulu seluruh fitur sepuasnya. Saat siap menyimpan rekor dan
-                lencana, cukup masuk dalam satu langkah.
+
+              <p className="mt-1 max-w-sm text-xs leading-relaxed text-ink/75">
+                Coba seluruh fitur terlebih dahulu. Masuk akun untuk menyimpan rekor dan lencana belajarmu.
               </p>
             </div>
           </div>

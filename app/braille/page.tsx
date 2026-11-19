@@ -214,15 +214,12 @@ export default function BraillePage() {
 
 
     {/* MASCOT */}
-    <div className="relative mx-auto w-full max-w-[160px] sm:max-w-[230px] md:max-w-[260px] mt-4 sm:mt-0">
+    <div className="relative mx-auto w-full max-w-[180px] sm:max-w-[230px] md:max-w-[260px] mt-4 sm:mt-0">
       {/* Glow circle */}
-      <div className="absolute left-1/2 top-1/2 aspect-square w-full -translate-x-[67%] -translate-y-[40%] rounded-full bg-grape/20 blur-2xl" />
-
-      {/* Decorative circle */}
-      <div className="absolute left-1/2 top-1/2 aspect-square w-full -translate-x-[67%] -translate-y-[40%] rounded-full border-2 border-sun/50 bg-sun/50 animate-pulse" />
+      <div className="absolute left-1/2 top-1/2 aspect-square w-full -translate-x-[50%] md:-translate-x-[67%] -translate-y-[40%] rounded-full bg-sun blur-2xl animate-pulse" />
 
       {/* Mascot */}
-      <div className="relative z-10 -translate-x-6 sm:-translate-x-10">
+      <div className="relative z-10 sm:-translate-x-10">
         <BrailleMascot activity="writing" className="animate-floaty w-full" />
       </div>
     </div>

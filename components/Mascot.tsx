@@ -391,7 +391,6 @@ export default function Mascot({ className = "" }: MascotProps) {
   );
 }
 
-
 type BrailleMascotProps = {
   activity?: "reading" | "writing" | "thinking" | "celebrating";
   className?: string;
@@ -405,13 +404,63 @@ export function BrailleMascot({
     reading: "Yuk, baca pola Braille!",
     writing: "Yuk, belajar menyusun titik Braille!",
     thinking: "Hmm... apa jawabannya?",
-    celebrating: "Hebat! Kamu berhasil!",
+    celebrating: "Hebat!",
   };
 
   const isThinking = activity === "thinking";
   const isCelebrating = activity === "celebrating";
   const isReading = activity === "reading";
   const isWriting = activity === "writing";
+  const svgRef = useRef<SVGSVGElement | null>(null);
+  const leftEyeRef = useRef<SVGGElement | null>(null);
+  const rightEyeRef = useRef<SVGGElement | null>(null);
+
+  useEffect(() => {
+    let animId = 0;
+    let running = false;
+    const target = { x: 0, y: 0 };
+    const current = { x: 0, y: 0 };
+    const startAnim = () => {
+      if (running) return;
+      running = true;
+      const tick = () => {
+        const dx = target.x - current.x;
+        const dy = target.y - current.y;
+        current.x += dx * 0.28;
+        current.y += dy * 0.28;
+        const transform = `translate3d(${current.x.toFixed(2)}px, ${current.y.toFixed(2)}px, 0)`;
+        if (leftEyeRef.current) leftEyeRef.current.style.transform = transform;
+        if (rightEyeRef.current) rightEyeRef.current.style.transform = transform;
+        if (Math.abs(dx) > 0.02 || Math.abs(dy) > 0.02) animId = requestAnimationFrame(tick);
+        else running = false;
+      };
+      animId = requestAnimationFrame(tick);
+    };
+    const updatePointer = (x: number, y: number) => {
+      const svg = svgRef.current;
+      if (!svg) return;
+      const rect = svg.getBoundingClientRect();
+      if (!rect.width || !rect.height) return;
+      const dx = x - (rect.left + rect.width * 0.5);
+      const dy = y - (rect.top + rect.height * 0.42);
+      const distance = Math.hypot(dx, dy);
+      const offset = distance < 1 ? 0 : Math.min(distance / 220, 1) * 9;
+      target.x = distance < 1 ? 0 : (dx / distance) * offset;
+      target.y = distance < 1 ? 0 : (dy / distance) * offset;
+      startAnim();
+    };
+    const onMouseMove = (e: MouseEvent) => updatePointer(e.clientX, e.clientY);
+    const onTouchMove = (e: TouchEvent) => {
+      if (e.touches.length) updatePointer(e.touches[0].clientX, e.touches[0].clientY);
+    };
+    window.addEventListener("mousemove", onMouseMove, { passive: true });
+    window.addEventListener("touchmove", onTouchMove, { passive: true });
+    return () => {
+      cancelAnimationFrame(animId);
+      window.removeEventListener("mousemove", onMouseMove);
+      window.removeEventListener("touchmove", onTouchMove);
+    };
+  }, []);
 
   return (
     <div
@@ -419,17 +468,18 @@ export function BrailleMascot({
       role="img"
       aria-label={`Owli ${activity}`}
     >
-      <div className="mb-3 relative max-w-[220px] rounded-2xl border-2 border-ink bg-sun px-4 py-3 text-center text-sm font-bold text-ink shadow-popsm">
-        {messages[activity]}
-
-        {/* Ekor bubble chat */}
-        <span className="absolute -bottom-[9px] right-3 h-4 w-4 rotate-45 border-b-2 border-r-2 border-ink bg-sun" />
-      </div>
+      {!isCelebrating && (
+        <div className="mb-3 relative max-w-[220px] rounded-2xl border-2 border-ink bg-sun px-4 py-3 text-center text-sm font-bold text-ink shadow-popsm">
+          {messages[activity]}
+          <span className="absolute -bottom-[9px] right-3 h-4 w-4 rotate-45 border-b-2 border-r-2 border-ink bg-sun" />
+        </div>
+      )}
 
       <svg
+        ref={svgRef}
         viewBox="0 0 280 300"
         xmlns="http://www.w3.org/2000/svg"
-        className={`w-full ${isCelebrating ? "mascot-celebrate" : ""}`}
+        className={`w-full animate-floaty`}
       >
         {/* Ground shadow */}
         <ellipse
@@ -548,31 +598,18 @@ export function BrailleMascot({
           <circle cx="99" cy="112" r="29" fill="#FFC93C" stroke="#5B4BDB" strokeWidth="5" />
           <circle cx="177" cy="112" r="29" fill="#FFC93C" stroke="#5B4BDB" strokeWidth="5" />
 
-          {isCelebrating ? (
-            <>
-              <circle cx="99" cy="112" r="18" fill="#1B1B3A" />
-              <circle cx="177" cy="112" r="18" fill="#1B1B3A" />
-              <path d="M89 108 L94 102 L99 108 L104 102 L109 108" fill="none" stroke="white" strokeWidth="4" strokeLinecap="round" />
-              <path d="M167 108 L172 102 L177 108 L182 102 L187 108" fill="none" stroke="white" strokeWidth="4" strokeLinecap="round" />
-            </>
-          ) : isThinking ? (
-            <>
-              <circle cx="105" cy="108" r="17" fill="#1B1B3A" />
-              <circle cx="183" cy="108" r="17" fill="#1B1B3A" />
-              <circle cx="111" cy="101" r="7" fill="white" />
-              <circle cx="189" cy="101" r="7" fill="white" />
-              <path d="M78 72 Q99 59 116 75 M162 75 Q180 59 198 72" fill="none" stroke="#1B1B3A" strokeWidth="5" strokeLinecap="round" />
-            </>
-          ) : (
-            <>
-              <circle cx="99" cy="112" r="19" fill="#1B1B3A" />
-              <circle cx="177" cy="112" r="19" fill="#1B1B3A" />
-              <circle cx="106" cy="104" r="8" fill="white" />
-              <circle cx="184" cy="104" r="8" fill="white" />
-            </>
-          )}
+          <g ref={leftEyeRef} style={{ willChange: "transform" }}>
+            <circle cx="99" cy="112" r="18" fill="#1B1B3A" />
+            <circle cx="105" cy="105" r="7.5" fill="white" />
+            <circle cx="92" cy="121" r="3.8" fill="#B9A9F5" />
+          </g>
+          <g ref={rightEyeRef} style={{ willChange: "transform" }}>
+            <circle cx="177" cy="112" r="18" fill="#1B1B3A" />
+            <circle cx="183" cy="105" r="7.5" fill="white" />
+            <circle cx="170" cy="121" r="3.8" fill="#B9A9F5" />
+          </g>
 
-          {/* Beak */}
+                    {/* Beak */}
           <path
             d="M126 126 L151 126 L139 145Z"
             fill="#FFB84D"
@@ -653,10 +690,29 @@ export function BrailleMascot({
 
           {/* Celebration sparkles */}
           {isCelebrating && (
-            <g className="mascot-sparkles" fill="#FFC93C" stroke="#1B1B3A" strokeWidth="2">
-              <path d="M39 75 L44 89 L58 94 L44 99 L39 113 L34 99 L20 94 L34 89Z" />
-              <path d="M235 75 L240 89 L254 94 L240 99 L235 113 L230 99 L216 94 L230 89Z" />
-              <path d="M137 9 L141 20 L152 24 L141 28 L137 39 L133 28 L122 24 L133 20Z" />
+            <g fill="#FFC93C" stroke="#1B1B3A" strokeWidth="2">
+              <g>
+                <path d="M39 75 L44 89 L58 94 L44 99 L39 113 L34 99 L20 94 L34 89Z" />
+                <animateTransform
+                  attributeName="transform"
+                  type="translate"
+                  values="0 0; -13 -17; -22 3; -8 20; 0 0"
+                  dur="2.8s"
+                  repeatCount="indefinite"
+                />
+              </g>
+              <g>
+                <path d="M235 75 L240 89 L254 94 L240 99 L235 113 L230 99 L216 94 L230 89Z" />
+                <animateTransform
+                  attributeName="transform"
+                  type="translate"
+                  values="0 0; 15 -14; 22 8; 7 19; 0 0"
+                  dur="3.5s"
+                  begin="-1s"
+                  repeatCount="indefinite"
+                />
+              </g>
+
             </g>
           )}
         </g>
