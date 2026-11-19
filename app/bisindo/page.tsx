@@ -23,15 +23,15 @@ const modes: { id: Mode; icon: Icon; label: string; desc: string }[] = [
 function NatureIllustration() {
   return (
     <div
-      className="nature-scene relative isolate h-52 overflow-hidden rounded-3xl border-4 border-ink bg-[#DDF3FF] sm:h-64"
+      className="nature-scene relative isolate h-40 overflow-hidden rounded-2xl sm:rounded-3xl border-2 sm:border-4 border-ink bg-[#DDF3FF] sm:h-64"
       aria-label="Ilustrasi ekosistem pesisir dan hutan tropis"
     >
       {/* Matahari */}
-      <div className="nature-sun absolute right-[13%] top-[12%] h-16 w-16 rounded-full border-4 border-ink bg-sun sm:h-20 sm:w-20" />
+      <div className="nature-sun absolute right-[13%] top-[12%] h-12 w-12 rounded-full border-2 sm:border-4 border-ink bg-sun sm:h-20 sm:w-20" />
 
       {/* Awan */}
-      <div className="cloud cloud-one absolute left-[13%] top-[18%] h-5 w-16 rounded-full bg-white sm:w-24" />
-      <div className="cloud cloud-two absolute left-[55%] top-[35%] h-4 w-12 rounded-full bg-white" />
+      <div className="cloud cloud-one absolute left-[13%] top-[18%] h-4 w-12 rounded-full bg-white sm:h-5 sm:w-24" />
+      <div className="cloud cloud-two absolute left-[55%] top-[35%] h-3 w-10 rounded-full bg-white sm:h-4 sm:w-12" />
 
       {/* Bukit / garis hutan */}
       <svg
@@ -101,20 +101,12 @@ function NatureIllustration() {
         />
       </svg>
 
-      {/* Daun dekoratif bergerak */}
-      <div className="floating-leaf absolute left-[38%] top-[15%] text-mint">
-        
-      </div>
-      <div className="floating-leaf leaf-delay absolute right-[32%] top-[12%] text-grape">
-        
-      </div>
-
-      <div className="absolute bottom-3 left-3 z-10 flex gap-2">
-        <span className="flex items-center gap-1 rounded-full border-2 border-ink bg-white px-3 py-1 text-[10px] font-bold sm:text-xs">
-           HUTAN
+      <div className="absolute bottom-2.5 left-2.5 z-10 flex gap-1.5 sm:gap-2">
+        <span className="flex items-center gap-1 rounded-full border-2 border-ink bg-white px-2.5 py-0.5 text-[9px] font-bold sm:px-3 sm:py-1 sm:text-xs">
+          HUTAN
         </span>
-        <span className="flex items-center gap-1 rounded-full border-2 border-ink bg-white px-3 py-1 text-[10px] font-bold sm:text-xs">
-           PESISIR
+        <span className="flex items-center gap-1 rounded-full border-2 border-ink bg-white px-2.5 py-0.5 text-[9px] font-bold sm:px-3 sm:py-1 sm:text-xs">
+          PESISIR
         </span>
       </div>
     </div>
@@ -231,33 +223,33 @@ export default function BisindoPage() {
             className="absolute -bottom-20 right-[30%] h-48 w-48 rounded-full border-4 border-white/10"
           />
 
-          <div className="relative z-10 grid items-center gap-8 lg:grid-cols-[1.1fr_0.9fr]">
+          <div className="relative z-10 grid items-center gap-6 sm:gap-8 lg:grid-cols-[1.1fr_0.9fr]">
             <div>
-              <span className="inline-flex items-center gap-2 rounded-full border-2 border-white/40 bg-white/15 px-4 py-2 text-xs font-bold tracking-wide">
-                <span className="h-2.5 w-2.5 animate-pulse rounded-full bg-sun" />
+              <span className="inline-flex items-center gap-2 rounded-full border-2 border-white/40 bg-white/15 px-3 py-1 sm:px-4 sm:py-2 text-[11px] sm:text-xs font-bold tracking-wide">
+                <span className="h-2 w-2 sm:h-2.5 sm:w-2.5 animate-pulse rounded-full bg-sun" />
                 SIGNIFY • INCLUSIVE LEARNING
               </span>
 
-              <h1 className="mt-5 text-4xl font-bold leading-tight sm:text-5xl">
+              <h1 className="mt-3 sm:mt-5 text-2xl font-bold leading-tight sm:text-4xl md:text-5xl">
                 Kenali BISINDO,
                 <span className="block text-sun">
                   Bangun Komunikasi Inklusif.
                 </span>
               </h1>
 
-              <p className="mt-4 max-w-xl text-base leading-tight text-white/85 sm:text-lg">
+              <p className="mt-2.5 sm:mt-4 max-w-xl text-xs leading-relaxed text-white/85 sm:text-base sm:leading-snug md:text-lg">
                 Pelajari alfabet dan kosakata BISINDO melalui referensi visual serta latihan pengenalan gestur berbasis AI. Mulai dari
                 langkah sederhana untuk membangun pemahaman komunikasi dengan komunitas Tuli.
               </p>
 
-              <div className="mt-6 flex flex-wrap gap-2">
-                <span className="rounded-full border-2 border-white/30 bg-white/10 px-3 py-2 text-xs font-bold">
+              <div className="mt-4 sm:mt-6 flex flex-wrap gap-1.5 sm:gap-2">
+                <span className="rounded-full border-2 border-white/30 bg-white/10 px-2.5 sm:px-3 py-1 sm:py-2 text-[10px] sm:text-xs font-bold">
                   26 Alfabet
                 </span>
-                <span className="rounded-full border-2 border-white/30 bg-white/10 px-3 py-2 text-xs font-bold">
+                <span className="rounded-full border-2 border-white/30 bg-white/10 px-2.5 sm:px-3 py-1 sm:py-2 text-[10px] sm:text-xs font-bold">
                   AI Gesture Practice
                 </span>
-                <span className="rounded-full border-2 border-white/30 bg-white/10 px-3 py-2 text-xs font-bold">
+                <span className="rounded-full border-2 border-white/30 bg-white/10 px-2.5 sm:px-3 py-1 sm:py-2 text-[10px] sm:text-xs font-bold">
                   Interactive Learning
                 </span>
               </div>
@@ -266,11 +258,11 @@ export default function BisindoPage() {
             {/* Hero illustration */}
             <div className="relative">
               <NatureIllustration />
-              <div className="absolute -right-2 -top-5 flex h-14 w-14 animate-floaty items-center justify-center rounded-2xl border-4 border-ink bg-mint text-ink shadow-popsm">
-                <BookOpen size={22} />
+              <div className="absolute -right-2 -top-3 sm:-top-5 flex h-10 w-10 sm:h-14 sm:w-14 animate-floaty items-center justify-center rounded-xl sm:rounded-2xl border-2 sm:border-4 border-ink bg-mint text-ink shadow-popsm">
+                <BookOpen size={18} className="sm:h-6 sm:w-6" />
               </div>
-              <div className="absolute -bottom-4 -left-3 flex h-12 w-12 animate-floaty items-center justify-center rounded-2xl border-4 border-ink bg-coral text-white shadow-popsm [animation-delay:0.8s]">
-                <Globe size={22} />
+              <div className="absolute -bottom-3 sm:-bottom-4 -left-2 sm:-left-3 flex h-9 w-9 sm:h-12 sm:w-12 animate-floaty items-center justify-center rounded-xl sm:rounded-2xl border-2 sm:border-4 border-ink bg-coral text-white shadow-popsm [animation-delay:0.8s]">
+                <Globe size={16} className="sm:h-6 sm:w-6" />
               </div>
             </div>
           </div>
@@ -279,29 +271,29 @@ export default function BisindoPage() {
 
       {/* LEARNING STATISTICS */}
       <Reveal>
-        <div className="mb-10 grid grid-cols-2 gap-3 sm:grid-cols-4">
-          <div className="card bg-grape p-4 text-white">
-            <p className="text-sm font-medium text-white/80">Alfabet</p>
-            <p className="mt-1 text-3xl font-bold">{allLetters.length}</p>
-            <p className="text-xs text-white/75">Huruf A–Z</p>
+        <div className="mb-6 sm:mb-10 grid grid-cols-2 gap-2.5 sm:gap-3 sm:grid-cols-4">
+          <div className="card bg-grape p-3 sm:p-4 text-white">
+            <p className="text-xs sm:text-sm font-medium text-white/80">Alfabet</p>
+            <p className="mt-0.5 sm:mt-1 text-2xl sm:text-3xl font-bold">{allLetters.length}</p>
+            <p className="text-[10px] sm:text-xs text-white/75">Huruf A–Z</p>
           </div>
 
-          <div className="card bg-sun p-4">
-            <p className="text-sm font-medium">Isyarat satu tangan</p>
-            <p className="mt-1 text-3xl font-bold">{oneHandCount}</p>
-            <p className="text-xs text-ink/70">Huruf</p>
+          <div className="card bg-sun p-3 sm:p-4">
+            <p className="text-xs sm:text-sm font-medium">Isyarat satu tangan</p>
+            <p className="mt-0.5 sm:mt-1 text-2xl sm:text-3xl font-bold">{oneHandCount}</p>
+            <p className="text-[10px] sm:text-xs text-ink/70">Huruf</p>
           </div>
 
-          <div className="card bg-mint p-4">
-            <p className="text-sm font-medium">Isyarat dua tangan</p>
-            <p className="mt-1 text-3xl font-bold">{twoHandCount}</p>
-            <p className="text-xs text-ink/70">Huruf</p>
+          <div className="card bg-mint p-3 sm:p-4">
+            <p className="text-xs sm:text-sm font-medium">Isyarat dua tangan</p>
+            <p className="mt-0.5 sm:mt-1 text-2xl sm:text-3xl font-bold">{twoHandCount}</p>
+            <p className="text-[10px] sm:text-xs text-ink/70">Huruf</p>
           </div>
 
-          <div className="card bg-white p-4">
-            <p className="text-sm font-medium">Sudah dipelajari</p>
-            <p className="mt-1 text-3xl font-bold">{learnedCount}</p>
-            <p className="text-xs text-ink/70">
+          <div className="card bg-white p-3 sm:p-4">
+            <p className="text-xs sm:text-sm font-medium">Sudah dipelajari</p>
+            <p className="mt-0.5 sm:mt-1 text-2xl sm:text-3xl font-bold">{learnedCount}</p>
+            <p className="text-[10px] sm:text-xs text-ink/70">
               Dari {allLetters.length} huruf
             </p>
           </div>
@@ -312,17 +304,17 @@ export default function BisindoPage() {
       <EnvironmentContext />
 
       {/* MODE SELECTOR */}
-      <section className="mb-8">
-        <div className="flex flex-wrap items-end justify-between gap-3">
+      <section className="mb-6 sm:mb-8">
+        <div className="flex flex-wrap items-end justify-between gap-2 sm:gap-3">
           <div>
-            <p className="text-xs font-bold uppercase tracking-wider">Ruang belajar</p>
-            <h2 className="font-display text-3xl font-bold">Pilih aktivitasmu!</h2>
+            <p className="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-ink/70">Ruang belajar</p>
+            <h2 className="font-display text-2xl sm:text-3xl font-bold">Pilih aktivitasmu!</h2>
           </div>
-          <span className="text-sm text-ink/70">Learning by doing</span>
+          <span className="text-xs sm:text-sm text-ink/70">Learning by doing</span>
         </div>
 
         <div
-          className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-3"
+          className="mt-3 sm:mt-4 grid grid-cols-1 gap-2.5 sm:gap-3 sm:grid-cols-3"
           role="tablist"
           aria-label="Mode BISINDO"
         >
@@ -333,17 +325,17 @@ export default function BisindoPage() {
               role="tab"
               aria-selected={mode === item.id}
               onClick={() => setMode(item.id)}
-              className={`btn min-h-20 text-left transition duration-200 hover:-translate-y-1 ${
+              className={`btn min-h-[56px] sm:min-h-20 text-left transition duration-200 hover:-translate-y-1 p-3 sm:p-4 ${
                 mode === item.id ? "bg-sun shadow-popsm" : "bg-white"
               }`}
             >
-              <div className="flex items-center gap-3.5 sm:gap-5">
-                <span className="text-2xl shrink-0">
-                  <item.icon className="h-7 w-7 sm:h-8 sm:w-8" />
+              <div className="flex items-center gap-3 sm:gap-5">
+                <span className="text-xl sm:text-2xl">
+                  <item.icon className="h-6 w-6 sm:h-8 sm:w-8" />
                 </span>
-                <div className="flex flex-col min-w-0">
-                  <span className="block text-base sm:text-lg font-bold">{item.label}</span>
-                  <span className="block text-xs font-medium text-ink/75">{item.desc}</span>
+                <div className="flex flex-col">
+                  <span className="block text-sm sm:text-lg font-bold">{item.label}</span>
+                  <span className="block text-[11px] sm:text-xs font-medium">{item.desc}</span>
                 </div>
               </div>
             </button>
@@ -369,7 +361,7 @@ export default function BisindoPage() {
       {mode === "learn" && (
       <div className="grid gap-8 lg:grid-cols-[1fr_1fr]">
         {/* LEFT COLUMN */}
-        <div className="order-2 lg:order-1 space-y-5">
+        <div className="space-y-5">
           <div className="mb-2">
             <div className="flex items-center gap-2">
               <BookOpen className="h-5 w-5" />
@@ -428,7 +420,7 @@ export default function BisindoPage() {
                           aria-label={`Huruf ${l}, ${handsOf(l)} tangan${
                             learned.includes(l) ? ", sudah dipelajari" : ""
                           }`}
-                          className={`relative flex h-16 w-16 items-center justify-center rounded-2xl border-4 border-ink font-display text-2xl font-bold transition hover:-translate-y-1 ${
+                          className={`relative flex h-12 w-12 sm:h-16 sm:w-16 items-center justify-center rounded-xl sm:rounded-2xl border-2 sm:border-4 border-ink font-display text-lg sm:text-2xl font-bold transition hover:-translate-y-1 ${
                             sel === l ? "bg-ink text-white" : "bg-white"
                           }`}
                         >
@@ -528,7 +520,7 @@ export default function BisindoPage() {
         </div>
 
         {/* RIGHT COLUMN: REFERENCE AND CAMERA (kompak agar Step 1 & 2 terlihat tanpa scroll) */}
-        <div className="order-1 lg:order-2 space-y-3 lg:sticky lg:top-20 lg:self-start">
+        <div className="space-y-3 lg:sticky lg:top-20 lg:self-start">
           {selectedWord ? (
             <>
               <StepHeader step="01" title="Kenali Kosakata" />

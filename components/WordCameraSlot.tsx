@@ -397,32 +397,32 @@ export default function WordCameraSlot({ word }: WordCameraSlotProps) {
 
   if (mode === "idle") {
     return (
-      <div className="card space-y-4 bg-ink p-6 text-white">
+      <div className="card space-y-3 sm:space-y-4 bg-ink p-3.5 sm:p-6 text-white">
         <div className="text-center">
-          <p className="font-display text-xl font-bold">Area kamera untuk kata {word.title}</p>
-          <p className="mt-1 text-sm text-white/80">
+          <p className="font-display text-lg sm:text-xl font-bold">Area kamera untuk kata {word.title}</p>
+          <p className="mt-1 text-xs sm:text-sm text-white/80">
             Video diproses di perangkatmu dan tidak dikirim ke server mana pun.
           </p>
         </div>
 
-        <div className="flex flex-col sm:flex-row flex-wrap items-stretch sm:items-center justify-center gap-3 w-full sm:w-auto">
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-3">
           <button
             type="button"
             onClick={() => switchMode("webcam")}
-            className="btn min-h-[44px] w-full sm:w-auto justify-center bg-sun text-ink"
+            className="btn w-full sm:w-auto min-h-[42px] sm:min-h-[44px] bg-sun text-ink text-xs sm:text-base py-2.5 sm:py-3"
           >
             Gunakan Kamera
           </button>
           <button
             type="button"
             onClick={() => switchMode("simulation")}
-            className="btn min-h-[44px] w-full sm:w-auto justify-center bg-white text-ink"
+            className="btn w-full sm:w-auto min-h-[42px] sm:min-h-[44px] bg-white text-ink text-xs sm:text-base py-2.5 sm:py-3"
           >
             Gunakan Video Simulasi
           </button>
         </div>
 
-        <p className="text-center text-xs text-white/75">
+        <p className="text-center text-[11px] sm:text-xs text-white/75">
           Di mode kamera, tekan Rekam Gerakan selama 2,5 detik. Di mode simulasi, aplikasi menampilkan animasi rangka tangan dan tubuh bagian atas tanpa foto wajah.
         </p>
       </div>
@@ -430,7 +430,7 @@ export default function WordCameraSlot({ word }: WordCameraSlotProps) {
   }
 
   return (
-    <div className="card space-y-4 bg-white p-4 sm:p-5">
+    <div className="card space-y-3 sm:space-y-4 bg-white p-3.5 sm:p-5">
       <div className="flex flex-wrap items-center justify-between gap-2">
         <div className="flex flex-wrap items-center gap-2">
           <span className="rounded-lg border-2 border-ink bg-sun px-2.5 py-1 text-xs font-bold text-ink">

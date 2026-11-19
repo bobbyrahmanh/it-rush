@@ -138,7 +138,7 @@ export default function Navbar() {
       {open && (
         <div
           id="menu-mobile"
-          className="animate-pagein space-y-3 border-t-4 border-ink bg-white p-4 md:hidden"
+          className="animate-pagein space-y-3 border-t-4 border-ink bg-white p-4 md:hidden max-h-[calc(100svh-70px)] overflow-y-auto"
         >
           <ul className="grid gap-2">
             {LINKS.map((l) => (

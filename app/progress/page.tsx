@@ -61,13 +61,13 @@ function MasteryGrid({ title, learned }: { title: string; learned: string[] }) {
     <section className="card bg-white p-4 sm:p-6">
       <div className="flex flex-wrap items-center justify-between gap-2">
         <h2 className="text-xl sm:text-2xl font-bold">{title}</h2>
-        <span className="rounded-full border-2 border-ink bg-mint px-2.5 py-0.5 sm:px-3 sm:py-1 text-xs font-bold text-ink">
+        <span className="rounded-full border-2 border-ink bg-mint px-2.5 sm:px-3 py-0.5 sm:py-1 text-[11px] sm:text-xs font-bold text-ink">
           {learned.length}/26 dikuasai
         </span>
       </div>
       <ul
-        className="mt-4 grid gap-1.5 sm:gap-2"
-        style={{ gridTemplateColumns: "repeat(auto-fill, minmax(38px, 1fr))" }}
+        className="mt-3 sm:mt-4 grid gap-1.5 sm:gap-2"
+        style={{ gridTemplateColumns: "repeat(auto-fill, minmax(36px, 1fr))" }}
       >
         {LETTERS.map((l) => {
           const isDone = learned.includes(l);
@@ -75,7 +75,7 @@ function MasteryGrid({ title, learned }: { title: string; learned: string[] }) {
             <li
               key={l}
               aria-label={`Huruf ${l}: ${isDone ? "sudah dipelajari" : "belum dipelajari"}`}
-              className={`flex h-10 sm:h-11 items-center justify-center rounded-xl border-2 border-ink font-display text-sm sm:text-base font-bold ${
+              className={`flex h-9 sm:h-11 items-center justify-center rounded-lg sm:rounded-xl border-2 border-ink font-display text-xs sm:text-base font-bold ${
                 isDone ? "bg-mint text-ink" : "bg-paper text-ink/70"
               }`}
             >

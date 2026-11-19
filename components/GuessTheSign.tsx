@@ -147,32 +147,32 @@ export default function GuessTheSign() {
         </h3>
 
         {done ? (
-          <div className="flex aspect-square w-full max-w-sm flex-col items-center justify-center rounded-2xl border-4 border-ink bg-white p-6 text-center">
-            <Award className="h-16 w-16 text-grape" aria-hidden="true" />
-            <p className="mt-3 text-sm font-semibold">Skor akhirmu</p>
-            <p className="font-display text-6xl font-bold">
+          <div className="flex aspect-square w-full max-w-[200px] sm:max-w-sm flex-col items-center justify-center rounded-2xl border-2 sm:border-4 border-ink bg-white p-4 sm:p-6 text-center">
+            <Award className="h-10 w-10 sm:h-16 sm:w-16 text-grape" aria-hidden="true" />
+            <p className="mt-2 sm:mt-3 text-xs sm:text-sm font-semibold">Skor akhirmu</p>
+            <p className="font-display text-4xl sm:text-6xl font-bold">
               {score}/{TOTAL}
             </p>
           </div>
         ) : (
-          <div className="relative w-full max-w-sm">
+          <div className="relative w-full max-w-[180px] sm:max-w-sm">
             <img
               key={current.answer}
               src={`/images/bisindo/${current.answer}.webp`}
               alt="Isyarat tangan BISINDO yang harus ditebak"
-              className="animate-pop aspect-square w-full rounded-2xl border-4 border-ink bg-sun/20 object-cover"
+              className="animate-pop aspect-square w-full rounded-xl sm:rounded-2xl border-2 sm:border-4 border-ink bg-sun/20 object-cover"
             />
             {picked && (
               <span
-                className={`absolute right-3 top-3 flex h-12 w-12 items-center justify-center rounded-full border-4 border-ink ${
+                className={`absolute right-2 top-2 sm:right-3 sm:top-3 flex h-8 w-8 sm:h-12 sm:w-12 items-center justify-center rounded-full border-2 sm:border-4 border-ink ${
                   picked === current.answer ? "bg-mint" : "bg-coral text-white"
                 }`}
                 aria-hidden="true"
               >
                 {picked === current.answer ? (
-                  <Check className="h-6 w-6" />
+                  <Check className="h-4 w-4 sm:h-6 sm:w-6" />
                 ) : (
-                  <X className="h-6 w-6" />
+                  <X className="h-4 w-4 sm:h-6 sm:w-6" />
                 )}
               </span>
             )}
@@ -180,36 +180,36 @@ export default function GuessTheSign() {
         )}
 
         {!done && (
-          <p className="mt-4 max-w-xs text-center text-xs leading-relaxed">
+          <p className="mt-2.5 sm:mt-4 max-w-xs text-center text-[11px] sm:text-xs leading-relaxed text-ink/75">
             Amati bentuk tangan pada gambar, lalu pilih huruf yang sesuai.
           </p>
         )}
       </div>
 
       {/* KANAN: PERTANYAAN & PILIHAN */}
-      <div className="card bg-sun p-5" aria-live="polite">
+      <div className="card bg-sun p-4 sm:p-5" aria-live="polite">
         {done ? (
           <>
-            <h3 className="text-2xl font-bold">Ronde selesai! 🎉</h3>
-            <p className="mt-2">
+            <h3 className="text-xl sm:text-2xl font-bold">Ronde selesai! 🎉</h3>
+            <p className="mt-1.5 sm:mt-2 text-sm">
               Kamu menjawab benar {score} dari {TOTAL} soal.
             </p>
             {newBest && (
-              <p className="mt-2 inline-block rounded-full border-2 border-ink bg-mint px-3 py-1 text-sm font-bold">
+              <p className="mt-2 inline-block rounded-full border-2 border-ink bg-mint px-3 py-1 text-xs sm:text-sm font-bold">
                 Skor terbaik baru!
               </p>
             )}
-            <p className="mt-2 text-sm">+{XP_REWARD} XP berhasil ditambahkan.</p>
-            <p className="text-sm">
+            <p className="mt-1.5 sm:mt-2 text-xs sm:text-sm">+{XP_REWARD} XP berhasil ditambahkan.</p>
+            <p className="text-xs sm:text-sm">
               Skor terbaik: {Math.max(bestScore, Math.round((score / TOTAL) * 100))}%
             </p>
-            <button onClick={startRound} className="btn mt-4 bg-white">
-              <RotateCcw className="h-5 w-5" /> Main lagi
+            <button onClick={startRound} className="btn mt-3 sm:mt-4 bg-white text-xs sm:text-base">
+              <RotateCcw className="h-4 w-4 sm:h-5 sm:w-5" /> Main lagi
             </button>
           </>
         ) : (
           <>
-            <div className="flex flex-wrap justify-between gap-2 text-sm font-bold">
+            <div className="flex flex-wrap justify-between gap-2 text-xs sm:text-sm font-bold">
               <span>
                 Soal {index + 1}/{TOTAL}
               </span>
@@ -218,7 +218,7 @@ export default function GuessTheSign() {
             </div>
 
             <div
-              className="mt-3 h-3 overflow-hidden rounded-full border-2 border-ink bg-white"
+              className="mt-2 sm:mt-3 h-2.5 sm:h-3 overflow-hidden rounded-full border-2 border-ink bg-white"
               role="progressbar"
               aria-valuemin={0}
               aria-valuemax={100}
@@ -231,12 +231,12 @@ export default function GuessTheSign() {
               />
             </div>
 
-            <h3 className="mt-5 text-3xl font-bold">Huruf apakah ini?</h3>
-            <p className="mt-1 text-sm">
+            <h3 className="mt-3 sm:mt-5 text-xl sm:text-3xl font-bold">Huruf apakah ini?</h3>
+            <p className="mt-0.5 sm:mt-1 text-xs sm:text-sm">
               Isyarat ini memakai {handsOf(current.answer)} tangan.
             </p>
 
-            <div className="mt-4 grid grid-cols-2 gap-3">
+            <div className="mt-3 sm:mt-4 grid grid-cols-2 gap-2 sm:gap-3">
               {current.choices.map((c, i) => {
                 const isAnswer = c === current.answer;
                 const isPicked = picked === c;
@@ -252,11 +252,11 @@ export default function GuessTheSign() {
                     disabled={Boolean(picked)}
                     onClick={() => answer(c)}
                     aria-label={`Pilihan ${i + 1}: huruf ${c}`}
-                    className={`btn font-display text-3xl hover:-translate-y-1 disabled:opacity-100 ${state}`}
+                    className={`btn min-h-[46px] sm:min-h-[56px] font-display text-xl sm:text-3xl hover:-translate-y-1 disabled:opacity-100 ${state}`}
                   >
                     {c}
-                    {picked && isAnswer && <Check className="h-5 w-5" aria-hidden="true" />}
-                    {picked && isPicked && !isAnswer && <X className="h-5 w-5" aria-hidden="true" />}
+                    {picked && isAnswer && <Check className="h-4 w-4 sm:h-5 sm:w-5" aria-hidden="true" />}
+                    {picked && isPicked && !isAnswer && <X className="h-4 w-4 sm:h-5 sm:w-5" aria-hidden="true" />}
                   </button>
                 );
               })}

@@ -39,26 +39,26 @@ export default function SignGallery() {
   ];
 
   return (
-    <div className="space-y-5">
-      <div className="card bg-white p-5">
-        <div className="flex flex-wrap items-end justify-between gap-3">
+    <div className="space-y-4 sm:space-y-5">
+      <div className="card bg-white p-3.5 sm:p-5">
+        <div className="flex flex-wrap items-end justify-between gap-2 sm:gap-3">
           <div>
-            <span className="text-xs font-bold tracking-wider text-grape">
+            <span className="text-[10px] sm:text-xs font-bold tracking-wider text-grape">
               LIHAT &amp; PELAJARI
             </span>
-            <h3 className="mt-1 text-2xl font-bold">Alfabet Isyarat BISINDO</h3>
-            <p className="mt-1 text-sm leading-relaxed text-ink/70">
+            <h3 className="mt-0.5 sm:mt-1 text-xl sm:text-2xl font-bold">Alfabet Isyarat BISINDO</h3>
+            <p className="mt-1 text-xs sm:text-sm leading-relaxed text-ink/70">
               Amati bentuk tangan pada setiap gambar beserta huruf yang
               diwakilinya. Tekan tombol suara untuk mendengar nama hurufnya.
             </p>
           </div>
-          <span className="rounded-full border-2 border-ink bg-mint px-3 py-1 text-xs font-bold">
+          <span className="rounded-full border-2 border-ink bg-mint px-2.5 sm:px-3 py-0.5 sm:py-1 text-[11px] sm:text-xs font-bold">
             {letters.length} huruf
           </span>
         </div>
 
         <div
-          className="mt-4 flex flex-wrap gap-2"
+          className="mt-3 sm:mt-4 flex flex-wrap gap-1.5 sm:gap-2"
           role="group"
           aria-label="Filter unit alfabet"
         >
@@ -68,7 +68,7 @@ export default function SignGallery() {
               type="button"
               onClick={() => setFilter(f.id)}
               aria-pressed={filter === f.id}
-              className={`min-h-[44px] rounded-xl border-2 border-ink px-3.5 py-2 text-sm font-bold shadow-[3px_3px_0px_#1B1B3A] transition hover:-translate-y-0.5 active:translate-x-[1px] active:translate-y-[1px] ${
+              className={`min-h-[38px] sm:min-h-[44px] rounded-lg sm:rounded-xl border-2 border-ink px-2.5 sm:px-3.5 py-1.5 sm:py-2 text-xs sm:text-sm font-bold shadow-[2px_2px_0px_#1B1B3A] sm:shadow-[3px_3px_0px_#1B1B3A] transition hover:-translate-y-0.5 active:translate-x-[1px] active:translate-y-[1px] ${
                 filter === f.id ? "bg-ink text-white" : "bg-white text-ink"
               }`}
             >
@@ -78,37 +78,37 @@ export default function SignGallery() {
         </div>
       </div>
 
-      <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      <ul className="grid gap-3 sm:gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {letters.map((l) => {
           const isLearned = learned.includes(l);
           return (
             <li key={l}>
               <article
-                className="card flex h-full items-center gap-4 bg-white p-4"
+                className="card flex h-full items-center gap-3 sm:gap-4 bg-white p-3 sm:p-4"
                 aria-label={`Isyarat huruf ${l}`}
               >
                 <img
                   src={`/images/bisindo/${l}.webp`}
                   alt={`Contoh pose tangan huruf BISINDO ${l}`}
                   loading="lazy"
-                  className="h-28 w-28 shrink-0 rounded-2xl border-4 border-ink bg-sun/20 object-cover sm:h-32 sm:w-32"
+                  className="h-20 w-20 sm:h-32 sm:w-32 shrink-0 rounded-xl sm:rounded-2xl border-2 sm:border-4 border-ink bg-sun/20 object-cover"
                 />
 
-                <div className="flex min-w-0 flex-1 flex-col items-start gap-2">
+                <div className="flex min-w-0 flex-1 flex-col items-start gap-1.5 sm:gap-2">
                   <span
-                    className={`flex h-16 w-16 items-center justify-center rounded-2xl border-4 border-ink font-display text-4xl font-bold ${
+                    className={`flex h-12 w-12 sm:h-16 sm:w-16 items-center justify-center rounded-xl sm:rounded-2xl border-2 sm:border-4 border-ink font-display text-2xl sm:text-4xl font-bold ${
                       UNIT_BG[unitOf(l)]
                     }`}
                   >
                     {l}
                   </span>
 
-                  <span className="rounded-full border-2 border-ink bg-white px-3 py-1 text-xs font-semibold">
+                  <span className="rounded-full border border-ink sm:border-2 bg-white px-2.5 sm:px-3 py-0.5 sm:py-1 text-[10px] sm:text-xs font-semibold">
                     {handsOf(l)} Tangan
                   </span>
 
                   {isLearned && (
-                    <span className="inline-flex items-center gap-1 rounded-full border-2 border-ink bg-mint px-3 py-1 text-xs font-semibold">
+                    <span className="inline-flex items-center gap-1 rounded-full border border-ink sm:border-2 bg-mint px-2.5 sm:px-3 py-0.5 sm:py-1 text-[10px] sm:text-xs font-semibold">
                       <Check className="h-3 w-3" aria-hidden="true" /> Dipelajari
                     </span>
                   )}
@@ -117,9 +117,9 @@ export default function SignGallery() {
                     type="button"
                     onClick={() => speak(l, audio)}
                     aria-label={`Dengarkan huruf ${l}`}
-                    className="btn !min-h-[40px] !px-3 bg-sun"
+                    className="btn !min-h-[36px] sm:!min-h-[40px] !px-2.5 sm:!px-3 bg-sun text-xs"
                   >
-                    <Volume2 className="h-4 w-4" />
+                    <Volume2 className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
                   </button>
                 </div>
               </article>

@@ -124,56 +124,56 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="mx-auto max-w-6xl px-4 py-8 sm:py-12">
-      <div className="grid items-start gap-8 lg:grid-cols-[1.05fr_0.95fr]">
+    <div className="mx-auto max-w-6xl px-3 sm:px-4 py-5 sm:py-12">
+      <div className="grid items-start gap-5 sm:gap-8 lg:grid-cols-[1.05fr_0.95fr]">
         {/* Kolom Kiri: Penjelasan Hybrid Auth & Panel Akun Demo Juri */}
-        <section className="order-2 lg:order-1 space-y-6">
-          <div className="card bg-grape p-5 sm:p-8 text-white">
+        <section className="space-y-4 sm:space-y-6">
+          <div className="card bg-grape p-4 text-white sm:p-8">
             <h1 className="font-display text-2xl font-bold leading-tight sm:text-4xl">
               Simpan Perjalanan Belajarmu dan Buka Fitur Personalisasi
             </h1>
-            <p className="mt-3 text-sm leading-relaxed text-white/90 sm:text-base">
+            <p className="mt-2 sm:mt-3 text-sm leading-relaxed text-white/90 sm:text-base">
               Seluruh materi BISINDO dan simulator Braille di SIGNIFY dapat
               dimainkan langsung sebagai Tamu. Dengan masuk ke akun, kamu
               membuka fitur personalisasi penuh yang tersimpan di akunmu.
             </p>
 
-            <ul className="mt-6 grid gap-3 sm:grid-cols-2">
-              <li className="flex items-start gap-3 rounded-2xl border-2 border-white/30 bg-white/10 p-3 sm:p-3.5">
-                <Zap className="mt-0.5 h-5 w-5 shrink-0 text-sun" aria-hidden="true" />
+            <ul className="mt-4 sm:mt-6 grid gap-2 sm:gap-3 sm:grid-cols-2">
+              <li className="flex items-start gap-2.5 sm:gap-3 rounded-xl sm:rounded-2xl border-2 border-white/30 bg-white/10 p-2.5 sm:p-3.5">
+                <Zap className="mt-0.5 h-4 w-4 sm:h-5 sm:w-5 shrink-0 text-sun" aria-hidden="true" />
                 <div>
-                  <p className="font-bold text-sm sm:text-base">Streak Belajar Harian</p>
-                  <p className="mt-0.5 text-xs leading-relaxed text-white/85">
+                  <p className="text-xs sm:text-sm font-bold">Streak Belajar Harian</p>
+                  <p className="mt-0.5 text-[11px] sm:text-xs leading-relaxed text-white/85">
                     Catat konsistensi latihan harianmu setiap menyelesaikan
                     huruf atau kuis.
                   </p>
                 </div>
               </li>
-              <li className="flex items-start gap-3 rounded-2xl border-2 border-white/30 bg-white/10 p-3 sm:p-3.5">
-                <Award className="mt-0.5 h-5 w-5 shrink-0 text-mint" aria-hidden="true" />
+              <li className="flex items-start gap-2.5 sm:gap-3 rounded-xl sm:rounded-2xl border-2 border-white/30 bg-white/10 p-2.5 sm:p-3.5">
+                <Award className="mt-0.5 h-4 w-4 sm:h-5 sm:w-5 shrink-0 text-mint" aria-hidden="true" />
                 <div>
-                  <p className="font-bold text-sm sm:text-base">8 Badge Pencapaian</p>
-                  <p className="mt-0.5 text-xs leading-relaxed text-white/85">
+                  <p className="text-xs sm:text-sm font-bold">8 Badge Pencapaian</p>
+                  <p className="mt-0.5 text-[11px] sm:text-xs leading-relaxed text-white/85">
                     Kumpulkan lencana mulai dari Langkah Pertama hingga Duta
                     Inklusif.
                   </p>
                 </div>
               </li>
-              <li className="flex items-start gap-3 rounded-2xl border-2 border-white/30 bg-white/10 p-3 sm:p-3.5">
-                <Users className="mt-0.5 h-5 w-5 shrink-0 text-sun" aria-hidden="true" />
+              <li className="flex items-start gap-2.5 sm:gap-3 rounded-xl sm:rounded-2xl border-2 border-white/30 bg-white/10 p-2.5 sm:p-3.5">
+                <Users className="mt-0.5 h-4 w-4 sm:h-5 sm:w-5 shrink-0 text-sun" aria-hidden="true" />
                 <div>
-                  <p className="font-bold text-sm sm:text-base">Papan Peringkat</p>
-                  <p className="mt-0.5 text-xs leading-relaxed text-white/85">
+                  <p className="text-xs sm:text-sm font-bold">Papan Peringkat</p>
+                  <p className="mt-0.5 text-[11px] sm:text-xs leading-relaxed text-white/85">
                     Lihat posisimu di antara pembelajar lain berdasarkan XP dan
                     Streak.
                   </p>
                 </div>
               </li>
-              <li className="flex items-start gap-3 rounded-2xl border-2 border-white/30 bg-white/10 p-3 sm:p-3.5">
-                <Shield className="mt-0.5 h-5 w-5 shrink-0 text-mint" aria-hidden="true" />
+              <li className="flex items-start gap-2.5 sm:gap-3 rounded-xl sm:rounded-2xl border-2 border-white/30 bg-white/10 p-2.5 sm:p-3.5">
+                <Shield className="mt-0.5 h-4 w-4 sm:h-5 sm:w-5 shrink-0 text-mint" aria-hidden="true" />
                 <div>
-                  <p className="font-bold text-sm sm:text-base">Gabung Progres Tamu</p>
-                  <p className="mt-0.5 text-xs leading-relaxed text-white/85">
+                  <p className="text-xs sm:text-sm font-bold">Gabung Progres Tamu</p>
+                  <p className="mt-0.5 text-[11px] sm:text-xs leading-relaxed text-white/85">
                     Huruf yang sudah kamu pelajari sebagai Tamu otomatis
                     digabungkan saat masuk.
                   </p>
@@ -183,10 +183,10 @@ export default function LoginPage() {
           </div>
 
           {/* Kartu Akun Demo Juri IT RUSH 2026 */}
-          <div className="card bg-sun p-5 sm:p-6 text-ink">
+          <div className="card bg-sun p-4 sm:p-6 text-ink">
             <div className="flex items-start justify-between gap-3">
               <div>
-                <p className="text-xs font-bold uppercase tracking-wider text-ink/80">
+                <p className="text-[11px] sm:text-xs font-bold uppercase tracking-wider text-ink/80">
                   Akses Penilaian Cepat (IT RUSH 2026)
                 </p>
                 <h2 className="mt-1 font-display text-xl font-bold sm:text-2xl">
@@ -196,7 +196,7 @@ export default function LoginPage() {
               <UserCheck className="h-6 w-6 sm:h-7 sm:w-7 shrink-0 text-ink" aria-hidden="true" />
             </div>
 
-            <p className="mt-2 text-xs leading-relaxed text-ink/90 sm:text-sm">
+            <p className="mt-2 text-xs sm:text-sm leading-relaxed text-ink/90">
               Untuk memudahkan pengujian fitur personalisasi tanpa perlu mengetik
               formulir pendaftaran, gunakan tombol di bawah ini. Sistem akan
               langsung mengaktifkan akun demo yang sudah memiliki contoh
@@ -204,9 +204,9 @@ export default function LoginPage() {
               Leaderboard.
             </p>
 
-            <div className="mt-4 rounded-2xl border-2 border-ink bg-white/85 p-3 text-xs">
+            <div className="mt-3 sm:mt-4 rounded-xl sm:rounded-2xl border-2 border-ink bg-white/85 p-2.5 sm:p-3 text-[11px] sm:text-xs">
               <p className="font-bold">Kredensial Demo (Jika Masuk Manual):</p>
-              <p className="mt-1 break-words">
+              <p className="mt-1">
                 Email: <code className="font-bold">juri.demo@signify.id</code> |
                 Sandi: <code className="font-bold">SignifyItRush2026!</code>
               </p>
@@ -216,40 +216,39 @@ export default function LoginPage() {
               type="button"
               onClick={handleJudgeDemo}
               disabled={submitting}
-              className="btn mt-4 w-full bg-ink text-white hover:bg-grape disabled:opacity-60 text-sm sm:text-base"
+              className="btn mt-3 sm:mt-4 w-full bg-ink text-white hover:bg-grape disabled:opacity-60 text-xs sm:text-base py-2.5 sm:py-3"
             >
-              <UserCheck className="h-5 w-5" aria-hidden="true" />
+              <UserCheck className="h-4 w-4 sm:h-5 sm:w-5" aria-hidden="true" />
               {submitting ? "Mengaktifkan Akun Demo..." : "Masuk Instan: Akun Demo Juri (1-Klik)"}
             </button>
           </div>
         </section>
 
         {/* Kolom Kanan: Maskot Interaktif Owli & Form Login / Register */}
-        <section className="order-1 lg:order-2 card bg-white p-4 sm:p-8">
+        <section className="card bg-white p-4 sm:p-8">
           {isAuthenticated && data.auth.user ? (
-            <div className="py-8 text-center" role="status" aria-live="polite">
-              <CheckCircle className="mx-auto h-12 w-12 text-ink" aria-hidden="true" />
-              <p className="mt-3 font-display text-2xl font-bold text-ink">
+            <div className="py-6 sm:py-8 text-center" role="status" aria-live="polite">
+              <CheckCircle className="mx-auto h-10 w-10 sm:h-12 sm:w-12 text-ink" aria-hidden="true" />
+              <p className="mt-3 font-display text-xl sm:text-2xl font-bold text-ink">
                 Berhasil masuk sebagai {data.auth.user.displayName}
               </p>
-              <p className="mt-1 text-sm font-semibold text-ink/75">
+              <p className="mt-1 text-xs sm:text-sm font-semibold text-ink/75">
                 Mengalihkan langsung ke halaman Progres Saya...
               </p>
             </div>
           ) : (
             <>
               {/* Maskot Owli yang merespons kursor, ketikan huruf, dan kata sandi */}
-              <div className="mb-4 flex justify-center rounded-2xl border-2 border-ink bg-paper pt-3 pb-1">
+              <div className="mb-3 sm:mb-4 rounded-xl sm:rounded-2xl border-2 border-ink bg-paper pt-2 sm:pt-3 pb-1 max-w-[200px] sm:max-w-none mx-auto">
                 <AuthMascot
                   pose={mascotPose}
                   mode={tab}
                   typingTarget={typingTarget}
-                  className="max-w-[240px] sm:max-w-none"
                 />
               </div>
 
               <div
-                className="grid grid-cols-2 gap-2 rounded-2xl border-2 border-ink bg-paper p-1.5"
+                className="grid grid-cols-2 gap-1.5 sm:gap-2 rounded-xl sm:rounded-2xl border-2 border-ink bg-paper p-1 sm:p-1.5"
                 role="tablist"
                 aria-label="Pilih mode autentikasi"
               >
@@ -261,11 +260,11 @@ export default function LoginPage() {
                     setTab("login");
                     setErrorMessage(null);
                   }}
-                  className={`flex min-h-[44px] items-center justify-center gap-2 rounded-xl font-display font-bold transition ${
+                  className={`flex min-h-[40px] sm:min-h-[44px] items-center justify-center gap-1.5 sm:gap-2 rounded-lg sm:rounded-xl font-display text-xs sm:text-sm font-bold transition ${
                     tab === "login" ? "bg-ink text-white" : "text-ink hover:bg-sun/50"
                   }`}
                 >
-                  <LogIn className="h-4 w-4" aria-hidden="true" />
+                  <LogIn className="h-3.5 w-3.5 sm:h-4 sm:w-4" aria-hidden="true" />
                   Masuk Akun
                 </button>
                 <button
@@ -276,18 +275,18 @@ export default function LoginPage() {
                     setTab("register");
                     setErrorMessage(null);
                   }}
-                  className={`flex min-h-[44px] items-center justify-center gap-2 rounded-xl font-display font-bold transition ${
+                  className={`flex min-h-[40px] sm:min-h-[44px] items-center justify-center gap-1.5 sm:gap-2 rounded-lg sm:rounded-xl font-display text-xs sm:text-sm font-bold transition ${
                     tab === "register" ? "bg-ink text-white" : "text-ink hover:bg-sun/50"
                   }`}
                 >
-                  <UserPlus className="h-4 w-4" aria-hidden="true" />
+                  <UserPlus className="h-3.5 w-3.5 sm:h-4 sm:w-4" aria-hidden="true" />
                   Daftar Baru
                 </button>
               </div>
 
               {guestLearnedCount > 0 && (
-                <div className="mt-4 flex items-start gap-2.5 rounded-2xl border-2 border-ink bg-sky p-3.5 text-xs text-ink">
-                  <CheckCircle className="mt-0.5 h-4 w-4 shrink-0" aria-hidden="true" />
+                <div className="mt-3 sm:mt-4 flex items-start gap-2 sm:gap-2.5 rounded-xl sm:rounded-2xl border-2 border-ink bg-sky p-3 sm:p-3.5 text-xs text-ink">
+                  <CheckCircle className="mt-0.5 h-3.5 w-3.5 sm:h-4 sm:w-4 shrink-0" aria-hidden="true" />
                   <p>
                     Kamu sudah mempelajari{" "}
                     <strong>{guestLearnedCount} materi</strong> pada sesi Tamu
@@ -297,12 +296,12 @@ export default function LoginPage() {
                 </div>
               )}
 
-              <form onSubmit={handleSubmit} className="mt-5 space-y-4" noValidate>
+              <form onSubmit={handleSubmit} className="mt-4 sm:mt-5 space-y-3 sm:space-y-4" noValidate>
                 {tab === "register" && (
                   <div>
                     <label
                       htmlFor="auth-display-name"
-                      className="block text-sm font-bold text-ink"
+                      className="block text-xs sm:text-sm font-bold text-ink"
                     >
                       Nama Tampilan
                     </label>
@@ -323,7 +322,7 @@ export default function LoginPage() {
                         updateTypingGaze("name", e.currentTarget);
                       }}
                       placeholder="Nama panggilan Anda"
-                      className="mt-1.5 min-h-[48px] w-full rounded-xl border-2 border-ink bg-paper px-4 py-2.5 font-semibold text-ink outline-none focus:bg-white focus:ring-4 focus:ring-grape/30"
+                      className="mt-1 min-h-[42px] sm:min-h-[48px] w-full rounded-xl border-2 border-ink bg-paper px-3 sm:px-4 py-2 sm:py-2.5 text-xs sm:text-sm font-semibold text-ink outline-none focus:bg-white focus:ring-4 focus:ring-grape/30"
                     />
                   </div>
                 )}
@@ -331,7 +330,7 @@ export default function LoginPage() {
                 <div>
                   <label
                     htmlFor="auth-email"
-                    className="block text-sm font-bold text-ink"
+                    className="block text-xs sm:text-sm font-bold text-ink"
                   >
                     Alamat Email
                   </label>
@@ -352,18 +351,18 @@ export default function LoginPage() {
                       updateTypingGaze("email", e.currentTarget);
                     }}
                     placeholder="nama@email.com"
-                    className="mt-1.5 min-h-[48px] w-full rounded-xl border-2 border-ink bg-paper px-4 py-2.5 font-semibold text-ink outline-none focus:bg-white focus:ring-4 focus:ring-grape/30"
+                    className="mt-1 min-h-[42px] sm:min-h-[48px] w-full rounded-xl border-2 border-ink bg-paper px-3 sm:px-4 py-2 sm:py-2.5 text-xs sm:text-sm font-semibold text-ink outline-none focus:bg-white focus:ring-4 focus:ring-grape/30"
                   />
                 </div>
 
                 <div>
                   <label
                     htmlFor="auth-password"
-                    className="block text-sm font-bold text-ink"
+                    className="block text-xs sm:text-sm font-bold text-ink"
                   >
                     Kata Sandi
                   </label>
-                  <div className="relative mt-1.5">
+                  <div className="relative mt-1">
                     <input
                       id="auth-password"
                       type={showPassword ? "text" : "password"}
@@ -382,7 +381,7 @@ export default function LoginPage() {
                         updateTypingGaze("password", e.currentTarget);
                       }}
                       placeholder="Minimal 6 karakter"
-                      className="min-h-[48px] w-full rounded-xl border-2 border-ink bg-paper py-2.5 pl-4 pr-12 font-semibold text-ink outline-none focus:bg-white focus:ring-4 focus:ring-grape/30"
+                      className="min-h-[42px] sm:min-h-[48px] w-full rounded-xl border-2 border-ink bg-paper py-2 sm:py-2.5 pl-3 sm:pl-4 pr-11 sm:pr-12 text-xs sm:text-sm font-semibold text-ink outline-none focus:bg-white focus:ring-4 focus:ring-grape/30"
                     />
                     <button
                       type="button"
@@ -392,12 +391,12 @@ export default function LoginPage() {
                       aria-label={
                         showPassword ? "Sembunyikan kata sandi" : "Tampilkan kata sandi"
                       }
-                      className="absolute right-1.5 top-1/2 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-lg text-ink/75 transition hover:bg-sun/50 hover:text-ink focus:outline-none focus:ring-2 focus:ring-ink"
+                      className="absolute right-1 top-1/2 flex h-8 w-8 sm:h-9 sm:w-9 -translate-y-1/2 items-center justify-center rounded-lg text-ink/75 transition hover:bg-sun/50 hover:text-ink focus:outline-none focus:ring-2 focus:ring-ink"
                     >
                       {showPassword ? (
-                        <EyeOff className="h-5 w-5" aria-hidden="true" />
+                        <EyeOff className="h-4 w-4 sm:h-5 sm:w-5" aria-hidden="true" />
                       ) : (
-                        <Eye className="h-5 w-5" aria-hidden="true" />
+                        <Eye className="h-4 w-4 sm:h-5 sm:w-5" aria-hidden="true" />
                       )}
                     </button>
                   </div>
@@ -406,9 +405,9 @@ export default function LoginPage() {
                 {errorMessage && (
                   <div
                     role="alert"
-                    className="flex items-start gap-2.5 rounded-2xl border-2 border-ink bg-coral p-3.5 text-sm font-semibold text-ink"
+                    className="flex items-start gap-2.5 rounded-xl sm:rounded-2xl border-2 border-ink bg-coral p-3 sm:p-3.5 text-xs sm:text-sm font-semibold text-ink"
                   >
-                    <AlertCircle className="mt-0.5 h-5 w-5 shrink-0" aria-hidden="true" />
+                    <AlertCircle className="mt-0.5 h-4 w-4 sm:h-5 sm:w-5 shrink-0" aria-hidden="true" />
                     <span>{errorMessage}</span>
                   </div>
                 )}
@@ -416,9 +415,9 @@ export default function LoginPage() {
                 {statusMessage && (
                   <div
                     role="status"
-                    className="flex items-start gap-2.5 rounded-2xl border-2 border-ink bg-mint p-3.5 text-sm font-semibold text-ink"
+                    className="flex items-start gap-2.5 rounded-xl sm:rounded-2xl border-2 border-ink bg-mint p-3 sm:p-3.5 text-xs sm:text-sm font-semibold text-ink"
                   >
-                    <CheckCircle className="mt-0.5 h-5 w-5 shrink-0" aria-hidden="true" />
+                    <CheckCircle className="mt-0.5 h-4 w-4 sm:h-5 sm:w-5 shrink-0" aria-hidden="true" />
                     <span>{statusMessage}</span>
                   </div>
                 )}
@@ -426,7 +425,7 @@ export default function LoginPage() {
                 <button
                   type="submit"
                   disabled={submitting}
-                  className="btn w-full bg-sun text-ink disabled:opacity-60"
+                  className="btn w-full bg-sun text-ink disabled:opacity-60 text-xs sm:text-base py-2.5 sm:py-3"
                 >
                   <Lock className="h-4 w-4" aria-hidden="true" />
                   {submitting
@@ -437,15 +436,15 @@ export default function LoginPage() {
                 </button>
               </form>
 
-              <div className="mt-6 border-t-2 border-ink/15 pt-5">
-                <p className="text-center text-xs font-semibold text-ink/75">
+              <div className="mt-5 sm:mt-6 border-t-2 border-ink/15 pt-4 sm:pt-5">
+                <p className="text-center text-[11px] sm:text-xs font-semibold text-ink/75">
                   Ingin langsung mencoba materi tanpa membuat akun?
                 </p>
-                <div className="mt-3 grid grid-cols-1 gap-2 sm:grid-cols-2">
-                  <Link href="/bisindo" className="btn bg-paper text-sm text-ink">
+                <div className="mt-2.5 sm:mt-3 grid grid-cols-1 gap-2 sm:grid-cols-2">
+                  <Link href="/bisindo" className="btn bg-paper text-xs sm:text-sm text-ink py-2 sm:py-2.5">
                     Lanjut Tamu: BISINDO
                   </Link>
-                  <Link href="/braille" className="btn bg-paper text-sm text-ink">
+                  <Link href="/braille" className="btn bg-paper text-xs sm:text-sm text-ink py-2 sm:py-2.5">
                     Lanjut Tamu: Braille
                   </Link>
                 </div>

@@ -406,18 +406,18 @@ export default function FeaturesSection() {
   const selected = FEATURES.find((feature) => feature.id === active)!;
 
   return (
-    <section className="mx-auto max-w-6xl px-4 py-12 sm:py-16 md:py-20">
+    <section className="mx-auto max-w-6xl px-4 py-10 sm:py-20">
       <Reveal>
         <div className="mb-8 sm:mb-12">
-          <span className="inline-block rounded-full border-2 border-ink bg-mint px-3.5 py-1.5 sm:px-4 sm:py-2 text-xs sm:text-sm font-bold">
+          <span className="inline-block rounded-full border-2 border-ink bg-mint px-3 py-1 sm:px-4 sm:py-2 text-xs sm:text-sm font-bold">
             EXPLORE SIGNIFY
           </span>
 
-          <h2 className="mt-5 text-3xl font-bold leading-tight sm:text-5xl">
+          <h2 className="mt-3 sm:mt-5 text-2xl font-bold leading-tight sm:text-4xl md:text-5xl">
             Satu platform, <br/> lebih banyak cara untuk belajar dan memahami.
           </h2>
 
-          <p className="mt-4 text-base leading-relaxed sm:text-lg">
+          <p className="mt-2.5 sm:mt-4 text-sm sm:text-lg leading-relaxed sm:leading-snug text-ink/85">
             Kenali fitur pembelajaran BISINDO dan Braille yang dirancang
             untuk memperkenalkan komunikasi inklusif. Melalui akses belajar
             yang lebih terbuka, SIGNIFY turut mengangkat pentingnya
@@ -427,11 +427,11 @@ export default function FeaturesSection() {
       </Reveal>
 
       <Reveal delay={100}>
-        <div className="grid gap-8 lg:grid-cols-[0.8fr_1.5fr] lg:items-stretch">
+        <div className="grid gap-6 sm:gap-8 lg:grid-cols-[0.8fr_1.5fr] lg:items-stretch">
 
           {/* ACCORDION FEATURE LIST */}
           <div
-            className="flex flex-col gap-3"
+            className="flex flex-col gap-2.5 sm:gap-3"
             aria-label="Daftar fitur SIGNIFY"
           >
             {FEATURES.map((feature) => {
@@ -440,7 +440,7 @@ export default function FeaturesSection() {
               return (
                 <div
                   key={feature.id}
-                  className={`overflow-hidden rounded-2xl border-4 border-ink transition-all duration-300 ${
+                  className={`overflow-hidden rounded-xl sm:rounded-2xl border-2 sm:border-4 border-ink transition-all duration-300 ${
                     isActive
                       ? "bg-sun shadow-popsm"
                       : "bg-white hover:bg-sun/30"
@@ -452,10 +452,10 @@ export default function FeaturesSection() {
                     onFocus={() => setActive(feature.id)}
                     onClick={() => setActive(feature.id)}
                     aria-expanded={isActive}
-                    className="flex w-full items-center gap-3.5 sm:gap-4 p-4 sm:p-5 text-left"
+                    className="flex w-full items-center gap-3 sm:gap-4 p-3.5 sm:p-5 text-left"
                   >
                     <span
-                      className={`flex h-10 w-10 sm:h-12 sm:w-12 shrink-0 items-center justify-center rounded-xl border-2 border-ink font-display text-base sm:text-lg font-bold transition-colors ${
+                      className={`flex h-10 w-10 sm:h-12 sm:w-12 shrink-0 items-center justify-center rounded-lg sm:rounded-xl border-2 border-ink font-display text-sm sm:text-lg font-bold transition-colors ${
                         isActive ? "bg-white" : "bg-mint"
                       }`}
                     >
@@ -463,7 +463,7 @@ export default function FeaturesSection() {
                     </span>
 
                     <span className="min-w-0 flex-1">
-                      <span className="block text-base sm:text-lg font-bold">
+                      <span className="block text-sm sm:text-lg font-bold">
                         {feature.title}
                       </span>
                     </span>
@@ -474,7 +474,7 @@ export default function FeaturesSection() {
                       }`}
                       aria-hidden="true"
                     >
-                      <ArrowUpRight className="h-5 w-5" />
+                      <ArrowUpRight className="h-4 w-4 sm:h-5 sm:w-5" />
                     </span>
                   </button>
 
@@ -488,7 +488,7 @@ export default function FeaturesSection() {
                     aria-hidden={!isActive}
                   >
                     <div className="overflow-hidden">
-                      <div className="px-4 pb-4 sm:px-5 sm:pb-5 sm:pl-[76px]">
+                      <div className="px-3.5 pb-3.5 pl-[54px] sm:px-5 sm:pb-5 sm:pl-[76px]">
                         <p className="text-xs sm:text-sm leading-snug">
                           {feature.tagline}
                         </p>
@@ -501,29 +501,29 @@ export default function FeaturesSection() {
           </div>
 
           {/* ANIMATED DEMONSTRATION PANEL */}
-          <div className="relative flex min-h-[400px] sm:min-h-[440px] overflow-hidden rounded-3xl border-4 border-ink bg-grape p-4 sm:p-8 text-white shadow-popsm">
+          <div className="relative flex min-h-[360px] sm:min-h-[440px] overflow-hidden rounded-2xl sm:rounded-3xl border-2 sm:border-4 border-ink bg-grape p-4 sm:p-8 text-white shadow-popsm">
             <div
               key={selected.id}
               className={`${styles.detailContent} flex w-full flex-col`}
             >
-              <div className="flex h-full flex-1 flex-col justify-between gap-5 md:flex-row md:items-center">
+              <div className="flex h-full flex-1 flex-col justify-between gap-4 sm:gap-5 md:flex-row md:items-center">
                 <div className="flex flex-col justify-center">
-                  <span className="inline-block w-fit rounded-full border-2 border-white/70 px-3 py-1 text-xs font-bold">
+                  <span className="inline-block w-fit rounded-full border-2 border-white/70 px-2.5 sm:px-3 py-0.5 sm:py-1 text-[11px] sm:text-xs font-bold">
                     FEATURE {selected.number}
                   </span>
 
-                  <h3 className="mt-5 text-3xl font-bold leading-tight">
+                  <h3 className="mt-3 sm:mt-5 text-xl sm:text-3xl font-bold leading-tight">
                     {selected.title}
                   </h3>
 
-                  <p className="mt-4 text-sm max-w-sm leading-snug text-white/85">
+                  <p className="mt-2.5 sm:mt-4 text-xs sm:text-sm max-w-sm leading-relaxed sm:leading-snug text-white/85">
                     {selected.description}
                   </p>
-                  <div className="mt-6 flex flex-wrap gap-2">
+                  <div className="mt-4 sm:mt-6 flex flex-wrap gap-1.5 sm:gap-2">
                     {selected.points.map((point) => (
                         <span
                         key={point}
-                        className="inline-flex items-center rounded-full border-2 border-ink bg-white px-3 py-1.5 text-xs font-bold text-ink shadow-popsm"
+                        className="inline-flex items-center rounded-full border-2 border-ink bg-white px-2.5 sm:px-3 py-1 text-[11px] sm:text-xs font-bold text-ink shadow-popsm"
                         >
                         {point}
                         </span>
@@ -532,13 +532,13 @@ export default function FeaturesSection() {
 
                   <Link
                     href={selected.href}
-                    className="btn mt-7 inline-flex w-fit bg-sun text-ink"
+                    className="btn mt-5 sm:mt-7 inline-flex w-fit bg-sun text-ink"
                   >
-                    {selected.action} <ChevronRight className="ml-1 h-5 w-5" />
+                    {selected.action} <ChevronRight className="ml-1 h-4 w-4 sm:h-5 sm:w-5" />
                   </Link>
                 </div>
 
-                <div className="flex shrink-0 items-center justify-center">
+                <div className="flex shrink-0 items-center justify-center mt-3 sm:mt-0">
                   <FeatureAnimation type={selected.id} />
                 </div>
               </div>

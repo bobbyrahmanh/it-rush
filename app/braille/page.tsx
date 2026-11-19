@@ -188,25 +188,25 @@ export default function BraillePage() {
 
   <div className="relative z-10 grid items-center gap-5 md:grid-cols-[1fr_260px]">
     <div className="max-w-2xl">
-      <span className="inline-flex items-center gap-2 rounded-full border-2 border-ink bg-white/50 px-4 py-2 text-xs font-bold tracking-wide">
-        <span className="h-2.5 w-2.5 animate-pulse rounded-full bg-sun" />
+      <span className="inline-flex items-center gap-2 rounded-full border-2 border-ink bg-white/50 px-3 py-1 sm:px-4 sm:py-2 text-[10px] sm:text-xs font-bold tracking-wide">
+        <span className="h-2 w-2 sm:h-2.5 sm:w-2.5 animate-pulse rounded-full bg-sun" />
           SIGNIFY • AKSES BRAILLE UNTUK SEMUA
       </span>
 
-      <h1 className="mt-5 font-display text-4xl font-bold leading-tight sm:text-6xl">
+      <h1 className="mt-3 sm:mt-5 font-display text-2xl font-bold leading-tight sm:text-5xl md:text-6xl">
         Kenali Braille,
         <br />
         Buka Akses Dunia.
       </h1>
 
-      <p className="mt-4 max-w-2xl leading-relaxed sm:text-lg">
+      <p className="mt-2.5 sm:mt-4 max-w-2xl text-xs sm:text-base leading-relaxed sm:text-lg">
         Informasi tentang hutan, pesisir, dan lingkungan harus dapat
-        diakses semua orang. <br/> Yuk, belajar Braille bersama Owli!
+        diakses semua orang. <br className="hidden sm:inline" /> Yuk, belajar Braille bersama Owli!
       </p>
 
-      <div className="mt-5 flex flex-wrap gap-2">
+      <div className="mt-4 sm:mt-5 flex flex-wrap gap-1.5 sm:gap-2">
         {["6 Titik Braille", "26 Huruf Alfabet", "Belajar Interaktif"].map((x) => (
-          <span key={x} className="rounded-xl border-2 border-ink bg-white px-3 py-2 text-sm font-bold">
+          <span key={x} className="rounded-lg sm:rounded-xl border-2 border-ink bg-white px-2.5 sm:px-3 py-1 sm:py-2 text-xs sm:text-sm font-bold">
             {x}
           </span>
         ))}
@@ -215,15 +215,15 @@ export default function BraillePage() {
 
 
     {/* MASCOT */}
-    <div className="relative mx-auto w-full max-w-[230px] md:max-w-[260px]">
+    <div className="relative mx-auto w-full max-w-[160px] sm:max-w-[230px] md:max-w-[260px] mt-4 sm:mt-0">
       {/* Glow circle */}
-      <div className="absolute left-1/2 top-1/2 aspect-square w-full -translate-x-1/2 -translate-y-1/2 md:-translate-x-[67%] md:-translate-y-[40%] rounded-full bg-grape/20 blur-2xl" />
+      <div className="absolute left-1/2 top-1/2 aspect-square w-full -translate-x-[67%] -translate-y-[40%] rounded-full bg-grape/20 blur-2xl" />
 
       {/* Decorative circle */}
-      <div className="absolute left-1/2 top-1/2 aspect-square w-full -translate-x-1/2 -translate-y-1/2 md:-translate-x-[67%] md:-translate-y-[40%] rounded-full border-2 border-sun/50 bg-sun/50 animate-pulse" />
+      <div className="absolute left-1/2 top-1/2 aspect-square w-full -translate-x-[67%] -translate-y-[40%] rounded-full border-2 border-sun/50 bg-sun/50 animate-pulse" />
 
       {/* Mascot */}
-      <div className="relative z-10 translate-x-0 md:-translate-x-10">
+      <div className="relative z-10 -translate-x-6 sm:-translate-x-10">
         <BrailleMascot activity="writing" className="animate-floaty w-full" />
       </div>
     </div>
@@ -233,20 +233,20 @@ export default function BraillePage() {
 
 
       {/* ENVIRONMENT CONTEXT */}
-      <section className="mt-6 grid gap-4 sm:grid-cols-2">
-        <article className="card bg-grape p-5 text-white sm:p-6">
-          <p className="text-xs font-bold uppercase tracking-wider text-white/75">Teknologi inklusif</p>
-          <h2 className="mt-2 text-2xl font-bold">Lingkungan untuk semua.</h2>
-          <p className="mt-2 text-sm leading-snug">
+      <section className="mt-4 sm:mt-6 grid gap-3 sm:gap-4 sm:grid-cols-2">
+        <article className="card bg-grape p-3.5 text-white sm:p-6">
+          <p className="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-white/75">Teknologi inklusif</p>
+          <h2 className="mt-1 sm:mt-2 text-lg sm:text-2xl font-bold">Lingkungan untuk semua.</h2>
+          <p className="mt-1.5 sm:mt-2 text-xs sm:text-sm leading-snug">
             Informasi mengenai pengelolaan sampah, pelestarian hutan, dan
             perlindungan pesisir perlu disampaikan dalam bentuk yang dapat
             diakses oleh berbagai kelompok masyarakat.
           </p>
         </article>
-        <article className="card bg-sun p-5 sm:p-6">
-          <p className="text-xs font-bold uppercase tracking-wider">Contoh penerapan</p>
-          <h2 className="mt-2 text-2xl font-bold">Dari huruf menjadi informasi.</h2>
-          <p className="mt-2 text-sm leading-snug">
+        <article className="card bg-sun p-3.5 sm:p-6">
+          <p className="text-[10px] sm:text-xs font-bold uppercase tracking-wider">Contoh penerapan</p>
+          <h2 className="mt-1 sm:mt-2 text-lg sm:text-2xl font-bold">Dari huruf menjadi informasi.</h2>
+          <p className="mt-1.5 sm:mt-2 text-xs sm:text-sm leading-snug">
             Tulisan Braille dapat digunakan pada label, petunjuk fasilitas
             publik, penanda tempat sampah, hingga informasi jalur evakuasi.
           </p>
@@ -254,16 +254,16 @@ export default function BraillePage() {
       </section>
 
       {/* MODE SELECTOR */}
-      <section className="mt-9">
-        <div className="flex flex-wrap items-end justify-between gap-3">
+      <section className="mt-6 sm:mt-9">
+        <div className="flex flex-wrap items-end justify-between gap-2 sm:gap-3">
           <div>
-            <p className="text-xs font-bold uppercase tracking-wider">Ruang belajar</p>
-            <h2 className="font-display text-3xl font-bold">Pilih aktivitasmu!</h2>
+            <p className="text-[10px] sm:text-xs font-bold uppercase tracking-wider">Ruang belajar</p>
+            <h2 className="font-display text-2xl sm:text-3xl font-bold">Pilih aktivitasmu!</h2>
           </div>
-          <span className="text-sm text-ink/70">Learning by doing</span>
+          <span className="text-xs sm:text-sm text-ink/70">Learning by doing</span>
         </div>
 
-        <div className="mt-4 grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-4 gap-3" role="tablist" aria-label="Mode Braille">
+        <div className="mt-3 sm:mt-4 grid grid-cols-2 gap-2 sm:gap-3 sm:grid-cols-4" role="tablist" aria-label="Mode Braille">
           {modes.map((item) => (
             <button
               key={item.id}
@@ -272,15 +272,15 @@ export default function BraillePage() {
               onClick={() => item.id === "read" || item.id === "write"
                 ? startQuiz(item.id)
                 : changeMode(item.id)}
-              className={`btn min-h-20 text-left transition duration-200 hover:-translate-y-1 ${
+              className={`btn min-h-[56px] sm:min-h-20 text-left transition duration-200 hover:-translate-y-1 p-2.5 sm:p-4 ${
                 mode === item.id ? "bg-sun shadow-popsm" : "bg-white"
               }`}
             >
-              <div className="flex items-center gap-3 sm:gap-4">
-                <span className="text-xl sm:text-2xl shrink-0"><item.icon className="w-7 h-7 sm:w-8 sm:h-8" /></span>
+              <div className="flex items-center gap-2.5 sm:gap-4">
+                <span className="shrink-0"><item.icon className="w-5 h-5 sm:w-8 sm:h-8" /></span>
                 <div className="flex flex-col min-w-0">
-                  <span className="block text-base sm:text-lg font-bold">{item.label}</span>
-                  <span className="block text-xs font-medium leading-snug text-ink/75">{item.desc}</span>
+                  <span className="block text-xs sm:text-lg font-bold truncate">{item.label}</span>
+                  <span className="hidden sm:block text-xs font-medium truncate">{item.desc}</span>
                 </div>
               </div>
             </button>
@@ -362,14 +362,14 @@ export default function BraillePage() {
                 )}
               </div>
 
-              <div className="card bg-white p-4 sm:p-5">
+              <div className="card bg-white p-5">
                 <div className="flex items-center justify-between gap-2">
-                  <h3 className="font-bold text-base sm:text-lg">Alfabet Braille A–Z</h3>
-                  <span className="rounded-full bg-mint px-2.5 py-0.5 sm:px-3 sm:py-1 text-xs font-bold">
+                  <h3 className="font-bold">Alfabet Braille A–Z</h3>
+                  <span className="rounded-full bg-mint px-3 py-1 text-xs font-bold">
                     {learned.length}/26 dipelajari
                   </span>
                 </div>
-                <div className="mt-4 grid grid-cols-6 gap-1.5 sm:grid-cols-9 sm:gap-2">
+                <div className="mt-4 grid grid-cols-6 gap-2 sm:grid-cols-9">
                   {LETTERS.map((l) => (
                     <button
                       key={l}
@@ -378,7 +378,7 @@ export default function BraillePage() {
                         speak(l, audio);
                       }}
                       aria-label={`Pilih huruf ${l}`}
-                      className={`h-10 sm:h-11 rounded-xl border-2 border-ink font-display text-base sm:text-lg font-bold transition hover:-translate-y-1 ${
+                      className={`h-11 rounded-xl border-2 border-ink font-display text-lg font-bold transition hover:-translate-y-1 ${
                         letter === l ? "bg-ink text-white" :
                           learned.includes(l) ? "bg-mint" : "bg-white"
                       }`}

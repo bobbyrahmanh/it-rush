@@ -337,8 +337,8 @@ export default function CameraSlot({ letter }: { letter: string }) {
   const holdPercent = Math.round(holdState.progress * 100);
 
   return (
-    <div className="card overflow-hidden bg-ink p-3 text-white sm:p-4">
-      <div className="relative aspect-[16/10] max-h-[42vh] min-h-[200px] w-full overflow-hidden rounded-2xl border-2 border-white/20 bg-black/50">
+    <div className="card overflow-hidden bg-ink p-2.5 text-white sm:p-4">
+      <div className="relative aspect-[16/10] max-h-[30vh] sm:max-h-[42vh] min-h-[170px] w-full overflow-hidden rounded-xl sm:rounded-2xl border-2 border-white/20 bg-black/50">
         <video
           ref={videoRef}
           muted
@@ -352,56 +352,56 @@ export default function CameraSlot({ letter }: { letter: string }) {
         />
 
         {mode !== "idle" && (
-          <div className="pointer-events-none absolute inset-x-3 top-3 flex flex-wrap items-center justify-between gap-2">
+          <div className="pointer-events-none absolute inset-x-2 sm:inset-x-3 top-2 sm:top-3 flex flex-wrap items-center justify-between gap-1.5 sm:gap-2">
             <span
-              className={`inline-flex items-center gap-2 rounded-full border-2 border-ink px-3 py-1 text-xs font-bold ${
+              className={`inline-flex items-center gap-1.5 sm:gap-2 rounded-full border border-ink sm:border-2 px-2.5 sm:px-3 py-0.5 sm:py-1 text-[10px] sm:text-xs font-bold ${
                 mode === "webcam" ? "bg-coral text-white" : "bg-sun text-ink"
               }`}
             >
-              <span className="h-2.5 w-2.5 rounded-full bg-current" aria-hidden="true" />
+              <span className="h-2 w-2 sm:h-2.5 sm:w-2.5 rounded-full bg-current" aria-hidden="true" />
               {mode === "webcam" ? "LIVE WEBCAM" : `MODE SIMULASI (${simLetter})`}
             </span>
-            <span className="rounded-full border-2 border-ink bg-white px-3 py-1 text-xs font-bold text-ink">
-              {detectedHands === 0 ? "Belum ada tangan" : `${detectedHands} Tangan Terbaca`}
+            <span className="rounded-full border border-ink sm:border-2 bg-white px-2.5 sm:px-3 py-0.5 sm:py-1 text-[10px] sm:text-xs font-bold text-ink">
+              {detectedHands === 0 ? "Belum ada tangan" : `${detectedHands} Tangan`}
             </span>
           </div>
         )}
 
         {mode !== "idle" && !isLoadingEngine && detectedHands === 0 && (
-          <div className="pointer-events-none absolute inset-x-4 bottom-4 rounded-xl border-2 border-white/20 bg-ink/85 px-4 py-2 text-center text-sm text-white">
+          <div className="pointer-events-none absolute inset-x-3 sm:inset-x-4 bottom-2.5 sm:bottom-4 rounded-xl border border-white/20 bg-ink/85 px-3 sm:px-4 py-1.5 sm:py-2 text-center text-xs sm:text-sm text-white">
             Arahkan 1 atau 2 tangan ke dalam kotak kamera
           </div>
         )}
 
         {isLoadingEngine && (
-          <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 bg-ink/90 p-6 text-center">
+          <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 sm:gap-3 bg-ink/90 p-4 sm:p-6 text-center">
             <div
-              className="h-10 w-10 animate-spin rounded-full border-4 border-sun border-t-transparent"
+              className="h-8 w-8 sm:h-10 sm:w-10 animate-spin rounded-full border-4 border-sun border-t-transparent"
               aria-hidden="true"
             />
-            <p className="font-display text-lg font-semibold">Memuat model AI MediaPipe &amp; BISINDO...</p>
-            <p className="text-sm text-white/80">Semua pemrosesan berjalan langsung di browser perangkatmu.</p>
+            <p className="font-display text-sm sm:text-lg font-semibold">Memuat model AI MediaPipe &amp; BISINDO...</p>
+            <p className="text-xs sm:text-sm text-white/80">Semua pemrosesan berjalan langsung di browser perangkatmu.</p>
           </div>
         )}
 
         {mode === "idle" && !isLoadingEngine && (
-          <div className="flex h-full flex-col items-center justify-center gap-3 p-4 text-center">
-            <p className="font-display text-lg font-semibold">Area kamera untuk huruf {letter}</p>
-            <p className="max-w-sm text-xs text-white/90">
+          <div className="flex h-full flex-col items-center justify-center gap-2 sm:gap-3 p-3 sm:p-4 text-center">
+            <p className="font-display text-base sm:text-lg font-semibold">Area kamera untuk huruf {letter}</p>
+            <p className="max-w-sm text-[11px] sm:text-xs text-white/90">
               Diproses di perangkatmu, tidak dikirim ke server mana pun.
             </p>
 
             {cameraError && (
-              <div role="alert" className="max-w-md rounded-2xl border-2 border-coral bg-coral/20 px-4 py-3 text-sm text-white">
+              <div role="alert" className="max-w-md rounded-xl border-2 border-coral bg-coral/20 px-3 py-2 text-xs sm:text-sm text-white">
                 {cameraError}
               </div>
             )}
 
-            <div className="flex flex-col sm:flex-row flex-wrap justify-center gap-3 w-full sm:w-auto">
-              <button type="button" onClick={startWebcam} className="btn w-full sm:w-auto justify-center bg-sun text-ink">
+            <div className="flex flex-col sm:flex-row justify-center gap-2 sm:gap-3 w-full sm:w-auto">
+              <button type="button" onClick={startWebcam} className="btn bg-sun text-ink text-xs sm:text-base py-2.5 sm:py-3">
                 Gunakan Kamera
               </button>
-              <button type="button" onClick={startSimulation} className="btn w-full sm:w-auto justify-center bg-white text-ink">
+              <button type="button" onClick={startSimulation} className="btn bg-white text-ink text-xs sm:text-base py-2.5 sm:py-3">
                 Gunakan Video Simulasi
               </button>
             </div>
@@ -503,15 +503,15 @@ export default function CameraSlot({ letter }: { letter: string }) {
             </div>
           )}
 
-          <div className="flex h-[52px] items-center gap-1.5 sm:gap-2 rounded-2xl border-2 border-white/20 bg-white/10 px-2.5 sm:px-3">
-            <p className="w-10 sm:w-12 shrink-0 text-[9px] sm:text-[10px] font-semibold uppercase leading-tight tracking-wider text-white/75">
+          <div className="flex h-[52px] items-center gap-2 rounded-2xl border-2 border-white/20 bg-white/10 px-3">
+            <p className="w-12 shrink-0 text-[10px] font-semibold uppercase leading-tight tracking-wider text-white/75">
               Prediksi AI
             </p>
-            <div className="flex flex-1 justify-end gap-1 sm:gap-2" aria-live="off">
+            <div className="flex flex-1 justify-end gap-2" aria-live="off">
               {Array.from({ length: 3 }).map((_, i) => {
                 const cand = holdState.topCandidates[i];
                 const base =
-                  "flex h-8 w-[4.1rem] sm:w-[4.75rem] shrink-0 items-center justify-center gap-1 sm:gap-1.5 rounded-lg border-2 tabular-nums";
+                  "flex h-8 w-[4.75rem] shrink-0 items-center justify-center gap-1.5 rounded-lg border-2 tabular-nums";
                 if (!cand) {
                   return (
                     <div
