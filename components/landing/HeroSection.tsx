@@ -17,7 +17,7 @@ const CHIPS = [
 
 export default function HeroSection() {
   return (
-    <section className="relative flex min-h-[100svh] items-center overflow-hidden">
+    <section className="relative flex h-[calc(100svh-4rem)] items-center overflow-hidden">
       <div className="relative mx-auto grid w-full max-w-6xl items-center gap-6 sm:gap-10 px-4 py-8 sm:py-16 md:grid-cols-2 md:py-20">
         {CHIPS.map((chip) => (
           <span

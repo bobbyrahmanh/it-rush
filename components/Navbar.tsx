@@ -45,7 +45,7 @@ export default function Navbar() {
   }, []);
 
   return (
-    <header className={`fixed top-0 left-1/2 z-40 -translate-x-1/2 border-b-4 border-ink bg-paper/95 backdrop-blur transition-all duration-300 ease-in-out
+    <header className={`fixed top-0 py-1 left-1/2 z-40 -translate-x-1/2 border-b-4 border-ink bg-paper/95 backdrop-blur transition-all duration-300 ease-in-out
       ${scrolled
         ? "w-full md:w-[75%] md:rounded-2xl md:top-3"
         : "w-full md:rounded-2xl" }`}>

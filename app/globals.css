@@ -3,13 +3,24 @@
 @tailwind utilities;
 
 @layer base {
-  html, body {
-    overflow-x: hidden;
-    max-width: 100vw;
+  html {
+    overflow-x: clip;
   }
-  body { @apply bg-paper font-body text-ink antialiased; }
-  h1, h2, h3 { @apply font-display; }
-  :focus-visible { outline: 4px solid #5B4BDB; outline-offset: 3px; border-radius: 12px; }
+
+  body {
+    @apply bg-paper font-body text-ink antialiased;
+    overflow-x: clip;
+  }
+
+  h1, h2, h3 {
+    @apply font-display;
+  }
+
+  :focus-visible {
+    outline: 4px solid #5B4BDB;
+    outline-offset: 3px;
+    border-radius: 12px;
+  }
 }
 @layer components {
   .btn { @apply inline-flex min-h-[42px] sm:min-h-[48px] min-w-[44px] items-center justify-center gap-2 rounded-full border-2 sm:border-4 border-ink px-4 sm:px-6 font-display text-sm sm:text-lg font-semibold shadow-popsm transition active:translate-y-1 active:shadow-none disabled:cursor-not-allowed disabled:opacity-60; }

@@ -22,7 +22,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <Loader />
         <a href="#utama" className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[90] focus:rounded-full focus:bg-sun focus:px-4 focus:py-2">Lompat ke konten</a>
         <Navbar />
-        <main id="utama">{children}</main>
+        <main id="utama" className="pt-16">
+          {children}
+        </main>
       </body>
     </html>
   );
