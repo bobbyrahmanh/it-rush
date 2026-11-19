@@ -213,11 +213,8 @@ export default function ProgressPage() {
               <h1 className="mt-3 font-display text-2xl font-bold leading-tight sm:text-4xl">
                 Buka Fitur Streak, Badge Pencapaian, dan Papan Peringkat
               </h1>
-              <p className="mt-2 text-xs leading-relaxed text-ink/90 sm:text-base">
-                Sebagai Tamu, kamu tetap bebas memainkan seluruh materi kamera AI
-                BISINDO, kosakata dinamis, serta simulator dan kuis Braille.
-                Masuk ke akun untuk mengaktifkan perhitungan Streak harian,
-                mengklaim Badge pencapaian, dan masuk ke Papan Peringkat.
+              <p className="mt-3 text-xs leading-tight text-ink/90 sm:text-base">
+                Sebagai Tamu, kamu bisa mengakses seluruh fitur pembelajaran BISINDO dan Braille. Masuk akun untuk mencatat Streak, meraih Badge, dan bergabung di Papan Peringkat.
               </p>
               {totalMaterialsLearned > 0 && (
                 <p className="mt-3 rounded-xl border-2 border-ink bg-white/90 px-3.5 py-2 text-xs font-bold">
@@ -257,7 +254,7 @@ export default function ProgressPage() {
               <p className="mt-2 font-display text-lg font-bold">
                 Belajar Tanpa Hambatan, Simpan Kapan Saja
               </p>
-              <p className="mt-1 text-xs leading-relaxed text-ink/75">
+              <p className="mt-1 text-xs leading-tight text-ink/75">
                 Coba dulu seluruh fitur sepuasnya. Saat siap menyimpan rekor dan
                 lencana, cukup masuk dalam satu langkah.
               </p>

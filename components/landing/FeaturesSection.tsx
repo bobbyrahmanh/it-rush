@@ -14,9 +14,9 @@ const FEATURES = [
     title: "BISINDO AI Recognition",
     subtitle: "Belajar bahasa isyarat",
     tagline:
-      "Mengenal komunikasi yang lebih inklusif, satu gerakan pada satu waktu.",
+      "Mengenal komunikasi inklusif melalui gerakan tangan.",
     description:
-      "Latih kemampuan mengenali alfabet BISINDO melalui kamera. Sistem mendeteksi posisi tangan dan membantu mengenali gestur untuk 26 huruf alfabet. Kemampuan komunikasi yang lebih inklusif dapat membuka ruang partisipasi dan pertukaran pengetahuan bagi masyarakat dengan kebutuhan komunikasi yang beragam.",
+      "Pelajari alfabet BISINDO melalui kamera dengan teknologi pengenalan gestur tangan. Sistem membantu mengenali posisi tangan untuk mengidentifikasi 26 huruf alfabet. Fitur ini menjadi langkah awal bagi masyarakat untuk memahami komunikasi dengan teman Tuli dan membangun interaksi yang lebih inklusif.",
     points: [
       "Deteksi gestur tangan",
       "Pengenalan 1 dan 2 tangan",
@@ -31,9 +31,9 @@ const FEATURES = [
     title: "Braille Simulator",
     subtitle: "Kenali pola enam titik",
     tagline:
-      "Membuka akses belajar melalui pengenalan sistem tulisan Braille.",
+      "Mengenal sistem tulisan Braille sebagai bagian dari akses informasi.",
     description:
-      "Pelajari cara membaca dan membentuk huruf Braille melalui sel enam titik interaktif. Coba klik titik atau gunakan keyboard untuk membentuk pola. Pengenalan Braille menjadi langkah awal memahami pentingnya akses informasi bagi penyandang Tunanetra.",
+      "Pelajari cara membaca dan membentuk huruf Braille melalui sel enam titik interaktif. Klik titik atau gunakan keyboard untuk mencoba berbagai pola huruf. Fitur ini memperkenalkan dasar sistem tulisan Braille sekaligus mengajak masyarakat memahami pentingnya akses informasi bagi teman Tunanetra.",
     points: [
       "Pengenalan enam titik",
       "Simulasi pola huruf",
@@ -48,9 +48,9 @@ const FEATURES = [
     title: "Guess the Sign",
     subtitle: "Uji pemahamanmu",
     tagline:
-      "Latihan interaktif untuk membangun pemahaman komunikasi inklusif.",
+      "Asah pemahaman alfabet BISINDO melalui permainan interaktif.",
     description:
-      "Uji pengetahuan alfabet BISINDO dengan menebak huruf berdasarkan gestur yang ditampilkan. Melalui latihan yang menyenangkan, pengguna dapat memperkuat pemahaman dasar komunikasi inklusif dan membangun kesadaran untuk berinteraksi dengan lebih terbuka.",
+      "Uji pengetahuan alfabet BISINDO dengan menebak huruf berdasarkan gestur yang ditampilkan. Latihan ini membantu pengguna memperkuat kemampuan mengenali gerakan tangan sekaligus membangun kesadaran untuk berkomunikasi secara lebih terbuka dengan teman Tuli.",
     points: [
       "Tebak huruf BISINDO",
       "Latihan pengenalan gestur",
@@ -65,9 +65,9 @@ const FEATURES = [
     title: "Learning Progress",
     subtitle: "Pantau perjalanan belajar",
     tagline:
-      "Setiap kemajuan kecil berarti dalam perjalanan menuju masyarakat inklusif.",
+      "Bangun kebiasaan belajar melalui setiap kemajuan kecil.",
     description:
-      "Lihat perkembangan belajarmu melalui XP, streak harian, dan catatan huruf yang sudah dipelajari. Progres ini membantu pengguna memantau konsistensi belajar dalam mengenal BISINDO dan Braille sebagai bagian dari penguatan literasi dan akses pengetahuan.",
+      "Pantau perkembangan belajar melalui perolehan XP, streak harian, dan catatan huruf yang telah dipelajari. Fitur ini membantu pengguna melihat konsistensi dan kemajuan dalam mempelajari BISINDO dan Braille sebagai bagian dari upaya membangun literasi komunikasi inklusif.",
     points: [
       "Perolehan XP",
       "Streak belajar",
@@ -82,9 +82,9 @@ const FEATURES = [
     title: "Inclusive Eco-Learning",
     subtitle: "Belajar lingkungan secara inklusif",
     tagline:
-      "Mengenal keberlanjutan melalui akses pengetahuan yang lebih inklusif.",
+      "Mengenal ekosistem pesisir dan hutan tropis melalui pembelajaran interaktif.",
     description:
-      "Jelajahi materi singkat mengenai ekosistem mangrove, kebersihan laut, dan keanekaragaman hayati hutan tropis. Kenali istilah penting dari setiap topik, kemudian eksplorasi huruf-huruf penyusunnya melalui modul pembelajaran alfabet BISINDO.",
+      "Jelajahi materi singkat tentang ekosistem mangrove, kebersihan laut, dan keanekaragaman hayati hutan tropis. Kenali kosakata penting dari setiap topik, kemudian eksplorasi huruf-huruf penyusunnya melalui modul pembelajaran alfabet BISINDO. Fitur ini menghubungkan literasi lingkungan dengan pengenalan komunikasi inklusif.",
     points: [
       "Materi lingkungan tematik",
       "Kosakata lingkungan",
@@ -93,7 +93,6 @@ const FEATURES = [
     href: "/bisindo",
     action: "Latih alfabet",
   },
-
 ] as const;
 
 type FeatureId = (typeof FEATURES)[number]["id"];
@@ -247,7 +246,7 @@ function FeatureAnimation({ type }: { type: FeatureId }) {
           </div>
 
           <div className={styles.handScene}>
-            <div className={styles.hand}>✋</div>
+            <div className={styles.hand}>🤏🏻</div>
 
             {Array.from({ length: 8 }).map((_, i) => (
               <span
@@ -261,7 +260,7 @@ function FeatureAnimation({ type }: { type: FeatureId }) {
 
           <div className={styles.recognition}>
             <span>GESTURE DETECTED</span>
-            <strong>A</strong>
+            <strong>C</strong>
             <span className={styles.confidence}>AI Recognition Preview</span>
           </div>
         </div>
@@ -322,7 +321,7 @@ function FeatureAnimation({ type }: { type: FeatureId }) {
 
           <div className={styles.quizQuestion}>
             <span>Which letter is this?</span>
-            <div className={styles.quizHand}>🤟</div>
+            <div className={styles.quizHand}>🤏🏻</div>
           </div>
 
           <div className={styles.quizOptions}>
@@ -414,14 +413,12 @@ export default function FeaturesSection() {
           </span>
 
           <h2 className="mt-3 sm:mt-5 text-2xl font-bold leading-tight sm:text-4xl md:text-5xl">
-            Satu platform, <br/> lebih banyak cara untuk belajar dan memahami.
+            Satu platform, <br/> dua cara belajar komunikasi inklusif.
           </h2>
 
           <p className="mt-2.5 sm:mt-4 text-sm sm:text-lg leading-relaxed sm:leading-snug text-ink/85">
-            Kenali fitur pembelajaran BISINDO dan Braille yang dirancang
-            untuk memperkenalkan komunikasi inklusif. Melalui akses belajar
-            yang lebih terbuka, SIGNIFY turut mengangkat pentingnya
-            pemerataan pengetahuan bagi masyarakat.
+            Jelajahi pembelajaran BISINDO dan Braille melalui fitur interaktif yang membantu masyarakat mengenal cara berkomunikasi yang lebih inklusif.
+            SIGNIFY hadir untuk memperluas kesempatan belajar dan mendorong pemerataan akses informasi bagi semua orang.
           </p>
         </div>
       </Reveal>

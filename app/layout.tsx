@@ -10,6 +10,9 @@ const body = Nunito({ subsets: ["latin"], variable: "--font-body" });
 export const metadata: Metadata = {
   title: "SIGNIFY: Belajar BISINDO & Braille",
   description: "Belajar alfabet BISINDO dan pola Braille secara interaktif, tanpa daftar akun.",
+  icons: {
+    icon: "/signify-owli.png",
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

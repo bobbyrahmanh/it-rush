@@ -22,31 +22,71 @@
   .reveal { opacity: 1; transform: none; }
 }
 
-/* Chat messages */
-.chat-message {
+.chat-typing-loop .chat-message {
   opacity: 0;
   transform: translateY(10px);
-  animation: chatAppear 0.55s ease forwards;
+  animation-duration: 12s;
+  animation-timing-function: ease;
+  animation-iteration-count: infinite;
+  animation-fill-mode: both;
+  margin-bottom: 12px;
 }
 
 .chat-delay-1 {
-  animation-delay: 0.5s;
+  animation-name: chatMessage1;
 }
 
 .chat-delay-2 {
-  animation-delay: 1.8s;
+  animation-name: chatMessage2;
 }
 
 .chat-delay-3 {
-  animation-delay: 3.3s;
+  animation-name: chatMessage3;
 }
 
 .chat-delay-4 {
-  animation-delay: 4.8s;
+  animation-name: chatMessage4;
 }
 
-@keyframes chatAppear {
-  to {
+@keyframes chatMessage1 {
+  0%, 3%, 82%, 100% {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  7%, 72% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes chatMessage2 {
+  0%, 13%, 82%, 100% {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  18%, 72% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes chatMessage3 {
+  0%, 26%, 82%, 100% {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  31%, 72% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes chatMessage4 {
+  0%, 39%, 82%, 100% {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  44%, 72% {
     opacity: 1;
     transform: translateY(0);
   }

@@ -16,7 +16,7 @@ export default function BrailleWorks() {
         Dunia Braille
       </h2>
       <p className="mt-1 text-xs sm:text-sm text-ink/70">
-        Kenali cara kerja dan teknologi yang membantu penyandang tunanetra membaca dan menulis.
+        Kenali huruf Braille dan pelajari cara menyampaikan informasi kepada teman tunanetra.
       </p>
     </div>
 

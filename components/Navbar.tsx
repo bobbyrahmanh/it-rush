@@ -102,7 +102,7 @@ export default function Navbar() {
             </div>
           ) : (
             <div className="hidden items-center gap-2 sm:flex">
-              <span className="hidden rounded-full border-2 border-ink bg-paper px-3 py-1.5 text-xs font-bold text-ink lg:inline-block">
+              <span className="inline-flex min-h-[44px] items-center gap-2 rounded-full border-2 border-ink bg-mint px-2.5 py-1 text-sm font-bold text-ink transition hover:-translate-y-0.5 cursor-pointer">
                 Mode Tamu
               </span>
               <Link

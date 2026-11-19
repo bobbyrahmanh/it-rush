@@ -25,10 +25,8 @@ export default function FooterSection() {
               SIGN<span className="text-grape">IFY</span>
             </Link>
 
-            <p className="mt-2.5 sm:mt-4 max-w-sm text-xs sm:text-base leading-relaxed text-paper/75">
-              Membangun pemahaman komunikasi inklusif melalui pembelajaran
-              dasar BISINDO dan Braille yang interaktif, mudah diakses,
-              dan menyenangkan.
+            <p className="mt-2.5 sm:mt-4 max-w-sm text-xs sm:text-sm leading-snug text-paper/75">
+              Mengenal BISINDO dan Braille melalui pembelajaran interaktif sebagai langkah awal membangun komunikasi inklusif dan memperluas akses informasi bagi semua orang.
             </p>
 
             <div className="mt-4 sm:mt-6 inline-flex items-center gap-2 rounded-full border-2 border-ink bg-mint px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm font-bold shadow-popsm">
@@ -43,12 +41,12 @@ export default function FooterSection() {
               Navigasi
             </h3>
 
-            <ul className="mt-3 sm:mt-5 space-y-2 sm:space-y-3">
+            <ul className="mt-3 sm:mt-5 space-y-1 sm:space-y-3">
               {FOOTER_LINKS.map((link) => (
                 <li key={link.href}>
                   <Link
                     href={link.href}
-                    className="inline-flex items-center gap-2 text-xs sm:text-sm font-semibold text-paper/75 transition hover:translate-x-1 hover:text-sun"
+                    className="inline-flex items-center gap-1 text-xs sm:text-sm font-semibold text-paper/75 transition hover:translate-x-1 hover:text-sun"
                   >
                     {link.label}
                   </Link>
@@ -58,12 +56,12 @@ export default function FooterSection() {
           </div>
 
           {/* ABOUT THE PROJECT */}
-          <div>
+          <div className="md: -ml-10">
             <h3 className="font-display text-base sm:text-lg font-bold text-paper">
               Tentang Proyek
             </h3>
 
-            <p className="mt-3 sm:mt-5 text-xs sm:text-sm leading-relaxed text-paper/75">
+            <p className="mt-3 sm:mt-5 text-sm sm:text-sm leading-relaxed text-paper/75">
               SIGNIFY dikembangkan sebagai bagian dari IT RUSH 2026
               dengan fokus pada pendidikan, tata kelola, dan teknologi inklusif.
             </p>

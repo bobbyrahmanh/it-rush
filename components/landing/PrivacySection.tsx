@@ -1,4 +1,5 @@
 import Reveal from "@/components/Reveal";
+import { Lock } from "react-feather";
 
 export default function PrivacySection() {
   return (
@@ -14,7 +15,7 @@ export default function PrivacySection() {
               Belajar dengan aman, <br></br> teknologi yang bertanggung jawab.
             </h2>
 
-            <p className="mt-2.5 sm:mt-4 max-w-2xl text-sm leading-relaxed sm:text-lg sm:leading-relaxed text-ink/85">
+            <p className="mt-2.5 sm:mt-4 text-sm leading-tight sm:text-lg sm:leading-relaxed text-ink/85">
               Seluruh deteksi titik jari dijalankan langsung di dalam peramban
               perangkatmu menggunakan WebAssembly dan TensorFlow.js. Tidak ada
               foto atau rekaman wajah maupun tangan yang dikirim atau disimpan
@@ -24,10 +25,10 @@ export default function PrivacySection() {
 
           <div
             aria-hidden="true"
-            className="mx-auto flex h-24 w-24 sm:h-36 sm:w-36 items-center justify-center rounded-full border-2 sm:border-4 border-ink bg-white shadow-popsm"
+            className="mr-10 mx-auto flex h-24 w-24 sm:h-36 sm:w-36 items-center justify-center rounded-full border-2 sm:border-4 border-ink bg-white shadow-popsm"
           >
             <div className="relative flex h-14 w-14 sm:h-20 sm:w-20 items-center justify-center rounded-xl sm:rounded-2xl border-2 sm:border-4 border-ink bg-mint">
-              <span className="text-2xl sm:text-5xl">🔒</span>
+              <span className="text-2xl sm:text-5xl"><Lock className="w-10 h-10"/></span>
               <span className="absolute -right-2.5 -top-2.5 sm:-right-4 sm:-top-4 flex h-7 w-7 sm:h-10 sm:w-10 items-center justify-center rounded-full border-2 border-ink bg-sun text-sm sm:text-xl">
                 ✓
               </span>

@@ -5,15 +5,16 @@ import { useState } from "react";
 import Reveal from "@/components/Reveal";
 import { BookOpen, Users, ArrowRight, RotateCcw } from "react-feather";
 
+
 const CARDS = [
   {
     id: "bisindo",
     number: "01",
     label: "BISINDO",
     title: "Kenali bahasa isyarat.",
-    description: "Pelajari alfabet BISINDO melalui pengenalan gestur tangan.",
+    description: "Belajar alfabet BISINDO melalui pengenalan gestur tangan berbasis AI.",
     detail:
-      "SIGNIFY menghadirkan pembelajaran alfabet BISINDO A–Z dengan bantuan teknologi pengenalan gestur tangan. Pengguna dapat berlatih mengenali bentuk isyarat secara interaktif melalui kamera maupun video simulasi.",
+      "SIGNIFY menyediakan pembelajaran alfabet BISINDO dengan teknologi pengenalan gestur tangan. Pengguna dapat mengenali bentuk isyarat sebagai langkah awal memahami komunikasi dengan teman Tuli.",
     color: "bg-sun",
     icon: BookOpen,
     symbol: "A B C",
@@ -22,10 +23,10 @@ const CARDS = [
     id: "braille",
     number: "02",
     label: "BRAILLE",
-    title: "Pahami pola titik.",
-    description: "Eksplorasi huruf Braille melalui simulasi interaktif.",
+    title: "Kenali bahasa titik.",
+    description: "Pelajari alfabet Braille melalui simulator interaktif.",
     detail:
-      "Melalui simulator Braille, pengguna dapat mengenal susunan enam titik yang membentuk huruf. Setiap titik dapat dieksplorasi secara interaktif untuk membantu pengguna memahami pola alfabet Braille.",
+      "Simulator Braille membantu pengguna mengenal susunan enam titik yang membentuk huruf. Melalui eksplorasi pola secara interaktif, pengguna dapat memahami dasar sistem tulisan Braille dan mengenal cara teman Tunanetra mengakses informasi.",
     color: "bg-mint",
     icon: BookOpen,
     symbol: "⠁ ⠃ ⠉",
@@ -34,10 +35,10 @@ const CARDS = [
     id: "inclusion",
     number: "03",
     label: "INCLUSION",
-    title: "Bangun pemahaman.",
-    description: "Mulai mengenal cara berkomunikasi yang lebih inklusif.",
+    title: "Buka akses untuk semua.",
+    description: "Bangun komunikasi inklusif untuk keberlanjutan lingkungan.",
     detail:
-      "SIGNIFY ingin mendorong lebih banyak orang untuk mengenal keberagaman cara berkomunikasi. Pemahaman merupakan langkah awal untuk membangun lingkungan sosial yang lebih inklusif dan memberikan ruang bagi setiap orang untuk berpartisipasi.",
+      "Dengan mengenal BISINDO dan Braille, semakin banyak orang dapat membangun komunikasi yang inklusif serta mendukung partisipasi teman Tuli dan Tunanetra dalam upaya menjaga pesisir dan hutan tropis.",
     color: "bg-coral",
     icon: Users,
     symbol: "LEARN • SHARE",
@@ -77,21 +78,11 @@ export default function AboutSection() {
             </span>
 
             <h2 className="mt-3 sm:mt-6 max-w-3xl text-2xl font-bold leading-tight sm:text-4xl md:text-5xl">
-              Setiap orang punya cara belajar dan berkomunikasi.
+              Keberlanjutan harus bisa dipahami oleh semua.
             </h2>
 
             <p className="mt-3 sm:mt-6 max-w-2xl text-sm leading-relaxed sm:text-lg sm:leading-snug text-white/90">
-              Perbedaan cara berkomunikasi seharusnya tidak menjadi
-              penghalang untuk saling memahami. Membangun masyarakat
-              yang inklusif dimulai dari kesediaan untuk mengenal dan
-              memahami keberagaman tersebut.
-            </p>
-
-            <p className="mt-2.5 sm:mt-4 max-w-2xl text-sm leading-relaxed sm:text-lg sm:leading-snug text-white/90">
-              SIGNIFY hadir sebagai platform pembelajaran interaktif
-              yang mengajak masyarakat mengenal alfabet BISINDO dan
-              pola Braille melalui teknologi. Sebuah langkah sederhana
-              untuk menumbuhkan pemahaman tentang komunikasi inklusif.
+              Informasi tentang pelestarian pesisir dan hutan tropis perlu dapat diakses oleh setiap orang, termasuk teman Tuli dan Tunanetra. SIGNIFY hadir sebagai platform pembelajaran berbasis AI untuk mengenalkan BISINDO dan Braille secara interaktif. Melalui literasi komunikasi inklusif, kami ingin mendorong masyarakat agar lebih siap berbagi informasi, berpartisipasi, dan bergerak bersama menjaga lingkungan.
             </p>
 
             <div className="mt-5 sm:mt-8 flex flex-wrap gap-2 sm:gap-3">
@@ -110,7 +101,7 @@ export default function AboutSection() {
           <div className="flex flex-col items-center">
             <div className="mb-5 sm:mb-8 text-center">
               <span className="text-xs sm:text-sm font-bold uppercase tracking-[0.2em] text-white/70">
-                Explore SIGNIFY
+                Get to Know SIGNIFY
               </span>
               <h3 className="mt-1 sm:mt-2 text-xl sm:text-2xl font-bold">
                 Discover what's inside!

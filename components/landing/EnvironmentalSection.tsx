@@ -46,9 +46,7 @@ export default function EnvironmentalSection() {
           </h2>
 
           <p className="mt-2.5 sm:mt-4 text-sm leading-relaxed sm:text-lg sm:leading-snug">
-            Kepedulian terhadap masyarakat dan lingkungan juga dimulai dari
-            akses informasi yang setara. Namun, apakah setiap orang sudah
-            memiliki kesempatan yang sama untuk memahami informasi?
+            Melalui pembelajaran BISINDO dan Braille, SIGNIFY mengajak masyarakat umum membangun komunikasi inklusif agar informasi tentang keberlanjutan pesisir dan hutan tropis juga dapat tersampaikan kepada teman Tuli dan tunanetra.
           </p>
         </div>
 
@@ -83,33 +81,33 @@ export default function EnvironmentalSection() {
                 <div className="mx-auto rounded-full bg-white/80 px-3 py-0.5 text-[9px] sm:text-[10px] font-bold text-ink/50">
                   HARI INI
                 </div>
+                
+                <div className="chat-typing-loop">
+                  <div className="chat-message chat-delay-1">
+                    <ChatBubble time="09.12">
+                      Besok ada kegiatan bersih pantai. Informasinya sudah
+                      dibagikan di grup warga.
+                    </ChatBubble>
+                  </div>
 
-                <div className="chat-message chat-delay-1">
-                  <ChatBubble time="09.12">
-                    Besok ada kegiatan bersih pantai. Informasinya sudah
-                    dibagikan di grup warga.
-                  </ChatBubble>
-                </div>
+                  <div className="chat-message chat-delay-2">
+                    <ChatBubble time="09.13">
+                      Tapi bagaimana teman Tuli dan Tunanetra bisa mendapatkan informasi dan ikut berpartisipasi jika informasinya belum aksesibel?
+                    </ChatBubble>
+                  </div>
 
-                <div className="chat-message chat-delay-2">
-                  <ChatBubble time="09.13">
-                    Tapi pengumumannya hanya berupa pesan suara. Bagaimana
-                    teman-teman yang tidak bisa mengakses audio?
-                  </ChatBubble>
-                </div>
+                  <div className="chat-message chat-delay-3">
+                    <ChatBubble time="09.14" variant="sent">
+                      Benar. Kita perlu belajar BISINDO dan Braille agar informasi tentang lingkungan bisa dipahami dan diakses oleh semua orang.
+                    </ChatBubble>
+                  </div>
 
-                <div className="chat-message chat-delay-3">
-                  <ChatBubble time="09.14" variant="sent">
-                    Benar juga. Informasi penting seharusnya bisa dipahami
-                    dengan berbagai cara.
-                  </ChatBubble>
-                </div>
-
-                <div className="chat-message chat-delay-4">
-                  <div className="flex w-fit items-center gap-1 rounded-2xl rounded-tl-sm bg-white px-3 sm:px-4 py-2 sm:py-3 shadow-sm">
-                    <span className="typing-dot" />
-                    <span className="typing-dot" />
-                    <span className="typing-dot" />
+                  <div className="chat-message chat-delay-4">
+                    <div className="flex w-fit items-center gap-1 rounded-2xl rounded-tl-sm bg-white px-3 sm:px-4 py-2 sm:py-3 shadow-sm">
+                      <span className="typing-dot" />
+                      <span className="typing-dot" />
+                      <span className="typing-dot" />
+                    </div>
                   </div>
                 </div>
 
@@ -128,7 +126,7 @@ export default function EnvironmentalSection() {
 
             <div
               aria-hidden="true"
-              className="hidden sm:block absolute -bottom-4 right-4 md:right-8 rotate-6 rounded-xl sm:rounded-2xl border-2 sm:border-4 border-ink bg-coral px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-base font-bold shadow-popsm"
+              className="hidden sm:block absolute -bottom-7 right-4 md:-right-8 -rotate-6 rounded-xl sm:rounded-2xl border-2 sm:border-4 border-ink bg-coral px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-base font-bold shadow-popsm"
             >
               Everyone matters!
             </div>
@@ -142,20 +140,11 @@ export default function EnvironmentalSection() {
               </span>
 
               <h3 className="mt-3 sm:mt-5 text-xl sm:text-3xl md:text-4xl font-bold leading-snug">
-                Bukan hanya menyampaikan informasi, tetapi memastikan semua
-                orang punya kesempatan untuk memahaminya.
+                Bukan hanya menyampaikan informasi, tetapi memastikan semua orang punya kesempatan untuk memahaminya.
               </h3>
 
               <p className="mt-2.5 sm:mt-4 text-xs sm:text-base leading-relaxed sm:leading-snug text-ink/85">
-                Dalam berbagai kegiatan masyarakat, informasi mengenai
-                kesehatan, pendidikan, hingga lingkungan perlu disampaikan
-                dengan memperhatikan keberagaman cara berkomunikasi.
-              </p>
-
-              <p className="mt-2 sm:mt-3 text-xs sm:text-base leading-relaxed sm:leading-snug text-ink/85">
-                Inilah semangat yang dibawa SIGNIFY: mengajak masyarakat
-                mengenal BISINDO dan Braille sebagai langkah awal membangun
-                komunikasi yang lebih inklusif.
+                SIGNIFY mengajak masyarakat mengenal BISINDO dan Braille agar informasi, termasuk tentang keberlanjutan lingkungan, dapat tersampaikan kepada teman Tuli dan tunanetra melalui komunikasi yang inklusif.
               </p>
             </div>
 
@@ -178,7 +167,7 @@ export default function EnvironmentalSection() {
                 {/* BISINDO */}
                 <div className="signify-visual-card rounded-xl sm:rounded-2xl border-2 border-ink bg-white p-3 sm:p-4">
                   <div className="flex h-10 sm:h-14 items-center justify-center rounded-lg sm:rounded-xl bg-mint">
-                    <span className="font-display text-lg sm:text-2xl font-bold">✌️</span>
+                    <span className="font-display text-xl sm:text-2xl font-bold">👋🏼</span>
                   </div>
 
                   <p className="mt-2 sm:mt-3 font-bold text-xs sm:text-base">BISINDO</p>

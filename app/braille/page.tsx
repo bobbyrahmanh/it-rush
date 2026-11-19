@@ -200,8 +200,7 @@ export default function BraillePage() {
       </h1>
 
       <p className="mt-2.5 sm:mt-4 max-w-2xl text-xs sm:text-base leading-relaxed sm:text-lg">
-        Informasi tentang hutan, pesisir, dan lingkungan harus dapat
-        diakses semua orang. <br className="hidden sm:inline" /> Yuk, belajar Braille bersama Owli!
+        Yuk, pelajari Braille bersama Owli agar informasi tentang hutan, pesisir, dan lingkungan juga dapat tersampaikan kepada teman tunanetra!
       </p>
 
       <div className="mt-4 sm:mt-5 flex flex-wrap gap-1.5 sm:gap-2">
@@ -235,20 +234,26 @@ export default function BraillePage() {
       {/* ENVIRONMENT CONTEXT */}
       <section className="mt-4 sm:mt-6 grid gap-3 sm:gap-4 sm:grid-cols-2">
         <article className="card bg-grape p-3.5 text-white sm:p-6">
-          <p className="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-white/75">Teknologi inklusif</p>
-          <h2 className="mt-1 sm:mt-2 text-lg sm:text-2xl font-bold">Lingkungan untuk semua.</h2>
+          <p className="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-white/75">
+            Teknologi inklusif
+          </p>
+          <h2 className="mt-1 sm:mt-2 text-lg sm:text-2xl font-bold">
+            Akses informasi untuk semua.
+          </h2>
           <p className="mt-1.5 sm:mt-2 text-xs sm:text-sm leading-snug">
-            Informasi mengenai pengelolaan sampah, pelestarian hutan, dan
-            perlindungan pesisir perlu disampaikan dalam bentuk yang dapat
-            diakses oleh berbagai kelompok masyarakat.
+            Informasi tentang pelestarian hutan tropis dan pesisir perlu dapat diakses oleh semua orang. Braille menjadi salah satu sarana bagi teman Tunanetra untuk mengenali dan memperoleh informasi melalui tulisan.
           </p>
         </article>
+
         <article className="card bg-sun p-3.5 sm:p-6">
-          <p className="text-[10px] sm:text-xs font-bold uppercase tracking-wider">Contoh penerapan</p>
-          <h2 className="mt-1 sm:mt-2 text-lg sm:text-2xl font-bold">Dari huruf menjadi informasi.</h2>
+          <p className="text-[10px] sm:text-xs font-bold uppercase tracking-wider">
+            Contoh penerapan
+          </p>
+          <h2 className="mt-1 sm:mt-2 text-lg sm:text-2xl font-bold">
+            Braille untuk lingkungan inklusif.
+          </h2>
           <p className="mt-1.5 sm:mt-2 text-xs sm:text-sm leading-snug">
-            Tulisan Braille dapat digunakan pada label, petunjuk fasilitas
-            publik, penanda tempat sampah, hingga informasi jalur evakuasi.
+            Penerapan Braille pada label tempat sampah, papan informasi fasilitas publik, dan petunjuk jalur evakuasi dapat membantu teman Tunanetra mengakses informasi lingkungan secara lebih mandiri.
           </p>
         </article>
       </section>
@@ -495,12 +500,11 @@ export default function BraillePage() {
       <section className="mt-6 rounded-[2rem] border-4 border-ink bg-mint p-6 sm:p-8">
         <p className="text-xs font-bold uppercase tracking-wider">Akses untuk semua</p>
         <h2 className="mt-2 max-w-2xl font-display text-2xl font-bold sm:text-3xl">
-          Lingkungan yang lestari juga harus inklusif.
+          Keberlanjutan dimulai dari akses yang setara.
         </h2>
         <p className="mt-2 text-sm leading-snug">
-          Pelestarian hutan dan pesisir membutuhkan partisipasi seluruh
-          masyarakat. Akses informasi yang inklusif merupakan salah satu
-          langkah agar setiap orang dapat ikut memahami dan menjaga lingkungan.
+          Menjaga hutan tropis dan pesisir membutuhkan keterlibatan seluruh masyarakat.
+          Dengan memperluas akses informasi melalui Braille, teman Tunanetra juga memiliki kesempatan untuk memahami isu lingkungan dan berpartisipasi dalam upaya pelestariannya.
         </p>
       </section>
     </main>

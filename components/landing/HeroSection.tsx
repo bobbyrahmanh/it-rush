@@ -52,11 +52,7 @@ export default function HeroSection() {
           </h1>
 
           <p className="mt-3 sm:mt-6 max-w-xl text-sm leading-relaxed sm:text-lg sm:leading-snug">
-            SIGNIFY menghadirkan pembelajaran komunikasi inklusif melalui
-            pengenalan alfabet BISINDO berbasis AI dan simulator Braille
-            interaktif. Kami percaya bahwa akses terhadap pendidikan dan
-            informasi, termasuk tentang keberlanjutan pesisir dan hutan tropis,
-            perlu terbuka bagi semua orang.
+            SIGNIFY adalah platform pembelajaran BISINDO dan Braille berbasis AI yang membantu masyarakat memahami komunikasi inklusif. Kami ingin memastikan informasi tentang pelestarian pesisir dan hutan tropis dapat diakses dan dipahami oleh semua orang, termasuk teman Tuli dan Tunanetra.
           </p>
 
           <div className="mt-5 sm:mt-8 flex flex-col sm:flex-row gap-3 sm:gap-4">

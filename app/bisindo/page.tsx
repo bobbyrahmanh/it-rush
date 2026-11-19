@@ -125,12 +125,11 @@ function EnvironmentContext() {
             </span>
 
             <h2 className="mt-4 text-2xl font-bold leading-snug sm:text-3xl">
-              Menjaga lingkungan juga membutuhkan komunikasi yang inklusif.
+              Pelestarian lingkungan membutuhkan partisipasi semua orang.
             </h2>
 
             <p className="mt-3 leading-snug text-ink/80">
-              Informasi tentang kebersihan pesisir, pelestarian mangrove, hingga perlindungan hutan tropis perlu dapat diakses oleh seluruh lapisan masyarakat. Karena itu, setiap orang perlu
-              memiliki kesempatan untuk mengenal cara berkomunikasi yang beragam.
+              Upaya menjaga pesisir dan hutan tropis perlu didukung oleh akses informasi yang inklusif. Melalui pembelajaran BISINDO, SIGNIFY mengajak masyarakat mengenal cara berkomunikasi dengan teman Tuli agar informasi dan kesadaran tentang lingkungan dapat dibagikan secara lebih luas.
             </p>
 
             <div className="mt-5 flex flex-wrap gap-2">
@@ -237,9 +236,8 @@ export default function BisindoPage() {
                 </span>
               </h1>
 
-              <p className="mt-2.5 sm:mt-4 max-w-xl text-xs leading-relaxed text-white/85 sm:text-base sm:leading-snug md:text-lg">
-                Pelajari alfabet dan kosakata BISINDO melalui referensi visual serta latihan pengenalan gestur berbasis AI. Mulai dari
-                langkah sederhana untuk membangun pemahaman komunikasi dengan komunitas Tuli.
+              <p className="mt-2.5 sm:mt-4 max-w-xl text-xs leading-snug text-white/85 sm:text-base sm:leading-snug md:text-lg">
+                Pelajari BISINDO melalui pembelajaran interaktif berbasis AI sebagai langkah sederhana untuk membantu menyampaikan informasi kepada teman Tuli.
               </p>
 
               <div className="mt-4 sm:mt-6 flex flex-wrap gap-1.5 sm:gap-2">
@@ -464,7 +462,7 @@ export default function BisindoPage() {
                 <h2 className="font-display text-xl font-bold">
                   Kosakata BISINDO Dinamis
                 </h2>
-                <p className="text-sm leading-relaxed text-white/90">
+                <p className="text-sm leading-snug text-white/90">
                   Setelah mengenal alfabet, lanjutkan latihan melalui kosakata BISINDO yang melibatkan gerakan tangan. Amati referensi, kemudian praktikkan gerakannya melalui kamera.
                 </p>
               </div>
@@ -630,7 +628,7 @@ export default function BisindoPage() {
             <CheckCircle className="mt-0.5 h-5 w-5 shrink-0" />
             <div>
               <p className="font-bold">Terus tingkatkan kemampuanmu!</p>
-              <p className="mt-1 text-sm leading-relaxed text-ink/75">
+              <p className="mt-1 text-sm leading-snug text-ink/75">
                 Setiap huruf dan kosakata yang berhasil dipelajari merupakan langkah awal untuk membangun pemahaman dan komunikasi yang lebih inklusif.
               </p>
             </div>
@@ -640,11 +638,9 @@ export default function BisindoPage() {
           <div className="card flex items-start gap-3 bg-sky p-4">
             <Shield className="mt-0.5 h-5 w-5 shrink-0 text-grape" />
             <div>
-              <p className="font-bold">Inklusivitas untuk semua.</p>
-              <p className="mt-1 text-sm leading-relaxed text-ink/75">
-                Kepedulian terhadap lingkungan juga berarti memastikan
-                informasi dan kesempatan berpartisipasi dapat dijangkau
-                masyarakat dengan beragam kebutuhan komunikasi.
+              <p className="font-bold">Lingkungan lestari, tanpa terkecuali.</p>
+              <p className="mt-1 text-sm leading-snug text-ink/75">
+                Setiap orang berhak memperoleh informasi dan kesempatan untuk berpartisipasi dalam menjaga lingkungan. Komunikasi yang inklusif menjadi salah satu langkah untuk mewujudkannya.
               </p>
             </div>
           </div>
