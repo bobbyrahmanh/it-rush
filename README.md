@@ -2,13 +2,9 @@
 
 # SIGNIFY
 
-### AI Teknologi untuk Penguatan Masyarakat serta Keberlanjutan Pesisir dan Hutan Tropis
+### Platform Pendidikan Inklusif Berbasis AI untuk Memperluas Akses Informasi dan Partisipasi Masyarakat dalam Mendukung Keberlanjutan Pesisir dan Hutan Tropis
 
-**Belajar komunikasi inklusif. Memperluas akses informasi. Menguatkan kepedulian terhadap lingkungan.**
-
-SIGNIFY adalah platform pembelajaran berbasis web yang mengajak masyarakat mengenal komunikasi inklusif melalui Bahasa Isyarat Indonesia (BISINDO) dan Braille. Platform ini mengintegrasikan pengenalan gestur alfabet BISINDO berbasis AI, simulator Braille 6-titik, kuis interaktif, sistem progres belajar, serta materi literasi lingkungan tentang pesisir dan hutan tropis.
-
-Melalui pendekatan tersebut, SIGNIFY mendorong masyarakat untuk memahami cara berkomunikasi yang lebih inklusif sekaligus meningkatkan kesadaran bahwa upaya menjaga lingkungan perlu melibatkan semua orang.
+SIGNIFY adalah platform pembelajaran berbasis web yang mengajak masyarakat mengenal komunikasi inklusif melalui Bahasa Isyarat Indonesia (BISINDO) dan Braille. Platform ini mengintegrasikan pengenalan gestur alfabet BISINDO berbasis AI, simulator Braille 6-titik, kuis interaktif, sistem progres belajar, serta materi literasi lingkungan tentang pesisir dan hutan tropis. Melalui pendekatan tersebut, SIGNIFY mendorong masyarakat untuk memahami cara berkomunikasi yang lebih inklusif sekaligus meningkatkan kesadaran bahwa upaya menjaga lingkungan perlu melibatkan semua orang.
 
 [![Vercel](https://img.shields.io/badge/Vercel-Visit%20Live%20Site-A5B4FC?style=for-the-badge&logo=vercel&logoColor=white)](https://it-rush.vercel.app/)
 
