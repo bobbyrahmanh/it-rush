@@ -540,7 +540,7 @@ export default function BisindoPage() {
         </div>
 
         {/* RIGHT COLUMN: REFERENCE AND CAMERA */}
-        <div className="space-y-3 lg:sticky lg:top-28 lg:max-h-[calc(100vh-7.5rem)] lg:self-start lg:overflow-y-auto lg:pr-1">
+        <div className="space-y-3 lg:sticky lg:top-[6.75rem] lg:max-h-[calc(100dvh-7.25rem)] lg:self-start lg:overflow-y-auto lg:pb-2 lg:pr-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
           {selectedWord ? (
             <>
               <StepHeader step="01" title="Kenali Kosakata" />
@@ -568,7 +568,7 @@ export default function BisindoPage() {
                 key={sel}
                 className="card animate-pop flex flex-col items-center gap-4 bg-white p-3.5 sm:flex-row sm:items-center sm:p-4"
               >
-                <div className="flex h-32 w-32 shrink-0 items-center justify-center overflow-hidden rounded-2xl border-4 border-ink bg-sun/20 p-1 shadow-[3px_3px_0px_#1B1B3A] sm:h-36 sm:w-36 lg:h-[clamp(7.5rem,18vh,10rem)] lg:w-[clamp(7.5rem,18vh,10rem)]">
+                <div className="flex h-32 w-32 shrink-0 items-center justify-center overflow-hidden rounded-2xl border-4 border-ink bg-sun/20 p-1 shadow-[3px_3px_0px_#1B1B3A] sm:h-36 sm:w-36 lg:h-[clamp(6.5rem,16dvh,9.5rem)] lg:w-[clamp(6.5rem,16dvh,9.5rem)]">
                   <img
                     src={`/images/bisindo/${sel}.webp`}
                     alt={`Contoh pose tangan huruf BISINDO ${sel}`}
