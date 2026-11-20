@@ -566,47 +566,49 @@ export default function BisindoPage() {
               {/* LETTER REFERENCE */}
               <div
                 key={sel}
-                className="card animate-pop space-y-3 bg-white p-4"
+                className="card animate-pop flex flex-col items-center gap-4 bg-white p-3.5 sm:flex-row sm:items-center sm:p-4"
               >
-                <div className="flex flex-wrap items-center justify-between gap-2">
-                  <div className="flex items-center gap-2.5">
-                    <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border-4 border-ink bg-grape font-display text-2xl font-bold text-white shadow-[3px_3px_0px_#1B1B3A]">
-                      {sel}
-                    </span>
-
-                    <div className="min-w-0">
-                      <h3 className="text-lg font-bold leading-tight">Huruf {sel}</h3>
-                      <span className="mt-0.5 inline-block rounded-full border-2 border-ink bg-mint px-2.5 py-0.5 text-xs font-semibold">
-                        {handsOf(sel)} Tangan
-                      </span>
-                    </div>
-                  </div>
-
-                  <button
-                    type="button"
-                    onClick={() => speak(sel, data.settings.audioEnabled)}
-                    className="btn !min-h-[40px] !px-3 bg-sun"
-                    aria-label={`Dengarkan huruf ${sel}`}
-                  >
-                    <Volume2 className="h-4 w-4" />
-                  </button>
-                </div>
-
-                <div className="flex h-44 w-full items-center justify-center overflow-hidden rounded-2xl border-4 border-ink bg-sun/15 p-2 shadow-[3px_3px_0px_#1B1B3A] sm:h-48 lg:h-[clamp(10rem,24vh,14rem)]">
+                <div className="flex h-32 w-32 shrink-0 items-center justify-center overflow-hidden rounded-2xl border-4 border-ink bg-sun/20 p-1 shadow-[3px_3px_0px_#1B1B3A] sm:h-36 sm:w-36 lg:h-[clamp(7.5rem,18vh,10rem)] lg:w-[clamp(7.5rem,18vh,10rem)]">
                   <img
                     src={`/images/bisindo/${sel}.webp`}
                     alt={`Contoh pose tangan huruf BISINDO ${sel}`}
-                    className="h-full w-full rounded-xl object-contain"
+                    className="h-full w-full rounded-xl object-contain brightness-[1.12] contrast-[1.04]"
                   />
                 </div>
 
-                {/* Catatan khusus huruf J */}
-                {sel === "J" && (
-                  <p className="rounded-xl border-2 border-ink/10 bg-sun p-2.5 text-xs leading-snug">
-                    <strong>Catatan:</strong> J digerakkan melengkung di udara.
-                    Untuk kamera, tahan pose akhir (kelingking ke samping).
-                  </p>
-                )}
+                <div className="w-full min-w-0 flex-1">
+                  <div className="flex flex-wrap items-center justify-between gap-2">
+                    <div className="flex items-center gap-2.5">
+                      <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border-4 border-ink bg-grape font-display text-2xl font-bold text-white shadow-[3px_3px_0px_#1B1B3A]">
+                        {sel}
+                      </span>
+
+                      <div className="min-w-0">
+                        <h3 className="text-lg font-bold leading-tight">Huruf {sel}</h3>
+                        <span className="mt-0.5 inline-block rounded-full border-2 border-ink bg-mint px-2.5 py-0.5 text-xs font-semibold">
+                          {handsOf(sel)} Tangan
+                        </span>
+                      </div>
+                    </div>
+
+                    <button
+                      type="button"
+                      onClick={() => speak(sel, data.settings.audioEnabled)}
+                      className="btn !min-h-[40px] !px-3 bg-sun"
+                      aria-label={`Dengarkan huruf ${sel}`}
+                    >
+                      <Volume2 className="h-4 w-4" />
+                    </button>
+                  </div>
+
+                  {/* Catatan khusus huruf J */}
+                  {sel === "J" && (
+                    <p className="mt-2.5 rounded-xl border-2 border-ink/10 bg-sun p-2.5 text-xs leading-snug">
+                      <strong>Catatan:</strong> J digerakkan melengkung di udara.
+                      Untuk kamera, tahan pose akhir (kelingking ke samping).
+                    </p>
+                  )}
+                </div>
               </div>
 
               {/* CAMERA PRACTICE */}
