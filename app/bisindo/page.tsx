@@ -540,7 +540,7 @@ export default function BisindoPage() {
         </div>
 
         {/* RIGHT COLUMN: REFERENCE AND CAMERA */}
-        <div className="space-y-3 lg:sticky lg:top-28 lg:self-start">
+        <div className="space-y-3 lg:sticky lg:top-28 lg:max-h-[calc(100vh-7.5rem)] lg:self-start lg:overflow-y-auto lg:pr-1">
           {selectedWord ? (
             <>
               <StepHeader step="01" title="Kenali Kosakata" />
@@ -592,7 +592,7 @@ export default function BisindoPage() {
                   </button>
                 </div>
 
-                <div className="flex h-52 w-full items-center justify-center overflow-hidden rounded-2xl border-4 border-ink bg-sun/15 p-2 shadow-[3px_3px_0px_#1B1B3A] sm:h-56">
+                <div className="flex h-44 w-full items-center justify-center overflow-hidden rounded-2xl border-4 border-ink bg-sun/15 p-2 shadow-[3px_3px_0px_#1B1B3A] sm:h-48 lg:h-[clamp(10rem,24vh,14rem)]">
                   <img
                     src={`/images/bisindo/${sel}.webp`}
                     alt={`Contoh pose tangan huruf BISINDO ${sel}`}

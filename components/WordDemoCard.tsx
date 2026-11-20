@@ -116,7 +116,7 @@ export default function WordDemoCard({
 
         {isLoadingDemo ? (
           <div
-            className="flex h-44 sm:h-48 w-full animate-pulse items-center justify-center rounded-2xl border-2 border-ink bg-surface-secondary text-xs font-semibold text-ink/65"
+            className="flex h-44 w-full animate-pulse items-center justify-center rounded-2xl border-2 border-ink bg-surface-secondary text-xs font-semibold text-ink/65 sm:h-48 lg:h-[clamp(10rem,24vh,14rem)]"
             role="status"
             aria-live="polite"
           >
@@ -130,7 +130,7 @@ export default function WordDemoCard({
                 src={mediaUrl}
                 alt={`Animasi contoh gerakan BISINDO kata ${word.title}`}
                 onError={() => setMediaFailed(true)}
-                className="h-44 sm:h-48 w-full object-contain"
+                className="h-44 w-full object-contain sm:h-48 lg:h-[clamp(10rem,24vh,14rem)]"
               />
             ) : (
               <video
@@ -147,7 +147,7 @@ export default function WordDemoCard({
                 onPause={() => setIsPlaying(false)}
                 aria-label={`Video berulang contoh gerakan BISINDO kata ${word.title}`}
                 onError={() => setMediaFailed(true)}
-                className="h-44 sm:h-48 w-full cursor-pointer object-contain"
+                className="h-44 w-full cursor-pointer object-contain sm:h-48 lg:h-[clamp(10rem,24vh,14rem)]"
               />
             )}
           </div>
