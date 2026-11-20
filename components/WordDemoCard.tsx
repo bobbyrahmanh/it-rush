@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { Check, RefreshCw, Volume2 } from "react-feather";
+import { useEffect, useRef, useState } from "react";
+import { Check, Pause, Play, RefreshCw, Volume2 } from "react-feather";
 import type { WordItem } from "@/lib/bisindo";
 import type { WordDemoRow } from "@/lib/supabase/client";
 
@@ -28,11 +28,27 @@ export default function WordDemoCard({
 }: WordDemoCardProps) {
   const [mediaFailed, setMediaFailed] = useState(false);
   const [retryCount, setRetryCount] = useState(0);
+  const [isPlaying, setIsPlaying] = useState(true);
+  const videoRef = useRef<HTMLVideoElement | null>(null);
 
   useEffect(() => {
     setMediaFailed(false);
     setRetryCount(0);
+    setIsPlaying(true);
   }, [word.id, demo?.video_url]);
+
+  const togglePlayback = () => {
+    const video = videoRef.current;
+    if (!video) return;
+    if (video.paused) {
+      void video.play().then(() => setIsPlaying(true)).catch(() => {});
+    } else {
+      video.pause();
+      setIsPlaying(false);
+    }
+  };
+
+  const isImgAnim = demo ? isImageAnimation(demo) : false;
 
   const mediaUrl = demo?.video_url
     ? retryCount > 0
@@ -75,10 +91,26 @@ export default function WordDemoCard({
           <p className="text-sm font-bold text-ink">
             Ikuti gerakan seperti ini:
           </p>
-          {mediaUrl && !mediaFailed && (
-            <span className="rounded-full border border-ink/20 bg-sky/50 px-2.5 py-0.5 text-[11px] font-bold text-ink">
-              Loop Otomatis
-            </span>
+          {mediaUrl && !mediaFailed && !isImgAnim && (
+            <button
+              type="button"
+              onClick={togglePlayback}
+              aria-pressed={!isPlaying}
+              aria-label={isPlaying ? `Hentikan animasi ${word.title}` : `Putar animasi ${word.title}`}
+              className="inline-flex items-center gap-1.5 rounded-full border-2 border-ink bg-sky px-3 py-1 text-xs font-bold text-ink transition hover:bg-sun"
+            >
+              {isPlaying ? (
+                <>
+                  <Pause className="h-3.5 w-3.5" />
+                  Stop
+                </>
+              ) : (
+                <>
+                  <Play className="h-3.5 w-3.5" />
+                  Putar
+                </>
+              )}
+            </button>
           )}
         </div>
 
@@ -92,7 +124,7 @@ export default function WordDemoCard({
           </div>
         ) : mediaUrl && !mediaFailed ? (
           <div className="relative overflow-hidden rounded-2xl border-2 border-ink bg-ink">
-            {demo && isImageAnimation(demo) ? (
+            {isImgAnim ? (
               <img
                 key={mediaUrl}
                 src={mediaUrl}
@@ -102,6 +134,7 @@ export default function WordDemoCard({
               />
             ) : (
               <video
+                ref={videoRef}
                 key={mediaUrl}
                 src={mediaUrl}
                 autoPlay
@@ -109,9 +142,12 @@ export default function WordDemoCard({
                 muted
                 playsInline
                 preload="auto"
+                onClick={togglePlayback}
+                onPlay={() => setIsPlaying(true)}
+                onPause={() => setIsPlaying(false)}
                 aria-label={`Video berulang contoh gerakan BISINDO kata ${word.title}`}
                 onError={() => setMediaFailed(true)}
-                className="h-44 sm:h-48 w-full object-contain"
+                className="h-44 sm:h-48 w-full cursor-pointer object-contain"
               />
             )}
           </div>
