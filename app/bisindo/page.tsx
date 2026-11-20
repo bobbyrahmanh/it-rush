@@ -566,31 +566,35 @@ export default function BisindoPage() {
               {/* LETTER REFERENCE */}
               <div
                 key={sel}
-                className="card animate-pop flex items-center gap-3 bg-white p-2.5"
+                className="card animate-pop flex flex-col items-center gap-4 bg-white p-4 sm:flex-row sm:items-center"
               >
-                <img
-                  src={`/images/bisindo/${sel}.webp`}
-                  alt={`Contoh pose tangan huruf BISINDO ${sel}`}
-                  className="h-16 w-16 shrink-0 rounded-2xl border-4 border-ink bg-sun/20 object-cover"
-                />
+                <div className="flex h-36 w-36 shrink-0 items-center justify-center overflow-hidden rounded-2xl border-4 border-ink bg-sun/20 p-1.5 shadow-[3px_3px_0px_#1B1B3A] sm:h-40 sm:w-40">
+                  <img
+                    src={`/images/bisindo/${sel}.webp`}
+                    alt={`Contoh pose tangan huruf BISINDO ${sel}`}
+                    className="h-full w-full rounded-xl object-contain"
+                  />
+                </div>
 
-                <div className="min-w-0 flex-1">
-                  <div className="flex flex-wrap items-center gap-2">
-                    <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border-4 border-ink bg-grape font-display text-xl font-bold text-white">
-                      {sel}
-                    </span>
-
-                    <div className="min-w-0">
-                      <h3 className="text-base font-bold leading-tight">Huruf {sel}</h3>
-                      <span className="inline-block rounded-full border-2 border-ink bg-mint px-2.5 py-0.5 text-xs font-semibold">
-                        {handsOf(sel)} Tangan
+                <div className="w-full min-w-0 flex-1">
+                  <div className="flex flex-wrap items-center justify-between gap-2">
+                    <div className="flex items-center gap-2.5">
+                      <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border-4 border-ink bg-grape font-display text-2xl font-bold text-white shadow-[3px_3px_0px_#1B1B3A]">
+                        {sel}
                       </span>
+
+                      <div className="min-w-0">
+                        <h3 className="text-lg font-bold leading-tight">Huruf {sel}</h3>
+                        <span className="mt-0.5 inline-block rounded-full border-2 border-ink bg-mint px-2.5 py-0.5 text-xs font-semibold">
+                          {handsOf(sel)} Tangan
+                        </span>
+                      </div>
                     </div>
 
                     <button
                       type="button"
                       onClick={() => speak(sel, data.settings.audioEnabled)}
-                      className="btn !min-h-[36px] !px-3 bg-sun"
+                      className="btn !min-h-[40px] !px-3 bg-sun"
                       aria-label={`Dengarkan huruf ${sel}`}
                     >
                       <Volume2 className="h-4 w-4" />
@@ -599,7 +603,7 @@ export default function BisindoPage() {
 
                   {/* Catatan khusus huruf J */}
                   {sel === "J" && (
-                    <p className="mt-2 rounded-xl border-2 border-ink/10 bg-sun p-2 text-xs leading-snug">
+                    <p className="mt-2.5 rounded-xl border-2 border-ink/10 bg-sun p-2.5 text-xs leading-snug">
                       <strong>Catatan:</strong> J digerakkan melengkung di udara.
                       Untuk kamera, tahan pose akhir (kelingking ke samping).
                     </p>
