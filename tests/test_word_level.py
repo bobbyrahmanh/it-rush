@@ -14,6 +14,7 @@ from bisindo.word_level import (
     add_temporal_derivatives,
     anatomical_is_right,
     append_wl_sequences_npz,
+    augment_wl_raw_frames,
     create_pose_detector,
     detect_raw_pose,
     extract_wl_backbone_embeddings,
@@ -199,7 +200,8 @@ def test_finetune_wl_head_in_place_updates_and_preserves_absent_classes(tmp_path
 
     rng = np.random.default_rng(19)
     X_seq = rng.normal(0.0, 0.3, size=(6, WL_SEQUENCE_LEN, WL_TEMPORAL_FEATURE_DIM)).astype(np.float32)
-    y_labels = np.array(["air", "makan", "air", "makan", "air", "makan"])
+    first_cls = classes[0]
+    y_labels = np.array([first_cls, "makan", first_cls, "makan", first_cls, "makan"])
 
     _, w_before, b_before = extract_wl_backbone_embeddings(base_tflite, X_seq[:1])
 
@@ -213,6 +215,7 @@ def test_finetune_wl_head_in_place_updates_and_preserves_absent_classes(tmp_path
         epochs=5,
         learning_rate=1e-3,
         l2_sp_alpha=1e-2,
+        reset_classes=[first_cls],
     )
 
     assert out_tflite.exists()
@@ -228,3 +231,36 @@ def test_finetune_wl_head_in_place_updates_and_preserves_absent_classes(tmp_path
     preds = predictor.predict(frames)
     assert len(preds) == len(classes)
     assert np.isclose(sum(p.confidence for p in preds), 1.0, atol=1e-4)
+
+
+def test_augment_wl_raw_frames_preserves_nan_and_mirrors_slots():
+    base = []
+    for t in range(12):
+        f = np.full(WL_RAW_FEATURE_DIM, np.nan, dtype=np.float32)
+        f[0:42:2] = 0.2 + 0.01 * t
+        f[1:42:2] = 0.3
+        f[84:98:2] = 0.05
+        f[85:98:2] = 0.10
+        f[98] = 1.0  # right hand present, left hand missing (NaN)
+        base.append(f)
+
+    orig_copy = base[0].copy()
+    aug = augment_wl_raw_frames(
+        base,
+        rng=np.random.default_rng(1),
+        mirror=True,
+        x_scale=0.5,
+        y_scale=1.0,
+        rot_deg=0.0,
+        crop_start=0.2,
+        crop_end=0.9,
+        noise_std=0.0,
+    )
+
+    assert np.array_equal(base[0], orig_copy, equal_nan=True)
+    assert len(aug) >= 8 and len(aug) < len(base)
+    # After mirror: right slot -> NaN, left slot -> negated * 0.5, flag swapped to left [99]
+    assert np.all(np.isnan(aug[0][0:42]))
+    assert np.isnan(aug[0][98]) and aug[0][99] == 1.0
+    expected_x = -(base[int(round(0.2 * 12))][0] * 0.5)
+    assert np.isclose(aug[0][42], expected_x, atol=1e-6)

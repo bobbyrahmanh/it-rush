@@ -230,13 +230,12 @@ class WordLevelPredictor:
         return preds
 
 
-def extract_wl_sequence_from_video_file(
+def extract_wl_raw_frames_from_video_file(
     video_path: str | Path,
     hand_detector: Any,
     pose_detector: Any,
-    sequence_len: int = WL_SEQUENCE_LEN,
-) -> np.ndarray:
-    """Extract a `(sequence_len, 300)` WL-BISINDO input tensor from a video clip."""
+) -> list[np.ndarray]:
+    """Read every frame of a video file into raw 100-float WL-BISINDO vectors."""
     cap = cv2.VideoCapture(str(video_path))
     if not cap.isOpened():
         raise RuntimeError(f"Could not open video file: {video_path}")
@@ -253,7 +252,93 @@ def extract_wl_sequence_from_video_file(
 
     if not raw_frames:
         raise ValueError(f"Video file contained no readable frames: {video_path}")
+    return raw_frames
+
+
+def extract_wl_sequence_from_video_file(
+    video_path: str | Path,
+    hand_detector: Any,
+    pose_detector: Any,
+    sequence_len: int = WL_SEQUENCE_LEN,
+) -> np.ndarray:
+    """Extract a `(sequence_len, 300)` WL-BISINDO input tensor from a video clip."""
+    raw_frames = extract_wl_raw_frames_from_video_file(video_path, hand_detector, pose_detector)
     return prepare_wl_model_input(raw_frames, sequence_len=sequence_len)[0]
+
+
+def augment_wl_raw_frames(
+    raw_frames: Sequence[np.ndarray],
+    *,
+    rng: np.random.Generator | None = None,
+    mirror: bool = False,
+    x_scale: float = 1.0,
+    y_scale: float = 1.0,
+    rot_deg: float = 0.0,
+    crop_start: float = 0.0,
+    crop_end: float = 1.0,
+    noise_std: float = 0.008,
+) -> list[np.ndarray]:
+    """Augment raw 100-float WL frame vectors without mutating input or corrupting NaNs.
+
+    Supports temporal cropping, anatomically consistent horizontal mirroring
+    (swapping right/left hand slots, left/right pose anchors, and presence flags),
+    aspect scaling, 2D rotation around the nose origin, and coordinate jitter.
+    """
+    if not raw_frames:
+        return []
+    if rng is None:
+        rng = np.random.default_rng()
+
+    n = len(raw_frames)
+    min_len = min(n, 8)
+    i0 = max(0, min(n - min_len, int(round(crop_start * n))))
+    i1 = max(i0 + min_len, min(n, int(round(crop_end * n))))
+
+    rad = np.deg2rad(float(rot_deg))
+    ca, sa = float(np.cos(rad)), float(np.sin(rad))
+
+    out_frames: list[np.ndarray] = []
+    for src in raw_frames[i0:i1]:
+        f = np.asarray(src, dtype=np.float32).copy()
+
+        if mirror:
+            right_hand = f[0:42].copy()
+            left_hand = f[42:84].copy()
+            f[0:42] = left_hand
+            f[42:84] = right_hand
+
+            flag_r = f[98]
+            f[98] = f[99]
+            f[99] = flag_r
+
+            # Swap symmetric pose anchors: L/R shoulder (1<->2), L/R ear (3<->4), L/R elbow (5<->6)
+            for a_idx, b_idx in ((1, 2), (3, 4), (5, 6)):
+                pa = 84 + a_idx * 2
+                pb = 84 + b_idx * 2
+                tmp_x, tmp_y = f[pa], f[pa + 1]
+                f[pa], f[pa + 1] = f[pb], f[pb + 1]
+                f[pb], f[pb + 1] = tmp_x, tmp_y
+
+            f[0:98:2] = -f[0:98:2]
+
+        f[0:98:2] *= np.float32(x_scale)
+        f[1:98:2] *= np.float32(y_scale)
+
+        if rot_deg != 0.0:
+            xs = f[0:98:2].copy()
+            ys = f[1:98:2].copy()
+            f[0:98:2] = xs * np.float32(ca) - ys * np.float32(sa)
+            f[1:98:2] = xs * np.float32(sa) + ys * np.float32(ca)
+
+        if noise_std > 0.0:
+            finite_mask = np.isfinite(f[:98])
+            if np.any(finite_mask):
+                jitter = rng.normal(0.0, noise_std, size=98).astype(np.float32)
+                f[:98][finite_mask] += jitter[finite_mask]
+
+        out_frames.append(f)
+
+    return out_frames
 
 
 def save_wl_sequences_npz(
@@ -396,6 +481,37 @@ def extract_wl_backbone_embeddings(
     return embeddings, w_head, b_head
 
 
+class ColumnMaskedL2SPRegularizer(tf.keras.regularizers.Regularizer):
+    """Per-class L2-SP regularizer that anchors preserved classes and frees reset classes."""
+
+    def __init__(
+        self,
+        w0: np.ndarray,
+        anchor_mask: np.ndarray,
+        l2_sp_alpha: float = 1e-2,
+        reset_l2: float = 1e-4,
+    ) -> None:
+        self.l2_sp_alpha = float(l2_sp_alpha)
+        self.reset_l2 = float(reset_l2)
+        self._w0_tensor = tf.constant(np.asarray(w0, dtype=np.float32), dtype=tf.float32)
+        self._mask_tensor = tf.constant(
+            np.asarray(anchor_mask, dtype=np.float32), dtype=tf.float32
+        )
+
+    def __call__(self, x: tf.Tensor) -> tf.Tensor:
+        xf = tf.cast(x, tf.float32)
+        anchored = self.l2_sp_alpha * tf.reduce_sum(
+            self._mask_tensor * tf.square(xf - self._w0_tensor)
+        )
+        unanchored = self.reset_l2 * tf.reduce_sum(
+            (1.0 - self._mask_tensor) * tf.square(xf)
+        )
+        return anchored + unanchored
+
+    def get_config(self) -> dict[str, Any]:
+        return {"l2_sp_alpha": self.l2_sp_alpha, "reset_l2": self.reset_l2}
+
+
 def finetune_wl_head_in_place(
     base_tflite_path: str | Path,
     classes: list[str],
@@ -406,6 +522,7 @@ def finetune_wl_head_in_place(
     epochs: int = 40,
     learning_rate: float = 1e-3,
     l2_sp_alpha: float = 1e-2,
+    reset_classes: Sequence[str] | None = None,
     seed: int = 42,
 ) -> float:
     """Fine-tune the final WL-BISINDO classifier head with L2-SP and patch the TFLite binary."""
@@ -432,18 +549,42 @@ def finetune_wl_head_in_place(
 
     tf.keras.utils.set_random_seed(seed)
     w0_keras = w0_tflite.T.copy()
+    b0_init = b0_tflite.copy()
+
+    reset_set = {str(lbl) for lbl in (reset_classes or ()) if str(lbl) in label_to_idx}
+    if reset_set:
+        rng = np.random.default_rng(seed)
+        w_mask = np.ones((1, len(classes)), dtype=np.float32)
+        b_mask = np.ones((len(classes),), dtype=np.float32)
+        for lbl in reset_set:
+            c_idx = label_to_idx[lbl]
+            w0_keras[:, c_idx] = rng.normal(0.0, 0.05, size=(embeddings.shape[1],)).astype(
+                np.float32
+            )
+            b0_init[c_idx] = np.float32(0.0)
+            w_mask[0, c_idx] = 0.0
+            b_mask[c_idx] = 0.0
+        k_reg: tf.keras.regularizers.Regularizer | None = ColumnMaskedL2SPRegularizer(
+            w0_keras, w_mask, l2_sp_alpha=l2_sp_alpha
+        )
+        b_reg: tf.keras.regularizers.Regularizer | None = ColumnMaskedL2SPRegularizer(
+            b0_init, b_mask, l2_sp_alpha=l2_sp_alpha
+        )
+    else:
+        k_reg = L2SPRegularizer(w0_keras, l2_sp_alpha) if l2_sp_alpha > 0.0 else None
+        b_reg = L2SPRegularizer(b0_init, l2_sp_alpha) if l2_sp_alpha > 0.0 else None
 
     inp = tf.keras.Input(shape=(embeddings.shape[1],), dtype=tf.float32)
     dense = tf.keras.layers.Dense(
         units=len(classes),
         activation="softmax",
         use_bias=True,
-        kernel_regularizer=L2SPRegularizer(w0_keras, l2_sp_alpha) if l2_sp_alpha > 0.0 else None,
-        bias_regularizer=L2SPRegularizer(b0_tflite, l2_sp_alpha) if l2_sp_alpha > 0.0 else None,
+        kernel_regularizer=k_reg,
+        bias_regularizer=b_reg,
     )
     out = dense(inp)
     head_model = tf.keras.Model(inputs=inp, outputs=out)
-    dense.set_weights([w0_keras.copy(), b0_tflite.copy()])
+    dense.set_weights([w0_keras.copy(), b0_init.copy()])
 
     head_model.compile(
         optimizer=tf.keras.optimizers.Adam(learning_rate=learning_rate),
@@ -469,7 +610,7 @@ def finetune_wl_head_in_place(
     for c in range(len(classes)):
         if c not in present_set:
             w_new_keras[:, c] = w0_keras[:, c]
-            b_new[c] = b0_tflite[c]
+            b_new[c] = b0_init[c]
 
     w_new_bytes = w_new_keras.T.astype("<f4").tobytes()
     b_new_bytes = b_new.astype("<f4").tobytes()
@@ -503,3 +644,58 @@ def finetune_wl_head_in_place(
         if pred == int(target):
             correct += 1
     return float(correct / len(y_idx))
+
+
+def export_wl_browser_weights(
+    tflite_path: str | Path,
+    output_dir: str | Path,
+    manifest_template_path: str | Path | None = None,
+) -> tuple[Path, Path]:
+    """Export WL TFLite constant tensors into `wl_model.json` and `wl_weights.bin`."""
+    out_dir = Path(output_dir)
+    out_dir.mkdir(parents=True, exist_ok=True)
+
+    template = (
+        Path(manifest_template_path)
+        if manifest_template_path is not None
+        else (out_dir / "wl_model.json")
+    )
+    if not template.exists():
+        template = Path("public/models/bisindo/wl_model.json")
+    manifest = json.loads(template.read_text(encoding="utf-8"))
+
+    interp = tf.lite.Interpreter(
+        model_path=str(tflite_path),
+        experimental_op_resolver_type=tf.lite.experimental.OpResolverType.BUILTIN_WITHOUT_DEFAULT_DELEGATES,
+        experimental_preserve_all_tensors=True,
+    )
+    interp.allocate_tensors()
+    details_by_id = {str(t["index"]): t for t in interp.get_tensor_details()}
+
+    chunks: list[bytes] = []
+    updated_tensors: dict[str, Any] = {}
+    offset = 0
+    for tid in sorted(manifest["tensors"], key=lambda x: int(x)):
+        arr = interp.get_tensor(int(tid))
+        dtype_name = "int32" if np.issubdtype(arr.dtype, np.integer) else "float32"
+        cast_arr = np.ascontiguousarray(arr, dtype=("<i4" if dtype_name == "int32" else "<f4"))
+        raw = cast_arr.tobytes(order="C")
+        t_name = details_by_id.get(tid, {}).get("name", manifest["tensors"][tid]["name"])
+        updated_tensors[tid] = {
+            "name": str(t_name),
+            "shape": [int(s) for s in cast_arr.shape],
+            "dtype": dtype_name,
+            "byteOffset": offset,
+            "byteLength": len(raw),
+        }
+        chunks.append(raw)
+        offset += len(raw)
+
+    weights_path = out_dir / "wl_weights.bin"
+    json_path = out_dir / "wl_model.json"
+    weights_path.write_bytes(b"".join(chunks))
+    json_path.write_text(
+        json.dumps({"format": manifest.get("format", "wl-conformer-v3"), "tensors": updated_tensors}, indent=2),
+        encoding="utf-8",
+    )
+    return json_path, weights_path

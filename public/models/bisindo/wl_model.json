@@ -586,7 +586,9 @@
     },
     "60": {
       "name": "arith.constant59",
-      "shape": [],
+      "shape": [
+        1
+      ],
       "dtype": "int32",
       "byteOffset": 593036,
       "byteLength": 4
@@ -603,14 +605,18 @@
     },
     "62": {
       "name": "arith.constant61",
-      "shape": [],
+      "shape": [
+        1
+      ],
       "dtype": "int32",
       "byteOffset": 593064,
       "byteLength": 4
     },
     "63": {
       "name": "arith.constant62",
-      "shape": [],
+      "shape": [
+        1
+      ],
       "dtype": "int32",
       "byteOffset": 593068,
       "byteLength": 4
@@ -635,7 +641,9 @@
     },
     "66": {
       "name": "arith.constant65",
-      "shape": [],
+      "shape": [
+        1
+      ],
       "dtype": "float32",
       "byteOffset": 593096,
       "byteLength": 4

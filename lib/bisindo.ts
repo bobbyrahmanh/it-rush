@@ -18,10 +18,10 @@ export interface WordItem {
 
 export const WORD_ITEMS: WordItem[] = [
   {
-    id: "air",
-    title: "Air",
-    hands: 1,
-    guide: "Bentuk tangan menghadap ke depan lalu gerakkan perlahan di dekat mulut seolah minum air.",
+    id: "pantai",
+    title: "Pantai",
+    hands: 2,
+    guide: "Arahkan kedua telapak tangan menghadap ke bawah di depan dada, lalu gerakkan bergelombang dari samping ke samping seperti ombak pantai.",
   },
   {
     id: "belajar",

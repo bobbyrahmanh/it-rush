@@ -1,6 +1,6 @@
 {
   "label_to_index": {
-    "air": 0,
+    "pantai": 0,
     "belajar": 1,
     "hari": 2,
     "maaf": 3,
@@ -10,7 +10,7 @@
     "tuli": 7
   },
   "index_to_label": {
-    "0": "air",
+    "0": "pantai",
     "1": "belajar",
     "2": "hari",
     "3": "maaf",
@@ -21,7 +21,7 @@
   },
   "num_classes": 8,
   "labels": [
-    "air",
+    "pantai",
     "belajar",
     "hari",
     "maaf",

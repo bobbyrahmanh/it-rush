@@ -42,7 +42,7 @@ export interface WordClassifier {
 }
 
 const WORD_DISPLAY_NAMES: Record<string, string> = {
-  air: "Air",
+  pantai: "Pantai",
   belajar: "Belajar",
   hari: "Hari",
   maaf: "Maaf",

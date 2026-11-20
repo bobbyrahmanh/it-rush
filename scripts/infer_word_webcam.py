@@ -1,6 +1,6 @@
 """Real-time / video-file BISINDO word-level inference using KawanIsyarat WL-BISINDO model.
 
-Supported 8 words: air, belajar, hari, maaf, makan, saya, terima_kasih, tuli.
+Supported 8 words: pantai, belajar, hari, maaf, makan, saya, terima_kasih, tuli.
 
 Usage:
   Webcam: press SPACE to record a 3-second sign window, Q/ESC to quit.
