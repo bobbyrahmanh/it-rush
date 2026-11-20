@@ -92,3 +92,45 @@ $$;
 create trigger on_auth_user_created
   after insert on auth.users
   for each row execute procedure public.handle_new_user();
+
+-- 7. Tabel URL publik animasi gerakan kosakata BISINDO (disimpan di Supabase Storage)
+create table if not exists public.bisindo_word_demos (
+  word_id text primary key,
+  title text not null,
+  video_url text not null,
+  mime_type text not null default 'video/mp4',
+  storage_path text not null,
+  updated_at timestamptz not null default now()
+);
+
+alter table public.bisindo_word_demos enable row level security;
+
+drop policy if exists "Video demo kosakata BISINDO dapat dilihat publik" on public.bisindo_word_demos;
+create policy "Video demo kosakata BISINDO dapat dilihat publik"
+  on public.bisindo_word_demos
+  for select
+  to anon, authenticated
+  using (true);
+
+-- 8. Public Bucket Supabase Storage untuk menyimpan animasi MP4/WebM/Animated WebP kosakata BISINDO
+insert into storage.buckets (id, name, public, file_size_limit, allowed_mime_types)
+values (
+  'bisindo-word-demos',
+  'bisindo-word-demos',
+  true,
+  5242880,
+  array['video/mp4', 'video/webm', 'image/webp']
+)
+on conflict (id) do update
+set
+  public = true,
+  file_size_limit = excluded.file_size_limit,
+  allowed_mime_types = excluded.allowed_mime_types;
+
+drop policy if exists "Aset animasi BISINDO publik dapat dibaca" on storage.objects;
+create policy "Aset animasi BISINDO publik dapat dibaca"
+  on storage.objects
+  for select
+  to anon, authenticated
+  using (bucket_id = 'bisindo-word-demos');
+

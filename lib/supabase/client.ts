@@ -44,6 +44,27 @@ export interface LeaderboardRow {
   } | null;
 }
 
+export interface WordDemoRow {
+  word_id: string;
+  title: string;
+  video_url: string;
+  mime_type: string;
+  storage_path: string;
+  updated_at?: string;
+}
+
+function isSafeMediaUrl(raw: string): boolean {
+  const trimmed = raw.trim();
+  if (!trimmed) return false;
+  if (trimmed.startsWith("/")) return true;
+  try {
+    const parsed = new URL(trimmed);
+    return parsed.protocol === "https:" || parsed.protocol === "http:";
+  } catch {
+    return false;
+  }
+}
+
 function getEnvConfig(): { url: string; anonKey: string } | null {
   const rawUrl = process.env.NEXT_PUBLIC_SUPABASE_URL?.trim();
   const rawKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY?.trim();
@@ -341,5 +362,46 @@ export async function fetchSupabaseLeaderboard(
     return Array.isArray(rows) ? rows : null;
   } catch {
     return null;
+  }
+}
+
+export async function fetchSupabaseWordDemos(): Promise<Record<string, WordDemoRow>> {
+  const cfg = getEnvConfig();
+  if (!cfg) return {};
+
+  try {
+    const res = await fetch(
+      `${cfg.url}/rest/v1/bisindo_word_demos?select=word_id,title,video_url,mime_type,storage_path,updated_at`,
+      {
+        method: "GET",
+        headers: buildHeaders(cfg.anonKey),
+        cache: "no-store",
+      }
+    );
+    if (!res.ok) return {};
+    const rows = (await res.json()) as WordDemoRow[];
+    if (!Array.isArray(rows)) return {};
+
+    const mapped: Record<string, WordDemoRow> = {};
+    for (const row of rows) {
+      if (
+        row &&
+        typeof row.word_id === "string" &&
+        typeof row.video_url === "string" &&
+        isSafeMediaUrl(row.video_url)
+      ) {
+        mapped[row.word_id] = {
+          word_id: row.word_id,
+          title: typeof row.title === "string" ? row.title : row.word_id,
+          video_url: row.video_url.trim(),
+          mime_type: typeof row.mime_type === "string" ? row.mime_type : "video/mp4",
+          storage_path: typeof row.storage_path === "string" ? row.storage_path : "",
+          updated_at: row.updated_at,
+        };
+      }
+    }
+    return mapped;
+  } catch {
+    return {};
   }
 }

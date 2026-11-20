@@ -1,15 +1,17 @@
 
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import CameraSlot from "@/components/CameraSlot";
 import WordCameraSlot from "@/components/WordCameraSlot";
+import WordDemoCard from "@/components/WordDemoCard";
 import GuessTheSign from "@/components/GuessTheSign";
 import SignGallery from "@/components/SignGallery";
 import Reveal from "@/components/Reveal";
 import { UNITS, WORD_ITEMS, handsOf } from "@/lib/bisindo";
 import { speak } from "@/lib/audio";
 import { useProgress } from "@/lib/storage/useProgress";
+import { fetchSupabaseWordDemos, type WordDemoRow } from "@/lib/supabase/client";
 import { Volume2, Camera, BookOpen, CheckCircle, Check, Globe, Shield, HelpCircle, Eye, type Icon } from "react-feather";
 
 type Mode = "learn" | "view" | "guess";
@@ -171,6 +173,26 @@ export default function BisindoPage() {
   const [selState, setSelState] = useState<
     { kind: "letter"; value: string } | { kind: "word"; value: string }
   >({ kind: "letter", value: "A" });
+  const [wordDemos, setWordDemos] = useState<Record<string, WordDemoRow>>({});
+  const [wordDemosLoading, setWordDemosLoading] = useState(true);
+
+  useEffect(() => {
+    let cancelled = false;
+    fetchSupabaseWordDemos()
+      .then((demos) => {
+        if (!cancelled) {
+          setWordDemos(demos);
+        }
+      })
+      .finally(() => {
+        if (!cancelled) {
+          setWordDemosLoading(false);
+        }
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   const sel = selState.kind === "letter" ? selState.value : "";
 
@@ -523,41 +545,15 @@ export default function BisindoPage() {
             <>
               <StepHeader step="01" title="Kenali Kosakata" />
 
-              <div
-                key={selectedWord.id}
-                className="card animate-pop space-y-2 bg-white p-4"
-              >
-                <div className="flex flex-wrap items-center justify-between gap-2">
-                  <div className="flex flex-wrap items-center gap-2">
-                    <span className="rounded-2xl border-2 border-ink bg-grape px-3 py-1.5 font-display text-xl font-bold text-white shadow-[3px_3px_0px_#1B1B3A]">
-                      {selectedWord.title}
-                    </span>
-                    <span className="rounded-full border-2 border-ink bg-mint px-3 py-1 text-sm font-bold text-ink">
-                      {selectedWord.hands} Tangan
-                    </span>
-                    {learnedWords.includes(selectedWord.id) && (
-                      <span className="rounded-full border-2 border-ink bg-sun px-3 py-1 text-sm font-bold text-ink">
-                        Dikuasai <Check className="inline h-3 w-3" />
-                      </span>
-                    )}
-                  </div>
-
-                  <button
-                    type="button"
-                    aria-label={`Dengarkan kata ${selectedWord.title}`}
-                    onClick={() =>
-                      speak(selectedWord.title, data.settings.audioEnabled)
-                    }
-                    className="btn !min-h-[44px] min-w-[44px] bg-sun !px-3 py-2 text-ink"
-                  >
-                    <Volume2 className="h-5 w-5" />
-                  </button>
-                </div>
-
-                <p className="text-sm leading-snug text-ink">
-                  {selectedWord.guide}
-                </p>
-              </div>
+              <WordDemoCard
+                word={selectedWord}
+                isLearned={learnedWords.includes(selectedWord.id)}
+                demo={wordDemos[selectedWord.id]}
+                isLoadingDemo={wordDemosLoading}
+                onSpeak={() =>
+                  speak(selectedWord.title, data.settings.audioEnabled)
+                }
+              />
 
               <StepHeader step="02" title="Praktikkan Gerakan" />
 

@@ -12,6 +12,7 @@ __pycache__/
 .coverage
 htmlcov/
 data/
+exports/word_demos/
 artifacts/mediapipe/
 public/models/mediapipe/
 *.egg-info/
